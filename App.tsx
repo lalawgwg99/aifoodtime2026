@@ -1,0 +1,242 @@
+
+import React, { useState, useEffect } from 'react';
+import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle } from 'lucide-react';
+import { Hero } from './components/Hero';
+import { RecipeCard } from './components/RecipeCard';
+import { Community } from './components/Community';
+import { MarketTicker } from './components/MarketTicker';
+import { AuthModal } from './components/AuthModal';
+import { ProfileModal } from './components/ProfileModal';
+import { SubscriptionModal } from './components/SubscriptionModal';
+import { Onboarding } from './components/Onboarding';
+import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
+import { SearchState, Recipe, Cuisine, VisionMode, User } from './types';
+
+const GENERIC_MESSAGES = [
+  { text: "正在解構食材風味...", sub: "AI 主廚正在優化口感搭配" },
+  { text: "正在喚醒食材靈魂...", sub: "尋找味覺的最佳平衡點" },
+  { text: "同步全球私廚資料庫...", sub: "策劃專屬於您的味覺饗宴" },
+  { text: "編排私人米其林食譜...", sub: "正在尋找最適合的烹飪工法" }
+];
+
+export default function App() {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [searchState, setSearchState] = useState<SearchState>({ 
+    ingredients: [], goal: null, cuisine: Cuisine.ANY, occasion: null, mealTime: null 
+  });
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [favorites, setFavorites] = useState<Recipe[]>([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingIndex, setLoadingIndex] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+  
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [currentView, setCurrentView] = useState<'home' | 'community'>('home');
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('smartchef_user');
+    if (savedUser) try { setCurrentUser(JSON.parse(savedUser)); } catch (e) {}
+    const savedFavorites = localStorage.getItem('smartchef_favorites');
+    if (savedFavorites) try { setFavorites(JSON.parse(savedFavorites)); } catch (e) {}
+  }, []);
+
+  const handleLogin = (user: User) => {
+    setCurrentUser(user);
+    localStorage.setItem('smartchef_user', JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setShowProfileModal(false);
+    localStorage.removeItem('smartchef_user');
+  };
+
+  const handleCloseOnboarding = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('smartchef_onboarding_seen', 'true');
+  };
+
+  useEffect(() => {
+    let interval: any;
+    if (loading) {
+      interval = setInterval(() => setLoadingIndex(prev => (prev + 1) % GENERIC_MESSAGES.length), 2500);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
+
+  const handleSearch = async () => {
+    if (searchState.ingredients.length === 0 && !searchState.goal && !searchState.occasion) return;
+    setLoading(true); setError(null); setShowFavoritesOnly(false); 
+    try {
+      const results = await generateRecipes(searchState, currentUser);
+      setRecipes(results); setHasSearched(true);
+      setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
+      results.forEach(async (recipe) => {
+        const imageUrl = await generateRecipeImage(recipe.name, recipe.description);
+        if (imageUrl) setRecipes(prev => prev.map(r => r.id === recipe.id ? { ...r, imageUrl } : r));
+      });
+    } catch (err) { setError("連線忙碌中，請稍後再試。"); } finally { setLoading(false); }
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setLoading(true); setError(null);
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        const base64 = reader.result as string;
+        const results = await analyzeImage(base64, VisionMode.FRIDGE_XRAY);
+        if (results.length === 0) {
+          setError("這張照片似乎沒有包含可辨識的食材或料理，請換一張試試。");
+          setLoading(false);
+          return;
+        }
+        setRecipes(results); setHasSearched(true);
+        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
+        results.forEach(async (recipe) => {
+          const imageUrl = await generateRecipeImage(recipe.name, recipe.description);
+          if (imageUrl) setRecipes(prev => prev.map(r => r.id === recipe.id ? { ...r, imageUrl } : r));
+        });
+      };
+    } catch (err) { setError("辨識失敗，請重試。"); } finally { setLoading(false); }
+  };
+
+  const toggleFavorite = (recipe: Recipe) => {
+    setFavorites(prev => {
+      const isFav = prev.some(f => f.id === recipe.id);
+      const next = isFav ? prev.filter(f => f.id !== recipe.id) : [...prev, recipe];
+      localStorage.setItem('smartchef_favorites', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // Soft reset function to avoid page reload crash
+  const handleLogoClick = () => {
+    setSearchState({ ingredients: [], goal: null, cuisine: Cuisine.ANY, occasion: null, mealTime: null });
+    setRecipes([]);
+    setHasSearched(false);
+    setShowFavoritesOnly(false);
+    setError(null);
+    setCurrentView('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (currentView === 'community') return <Community onBack={() => setCurrentView('home')} currentUser={currentUser} onShowLogin={() => setShowAuthModal(true)} />;
+
+  const displayedRecipes = showFavoritesOnly ? favorites : recipes;
+
+  return (
+    <div className="min-h-screen bg-chef-paper selection:bg-chef-gold/30 pb-24 font-sans relative">
+      
+      {/* 1. Market Ticker - The "Market Research" Vibe */}
+      <MarketTicker />
+
+      {/* Global Error Toast */}
+      {error && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[80] bg-red-50 text-red-600 px-6 py-4 rounded-xl shadow-floating border border-red-100 flex items-center gap-3 animate-[fadeInUp_0.3s_ease-out]">
+          <X className="cursor-pointer hover:text-red-800" size={18} onClick={() => setError(null)} />
+          <span className="text-sm font-bold">{error}</span>
+        </div>
+      )}
+
+      {/* Navigation */}
+      <nav className="w-full bg-chef-paper/80 backdrop-blur-xl transition-all sticky top-0 z-40 border-b border-chef-gold/5">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 md:h-24 flex items-center justify-between">
+          <div className="flex items-center gap-4 group cursor-pointer" onClick={handleLogoClick}>
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-[#1A1818] rounded-xl flex items-center justify-center text-white shadow-xl">
+              <ChefHat size={22} className="md:w-[26px] md:h-[26px]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg md:text-xl font-bold text-[#1A1818] leading-tight">饗味食光</span>
+              <span className="text-[10px] md:text-[11px] tracking-[0.15em] text-chef-gold font-serif italic font-medium mt-0.5">您的專屬暖心私廚</span>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4 md:gap-8">
+            {/* Pro Button - Always Visible now */}
+            <button onClick={() => setShowSubscriptionModal(true)} className="flex items-center gap-2 px-4 py-2 bg-chef-black text-chef-gold rounded-full text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg border border-chef-gold/30">
+               <Crown size={12} /> Pro
+            </button>
+            
+            {/* New Onboarding Trigger Button */}
+            <button onClick={() => setShowOnboarding(true)} className="p-2 text-stone-300 hover:text-chef-black transition-all" title="新手指南">
+              <HelpCircle size={22} />
+            </button>
+
+            <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`p-2 transition-all ${showFavoritesOnly ? 'text-chef-gold' : 'text-stone-300 hover:text-chef-black'}`}>
+              <Heart size={22} fill={showFavoritesOnly ? "currentColor" : "none"} />
+            </button>
+            <button onClick={() => setCurrentView('community')} className="p-2 text-stone-300 hover:text-chef-black transition-all">
+              <Users size={22} />
+            </button>
+            
+            {currentUser ? (
+               <button onClick={() => setShowProfileModal(true)} className="outline-none">
+                 <img src={currentUser.avatar} className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-chef-gold/30" alt="User" />
+               </button>
+            ) : (
+               <button onClick={() => setShowAuthModal(true)} className="px-6 py-2.5 md:px-8 md:py-3 rounded-xl bg-stone-100/50 text-[#1A1818] text-[10px] font-black uppercase tracking-widest hover:bg-[#1A1818] hover:text-white transition-all">登入</button>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-6 md:px-12 pt-12 md:pt-24">
+        <div className="text-center mb-16 md:mb-32 animate-fadeIn">
+          
+          <h1 className="text-6xl md:text-9xl font-serif font-bold text-[#1A1818] mb-10 md:mb-16 leading-[1.1] tracking-tight">
+            讓食材，<span className="italic text-chef-gold">綻放</span> 靈魂。
+          </h1>
+          
+          <p className="text-lg md:text-2xl text-stone-400 max-w-3xl mx-auto font-light leading-relaxed font-serif">
+            「饗味食光」不只是食譜，更是您廚房裡的藝術策展人。讓我們為您編織一場味覺的極致饗宴。
+          </p>
+        </div>
+
+        {/* Search Component */}
+        <Hero searchState={searchState} setSearchState={setSearchState} onSearch={handleSearch} isLoading={loading} onImageUpload={handleImageUpload} />
+
+        {/* Results */}
+        {(hasSearched || showFavoritesOnly) && (
+          <div id="results-section" className="mt-24 md:mt-40 animate-fadeIn">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
+               <h2 className="text-3xl md:text-5xl font-serif font-bold italic">{showFavoritesOnly ? "收藏菜單" : "策劃菜單"}</h2>
+               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-chef-gold bg-chef-gold/5 px-5 py-2.5 rounded-full self-start md:self-auto">{displayedRecipes.length} 道精選佳餚</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
+              {displayedRecipes.map(recipe => (
+                <RecipeCard key={recipe.id} recipe={recipe} isFavorite={favorites.some(f => f.id === recipe.id)} onToggleFavorite={() => toggleFavorite(recipe)} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Loading Overlay */}
+        {loading && (
+          <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/98 backdrop-blur-md animate-fadeIn transition-all">
+             <div className="w-20 h-20 mb-12 relative">
+                <div className="absolute inset-0 border-4 border-stone-50 rounded-[2rem]"></div>
+                <div className="absolute inset-0 border-4 border-[#1A1818] border-t-transparent rounded-[2rem] animate-spin"></div>
+                <ChefHat className="absolute inset-0 m-auto text-[#1A1818] animate-pulse" size={28} />
+             </div>
+             <div className="text-center max-w-sm px-8">
+                <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1818] mb-3 italic">{GENERIC_MESSAGES[loadingIndex].text}</h3>
+                <p className="text-stone-400 text-[10px] font-bold tracking-[0.2em] uppercase">{GENERIC_MESSAGES[loadingIndex].sub}</p>
+             </div>
+          </div>
+        )}
+      </main>
+
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={handleLogin} />}
+      {showProfileModal && currentUser && <ProfileModal user={currentUser} onClose={() => setShowProfileModal(false)} onLogout={handleLogout} />}
+      {showSubscriptionModal && <SubscriptionModal onClose={() => setShowSubscriptionModal(false)} />}
+      {showOnboarding && <Onboarding onClose={handleCloseOnboarding} />}
+    </div>
+  );
+}
