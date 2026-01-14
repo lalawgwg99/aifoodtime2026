@@ -166,14 +166,14 @@ export default function App() {
             </div>
             <div className="flex flex-col">
               <span className="text-lg md:text-xl font-bold text-[#1A1818] leading-tight">饗味食光</span>
-              <span className="text-[10px] md:text-[11px] tracking-[0.15em] text-chef-gold font-serif italic font-medium mt-0.5">您的專屬暖心私廚</span>
+              <span className="text-xs md:text-sm tracking-[0.15em] text-chef-gold font-serif italic font-medium mt-0.5">您的專屬暖心私廚</span>
             </div>
           </div>
 
           <div className="flex items-center gap-4 md:gap-8">
             {/* Pro Button - Always Visible now */}
-            <button onClick={() => setShowSubscriptionModal(true)} className="flex items-center gap-2 px-4 py-2 bg-chef-black text-chef-gold rounded-full text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg border border-chef-gold/30">
-              <Crown size={12} /> Pro
+            <button onClick={() => setShowSubscriptionModal(true)} className="flex items-center gap-2 px-4 py-2 bg-chef-black text-chef-gold rounded-full text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg border border-chef-gold/30">
+              <Crown size={14} /> Pro
             </button>
 
             {/* New Onboarding Trigger Button */}
@@ -193,7 +193,7 @@ export default function App() {
                 <img src={currentUser.avatar} className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-chef-gold/30" alt="User" />
               </button>
             ) : (
-              <button onClick={() => setShowAuthModal(true)} className="px-6 py-2.5 md:px-8 md:py-3 rounded-xl bg-stone-100/50 text-[#1A1818] text-[10px] font-black uppercase tracking-widest hover:bg-[#1A1818] hover:text-white transition-all">登入</button>
+              <button onClick={() => setShowAuthModal(true)} className="px-6 py-2.5 md:px-8 md:py-3 rounded-xl bg-stone-100/50 text-[#1A1818] text-xs font-black uppercase tracking-widest hover:bg-[#1A1818] hover:text-white transition-all">登入</button>
             )}
           </div>
         </div>
@@ -204,10 +204,10 @@ export default function App() {
         <div className="text-center mb-16 md:mb-32 animate-fadeIn">
 
           <h1 className="text-6xl md:text-9xl font-serif font-bold text-[#1A1818] mb-10 md:mb-16 leading-[1.1] tracking-tight">
-            讓食材，<span className="italic text-chef-gold">綻放</span> 靈魂。
+            讓食材<span className="text-stone-300 px-2">/</span><span className="text-chef-gold relative inline-block after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-full after:h-4 after:bg-chef-gold/10 after:-z-10">綻放</span><span className="text-stone-300 px-2">/</span>靈魂
           </h1>
 
-          <p className="text-lg md:text-2xl text-stone-400 max-w-3xl mx-auto font-light leading-relaxed font-serif">
+          <p className="text-xl md:text-2xl text-stone-500 max-w-3xl mx-auto font-normal leading-relaxed font-serif tracking-wide">
             「饗味食光」不只是食譜，更是您廚房裡的藝術策展人。讓我們為您編織一場味覺的極致饗宴。
           </p>
         </div>

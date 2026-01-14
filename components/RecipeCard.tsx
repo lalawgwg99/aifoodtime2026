@@ -98,8 +98,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
 
         {recipe.isUserCreated && (
           <div className="absolute top-4 left-4 z-20">
-            <div className="px-2 py-1 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white/80 text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5">
-              {recipe.isPublic ? <Globe size={10} /> : <ShieldCheck size={10} />}
+            <div className="px-2 py-1 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white/80 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
+              {recipe.isPublic ? <Globe size={11} /> : <ShieldCheck size={11} />}
               {recipe.isPublic ? '公開' : '私人'}
             </div>
           </div>
@@ -125,8 +125,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
 
         <div className="absolute bottom-5 left-6 right-6 text-white z-10">
           <div className="flex items-center gap-2 mb-2.5">
-            <span className="bg-chef-gold px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest text-chef-black">{recipe.calories} KCAL</span>
-            <span className="bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 border border-white/10"><Clock size={10} /> {recipe.timeMinutes} MIN</span>
+            <span className="bg-chef-gold px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest text-chef-black">{recipe.calories} KCAL</span>
+            <span className="bg-white/10 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 border border-white/10"><Clock size={11} /> {recipe.timeMinutes} MIN</span>
           </div>
           <h3 className="text-xl md:text-2xl font-serif font-bold tracking-tight leading-none">{recipe.name}</h3>
         </div>
@@ -135,11 +135,11 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
       <div className="p-6 md:p-8 flex-1 flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <div className="flex gap-1.5 flex-wrap">
-            {recipe.tags.slice(0, 2).map(tag => <span key={tag} className="text-[8px] font-black bg-stone-50 text-stone-400 border border-stone-100 px-2 py-1 rounded-md uppercase tracking-widest">{tag}</span>)}
+            {recipe.tags.slice(0, 2).map(tag => <span key={tag} className="text-[10px] font-black bg-stone-50 text-stone-500 border border-stone-100 px-2 py-1 rounded-md uppercase tracking-widest">{tag}</span>)}
           </div>
           <div className="text-right shrink-0">
-            <span className="text-xs font-black text-chef-gold italic">{recipe.matchScore}%</span>
-            <p className="text-[7px] text-stone-300 font-bold uppercase tracking-widest">Accuracy</p>
+            <span className="text-sm font-black text-chef-gold italic">{recipe.matchScore}%</span>
+            <p className="text-[9px] text-stone-400 font-bold uppercase tracking-widest">Accuracy</p>
           </div>
         </div>
 
@@ -155,16 +155,16 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
               {/* Macros Grid */}
               <div className="grid grid-cols-3 gap-2 mb-4">
                 <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">蛋白質</div>
-                  <div className="text-sm font-bold text-chef-black">{recipe.macros.protein}</div>
+                  <div className="text-xs font-black uppercase tracking-widest text-stone-500 mb-1">蛋白質</div>
+                  <div className="text-base font-bold text-chef-black">{recipe.macros.protein}</div>
                 </div>
                 <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">碳水</div>
-                  <div className="text-sm font-bold text-chef-black">{recipe.macros.carbs}</div>
+                  <div className="text-xs font-black uppercase tracking-widest text-stone-500 mb-1">碳水</div>
+                  <div className="text-base font-bold text-chef-black">{recipe.macros.carbs}</div>
                 </div>
                 <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">脂肪</div>
-                  <div className="text-sm font-bold text-chef-black">{recipe.macros.fat}</div>
+                  <div className="text-xs font-black uppercase tracking-widest text-stone-500 mb-1">脂肪</div>
+                  <div className="text-base font-bold text-chef-black">{recipe.macros.fat}</div>
                 </div>
               </div>
 
@@ -172,7 +172,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
               {recipe.healthTip && (
                 <div className="flex gap-3 items-start bg-white p-3 rounded-xl shadow-sm">
                   <Leaf size={16} className="text-green-500 shrink-0 mt-0.5" />
-                  <p className="text-xs text-stone-600 leading-relaxed font-serif italic">
+                  <p className="text-sm text-stone-700 leading-relaxed font-serif italic">
                     {recipe.healthTip}
                   </p>
                 </div>
@@ -197,7 +197,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
             <div className="space-y-5">
               {recipe.instructions.map((step, i) => (
                 <div key={i} className="flex gap-4">
-                  <div className="w-6 h-6 rounded-full bg-chef-black text-white text-[9px] font-black flex items-center justify-center shrink-0 shadow-lg">{i + 1}</div>
+                  <div className="w-6 h-6 rounded-full bg-chef-black text-white text-xs font-black flex items-center justify-center shrink-0 shadow-lg">{i + 1}</div>
                   <p className="text-xs text-stone-600 leading-relaxed font-serif">{step}</p>
                 </div>
               ))}
@@ -219,8 +219,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
                 {chatMessages.map((msg, i) => (
                   <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <span className={`inline-block px-4 py-2.5 rounded-2xl text-sm max-w-[80%] ${msg.role === 'user'
-                        ? 'bg-chef-gold text-white rounded-br-sm'
-                        : 'bg-white shadow-sm text-stone-700 rounded-bl-sm'
+                      ? 'bg-chef-gold text-white rounded-br-sm'
+                      : 'bg-white shadow-sm text-stone-700 rounded-bl-sm'
                       }`}>{msg.text}</span>
                   </div>
                 ))}
