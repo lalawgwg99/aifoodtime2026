@@ -131,6 +131,8 @@ const TREND_REPORT_SCHEMA = {
 // Analyze image and return recipes
 export const analyzeImage = async (base64Image: string, mode: VisionMode): Promise<Recipe[]> => {
   const ai = getAIClient();
+  const mimeTypeMatch = base64Image.match(/^data:(image\/[a-zA-Z+]+);base64,/);
+  const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
   const cleanBase64 = base64Image.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, "");
 
   let prompt = "";
@@ -149,7 +151,7 @@ export const analyzeImage = async (base64Image: string, mode: VisionMode): Promi
     contents: {
       parts: [
         { text: prompt },
-        { inlineData: { mimeType: 'image/jpeg', data: cleanBase64 } }
+        { inlineData: { mimeType: mimeType, data: cleanBase64 } }
       ]
     },
     config: {
