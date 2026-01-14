@@ -31,39 +31,39 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
     setInputMessage("");
     setIsChefThinking(true);
     try {
-        const answer = await askSousChef(recipe, inputMessage);
-        setChatMessages(prev => [...prev, { role: 'assistant', text: answer, timestamp: Date.now() }]);
+      const answer = await askSousChef(recipe, inputMessage);
+      setChatMessages(prev => [...prev, { role: 'assistant', text: answer, timestamp: Date.now() }]);
     } finally { setIsChefThinking(false); }
   };
 
   const handleVerdictUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files?.[0]) {
-          const reader = new FileReader();
-          reader.onloadend = async () => {
-              const base64 = reader.result as string;
-              setVerdictImage(base64);
-              setShowVerdictModal(true);
-              setIsAnalyzingVerdict(true);
-              setVerdictError(null);
-              setVerdict(null);
-              try {
-                  const result = await generateChefVerdict(base64, recipe.name);
-                  if (result.badge === "NOT_FOOD") {
-                     setVerdictError("這張照片似乎不是食物，請拍攝您的料理成品。");
-                  } else {
-                     setVerdict(result);
-                  }
-              } catch (e) { 
-                setVerdictError("分析失敗，請稍後再試。");
-              } finally { setIsAnalyzingVerdict(false); }
-          };
-          reader.readAsDataURL(e.target.files[0]);
-      }
+    if (e.target.files?.[0]) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64 = reader.result as string;
+        setVerdictImage(base64);
+        setShowVerdictModal(true);
+        setIsAnalyzingVerdict(true);
+        setVerdictError(null);
+        setVerdict(null);
+        try {
+          const result = await generateChefVerdict(base64, recipe.name);
+          if (result.badge === "NOT_FOOD") {
+            setVerdictError("這張照片似乎不是食物，請拍攝您的料理成品。");
+          } else {
+            setVerdict(result);
+          }
+        } catch (e) {
+          setVerdictError("分析失敗，請稍後再試。");
+        } finally { setIsAnalyzingVerdict(false); }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     // Construct a rich text summary
     const shareText = `【饗味食光 SavorChef】\n主廚推薦：${recipe.name}\n\n"${recipe.description}"\n\n🔥 熱量：${recipe.calories} Kcal\n⏱️ 時間：${recipe.timeMinutes} Min\n\n快來試試這道 AI 私廚料理！`;
     const shareUrl = window.location.href; // In a real app, this would be a deep link to the specific recipe ID
@@ -95,27 +95,27 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
       <div className="relative aspect-[4/3] overflow-hidden rounded-t-[2rem] cursor-pointer bg-chef-cream" onClick={() => setExpanded(!expanded)}>
         {recipe.imageUrl ? <img src={recipe.imageUrl} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={recipe.name} /> : <div className="absolute inset-0 flex items-center justify-center text-stone-200"><ChefHat size={48} className="animate-pulse" /></div>}
         <div className="absolute inset-0 bg-gradient-to-t from-chef-black/95 via-chef-black/20 to-transparent" />
-        
+
         {recipe.isUserCreated && (
           <div className="absolute top-4 left-4 z-20">
-             <div className="px-2 py-1 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white/80 text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5">
-                {recipe.isPublic ? <Globe size={10} /> : <ShieldCheck size={10} />}
-                {recipe.isPublic ? '公開' : '私人'}
-             </div>
+            <div className="px-2 py-1 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white/80 text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5">
+              {recipe.isPublic ? <Globe size={10} /> : <ShieldCheck size={10} />}
+              {recipe.isPublic ? '公開' : '私人'}
+            </div>
           </div>
         )}
 
         <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
-          <button 
-            onClick={handleShare} 
+          <button
+            onClick={handleShare}
             className={`p-2.5 rounded-full transition-all backdrop-blur-sm border border-white/10 ${isCopied ? 'bg-green-500 text-white' : 'bg-white/10 text-white hover:bg-white hover:text-chef-black'}`}
             title="分享食譜"
           >
             {isCopied ? <Check size={16} /> : <Share2 size={16} />}
           </button>
-          
-          <button 
-            onClick={(e) => { e.stopPropagation(); onToggleFavorite?.(); }} 
+
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleFavorite?.(); }}
             className={`p-2.5 rounded-full transition-all backdrop-blur-sm border border-white/10 ${isFavorite ? 'bg-chef-terracotta text-white shadow-lg' : 'bg-white/10 text-white hover:bg-white hover:text-chef-terracotta'}`}
             title="收藏食譜"
           >
@@ -124,147 +124,190 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
         </div>
 
         <div className="absolute bottom-5 left-6 right-6 text-white z-10">
-           <div className="flex items-center gap-2 mb-2.5">
-              <span className="bg-chef-gold px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest text-chef-black">{recipe.calories} KCAL</span>
-              <span className="bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 border border-white/10"><Clock size={10} /> {recipe.timeMinutes} MIN</span>
-           </div>
-           <h3 className="text-xl md:text-2xl font-serif font-bold tracking-tight leading-none">{recipe.name}</h3>
+          <div className="flex items-center gap-2 mb-2.5">
+            <span className="bg-chef-gold px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest text-chef-black">{recipe.calories} KCAL</span>
+            <span className="bg-white/10 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 border border-white/10"><Clock size={10} /> {recipe.timeMinutes} MIN</span>
+          </div>
+          <h3 className="text-xl md:text-2xl font-serif font-bold tracking-tight leading-none">{recipe.name}</h3>
         </div>
       </div>
 
       <div className="p-6 md:p-8 flex-1 flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-             <div className="flex gap-1.5 flex-wrap">
-               {recipe.tags.slice(0,2).map(tag => <span key={tag} className="text-[8px] font-black bg-stone-50 text-stone-400 border border-stone-100 px-2 py-1 rounded-md uppercase tracking-widest">{tag}</span>)}
-             </div>
-             <div className="text-right shrink-0">
-                <span className="text-xs font-black text-chef-gold italic">{recipe.matchScore}%</span>
-                <p className="text-[7px] text-stone-300 font-bold uppercase tracking-widest">Accuracy</p>
-             </div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex gap-1.5 flex-wrap">
+            {recipe.tags.slice(0, 2).map(tag => <span key={tag} className="text-[8px] font-black bg-stone-50 text-stone-400 border border-stone-100 px-2 py-1 rounded-md uppercase tracking-widest">{tag}</span>)}
           </div>
+          <div className="text-right shrink-0">
+            <span className="text-xs font-black text-chef-gold italic">{recipe.matchScore}%</span>
+            <p className="text-[7px] text-stone-300 font-bold uppercase tracking-widest">Accuracy</p>
+          </div>
+        </div>
 
-          <div className={`space-y-8 transition-all duration-700 overflow-hidden ${expanded ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
-              
-              {/* Nutrition Analysis Section */}
-              {recipe.macros && (
-                <div className="animate-fadeInUp p-5 bg-chef-gold/5 rounded-2xl border border-chef-gold/10">
-                   <h4 className="font-serif font-bold text-md mb-4 flex items-center gap-2 text-chef-black">
-                     <Activity size={16} className="text-chef-gold" /> 深度營養分析
-                   </h4>
-                   
-                   {/* Macros Grid */}
-                   <div className="grid grid-cols-3 gap-2 mb-4">
-                      <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                         <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">蛋白質</div>
-                         <div className="text-sm font-bold text-chef-black">{recipe.macros.protein}</div>
-                      </div>
-                      <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                         <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">碳水</div>
-                         <div className="text-sm font-bold text-chef-black">{recipe.macros.carbs}</div>
-                      </div>
-                      <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                         <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">脂肪</div>
-                         <div className="text-sm font-bold text-chef-black">{recipe.macros.fat}</div>
-                      </div>
-                   </div>
+        <div className={`space-y-8 transition-all duration-700 overflow-hidden ${expanded ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
 
-                   {/* Health Tip */}
-                   {recipe.healthTip && (
-                     <div className="flex gap-3 items-start bg-white p-3 rounded-xl shadow-sm">
-                        <Leaf size={16} className="text-green-500 shrink-0 mt-0.5" />
-                        <p className="text-xs text-stone-600 leading-relaxed font-serif italic">
-                           {recipe.healthTip}
-                        </p>
-                     </div>
-                   )}
+          {/* Nutrition Analysis Section */}
+          {recipe.macros && (
+            <div className="animate-fadeInUp p-5 bg-chef-gold/5 rounded-2xl border border-chef-gold/10">
+              <h4 className="font-serif font-bold text-md mb-4 flex items-center gap-2 text-chef-black">
+                <Activity size={16} className="text-chef-gold" /> 深度營養分析
+              </h4>
+
+              {/* Macros Grid */}
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                <div className="bg-white p-3 rounded-xl text-center shadow-sm">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">蛋白質</div>
+                  <div className="text-sm font-bold text-chef-black">{recipe.macros.protein}</div>
+                </div>
+                <div className="bg-white p-3 rounded-xl text-center shadow-sm">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">碳水</div>
+                  <div className="text-sm font-bold text-chef-black">{recipe.macros.carbs}</div>
+                </div>
+                <div className="bg-white p-3 rounded-xl text-center shadow-sm">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">脂肪</div>
+                  <div className="text-sm font-bold text-chef-black">{recipe.macros.fat}</div>
+                </div>
+              </div>
+
+              {/* Health Tip */}
+              {recipe.healthTip && (
+                <div className="flex gap-3 items-start bg-white p-3 rounded-xl shadow-sm">
+                  <Leaf size={16} className="text-green-500 shrink-0 mt-0.5" />
+                  <p className="text-xs text-stone-600 leading-relaxed font-serif italic">
+                    {recipe.healthTip}
+                  </p>
                 </div>
               )}
+            </div>
+          )}
 
-              <div className="animate-fadeInUp">
-                <h4 className="font-serif font-bold text-lg mb-3 flex items-center gap-2.5"><Utensils size={14} className="text-chef-gold" /> 嚴選食材</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {recipe.ingredients.map((ing, i) => (
-                    <div key={i} className="text-xs text-stone-600 flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-chef-gold" />
-                      {ing}
-                    </div>
-                  ))}
+          <div className="animate-fadeInUp">
+            <h4 className="font-serif font-bold text-lg mb-3 flex items-center gap-2.5"><Utensils size={14} className="text-chef-gold" /> 嚴選食材</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {recipe.ingredients.map((ing, i) => (
+                <div key={i} className="text-xs text-stone-600 flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-chef-gold" />
+                  {ing}
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
 
-              <div className="animate-fadeInUp">
-                <h4 className="font-serif font-bold text-lg mb-4 flex items-center gap-2.5"><Flame size={14} className="text-chef-gold" /> 烹飪工法</h4>
-                <div className="space-y-5">
-                  {recipe.instructions.map((step, i) => (
-                    <div key={i} className="flex gap-4">
-                      <div className="w-6 h-6 rounded-full bg-chef-black text-white text-[9px] font-black flex items-center justify-center shrink-0 shadow-lg">{i+1}</div>
-                      <p className="text-xs text-stone-600 leading-relaxed font-serif">{step}</p>
-                    </div>
-                  ))}
+          <div className="animate-fadeInUp">
+            <h4 className="font-serif font-bold text-lg mb-4 flex items-center gap-2.5"><Flame size={14} className="text-chef-gold" /> 烹飪工法</h4>
+            <div className="space-y-5">
+              {recipe.instructions.map((step, i) => (
+                <div key={i} className="flex gap-4">
+                  <div className="w-6 h-6 rounded-full bg-chef-black text-white text-[9px] font-black flex items-center justify-center shrink-0 shadow-lg">{i + 1}</div>
+                  <p className="text-xs text-stone-600 leading-relaxed font-serif">{step}</p>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-stone-50">
-                <button onClick={() => setShowSousChef(!showSousChef)} className="py-3.5 rounded-xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 bg-chef-cream text-chef-black hover:bg-chef-gold hover:text-white transition-all shadow-sm"><Mic size={14} /> 語音二廚</button>
-                <button onClick={() => fileInputRef.current?.click()} className="py-3.5 rounded-xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 border-2 border-dashed border-stone-100 text-stone-400 hover:border-chef-gold hover:text-chef-gold transition-all"><Camera size={14} /> 成品評鑑<input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleVerdictUpload} /></button>
+          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-stone-50">
+            <button onClick={() => setShowSousChef(!showSousChef)} className={`py-3.5 rounded-xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-sm ${showSousChef ? 'bg-chef-gold text-white' : 'bg-chef-cream text-chef-black hover:bg-chef-gold hover:text-white'}`}><Mic size={14} /> 語音二廚</button>
+            <button onClick={() => fileInputRef.current?.click()} className="py-3.5 rounded-xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 border-2 border-dashed border-stone-100 text-stone-400 hover:border-chef-gold hover:text-chef-gold transition-all"><Camera size={14} /> 成品評鑑<input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleVerdictUpload} /></button>
+          </div>
+
+          {/* BUG-003 修復：Sous Chef 對話介面 */}
+          {showSousChef && (
+            <div className="mt-4 p-5 bg-stone-50 rounded-2xl animate-fadeInUp">
+              <div className="max-h-48 overflow-y-auto no-scrollbar space-y-3 mb-4">
+                {chatMessages.length === 0 && (
+                  <p className="text-center text-stone-400 text-xs py-4 italic">向二廚詢問任何烹飪問題...</p>
+                )}
+                {chatMessages.map((msg, i) => (
+                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <span className={`inline-block px-4 py-2.5 rounded-2xl text-sm max-w-[80%] ${msg.role === 'user'
+                        ? 'bg-chef-gold text-white rounded-br-sm'
+                        : 'bg-white shadow-sm text-stone-700 rounded-bl-sm'
+                      }`}>{msg.text}</span>
+                  </div>
+                ))}
+                {isChefThinking && (
+                  <div className="flex justify-start">
+                    <span className="inline-block px-4 py-2.5 bg-white shadow-sm rounded-2xl rounded-bl-sm text-stone-400 text-sm animate-pulse">
+                      主廚思考中...
+                    </span>
+                  </div>
+                )}
               </div>
-          </div>
-          <div className="mt-6 pt-5 border-t border-stone-50 text-center cursor-pointer -mx-6 -mb-6 pb-6 rounded-b-[2rem] transition-colors hover:bg-chef-cream/50" onClick={() => setExpanded(!expanded)}>
-            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-300">{expanded ? '收合詳情' : '查看完整工法'}</span>
-          </div>
+              <div className="flex gap-2">
+                <input
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && !isChefThinking && handleSendMessage()}
+                  className="flex-1 px-4 py-3 rounded-xl bg-white border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-chef-gold/20 focus:border-chef-gold transition-all"
+                  placeholder="問問二廚..."
+                  disabled={isChefThinking}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!inputMessage.trim() || isChefThinking}
+                  className="px-5 py-3 bg-chef-black text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-chef-gold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  發送
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="mt-6 pt-5 border-t border-stone-50 text-center cursor-pointer -mx-6 -mb-6 pb-6 rounded-b-[2rem] transition-colors hover:bg-chef-cream/50" onClick={() => setExpanded(!expanded)}>
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-300">{expanded ? '收合詳情' : '查看完整工法'}</span>
+        </div>
       </div>
 
       {showVerdictModal && (
-          <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-chef-black/98 backdrop-blur-xl p-0 md:p-6 animate-fadeIn">
-              <div className="bg-white rounded-t-[2.5rem] md:rounded-[3rem] max-w-2xl w-full max-h-[92vh] overflow-y-auto no-scrollbar shadow-floating relative animate-fadeInUp">
-                  <button onClick={() => setShowVerdictModal(false)} className="absolute top-5 right-5 z-20 p-2.5 bg-chef-black/20 backdrop-blur-md rounded-full text-white"><X size={20} /></button>
-                  <div className="relative aspect-square md:aspect-video">
-                      <img src={verdictImage || ''} className="w-full h-full object-cover" alt="User Dish" />
-                      {isAnalyzingVerdict && <div className="absolute inset-0 bg-chef-black/70 backdrop-blur-md flex flex-col items-center justify-center text-white"><Loader2 size={32} className="animate-spin mb-4 text-chef-gold" /><p className="font-serif text-lg animate-pulse">大師對比分析中...</p></div>}
-                  </div>
-                  
-                  {/* Error State */}
-                  {verdictError && !isAnalyzingVerdict && (
-                      <div className="p-12 text-center flex flex-col items-center">
-                          <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6">
-                             <AlertCircle size={40} />
-                          </div>
-                          <h3 className="text-xl font-bold text-chef-black mb-2">無法評分</h3>
-                          <p className="text-stone-500 mb-8 max-w-xs mx-auto">{verdictError}</p>
-                          <button onClick={() => setShowVerdictModal(false)} className="px-8 py-3 bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-xl font-bold transition-colors">關閉</button>
-                      </div>
-                  )}
+        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-chef-black/98 backdrop-blur-xl p-0 md:p-6 animate-fadeIn">
+          <div className="bg-white rounded-t-[2.5rem] md:rounded-[3rem] max-w-2xl w-full max-h-[92vh] overflow-y-auto no-scrollbar shadow-floating relative animate-fadeInUp">
+            <button onClick={() => setShowVerdictModal(false)} className="absolute top-5 right-5 z-20 p-2.5 bg-chef-black/20 backdrop-blur-md rounded-full text-white"><X size={20} /></button>
+            <div className="relative aspect-square md:aspect-video">
+              <img src={verdictImage || ''} className="w-full h-full object-cover" alt="User Dish" />
+              {isAnalyzingVerdict && <div className="absolute inset-0 bg-chef-black/70 backdrop-blur-md flex flex-col items-center justify-center text-white"><Loader2 size={32} className="animate-spin mb-4 text-chef-gold" /><p className="font-serif text-lg animate-pulse">大師對比分析中...</p></div>}
+            </div>
 
-                  {verdict && !isAnalyzingVerdict && (
-                      <div className="p-8 md:p-12 text-center">
-                          <div className="flex justify-center items-center gap-6 mb-8">
-                            <div className="text-6xl md:text-8xl font-serif font-bold text-chef-black">{verdict.score}</div>
-                            <div className="text-left border-l border-stone-100 pl-6">
-                              <div className="text-[9px] font-black uppercase tracking-widest text-chef-gold">Soul Score</div>
-                              <div className="text-xl md:text-2xl font-serif font-bold">{verdict.badge}</div>
-                            </div>
-                          </div>
-                          <div className="bg-stone-50 p-7 md:p-10 rounded-[2.5rem] mb-8 space-y-6 text-left">
-                             <div className="flex items-center gap-3 mb-2"><BarChart2 size={18} className="text-chef-gold" /><h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-chef-black">評鑑維度分析</h4></div>
-                             {[
-                               { label: '視覺呈現', user: verdict.comparisonData.visual, pro: verdict.comparisonData.proVisual },
-                               { label: '創意發想', user: verdict.comparisonData.creativity, pro: verdict.comparisonData.proCreativity },
-                               { label: '技術精準', user: verdict.comparisonData.technique, pro: verdict.comparisonData.proTechnique }
-                             ].map((item, idx) => (
-                               <div key={idx} className="space-y-3">
-                                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest"><span className="text-stone-400">{item.label}</span><span className="text-chef-black">{item.user}%</span></div>
-                                  <div className="h-1.5 bg-white rounded-full overflow-hidden flex shadow-inner border border-stone-100">
-                                     <div style={{width: `${item.user}%`}} className="h-full bg-chef-gold" />
-                                  </div>
-                               </div>
-                             ))}
-                             <p className="pt-6 border-t border-stone-200 text-xs text-stone-500 leading-relaxed italic font-serif">"{verdict.critique}"</p>
-                          </div>
-                          <button onClick={() => setShowVerdictModal(false)} className="w-full py-5 bg-chef-black text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 transition-all">關閉評鑑</button>
-                      </div>
-                  )}
+            {/* Error State */}
+            {verdictError && !isAnalyzingVerdict && (
+              <div className="p-12 text-center flex flex-col items-center">
+                <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6">
+                  <AlertCircle size={40} />
+                </div>
+                <h3 className="text-xl font-bold text-chef-black mb-2">無法評分</h3>
+                <p className="text-stone-500 mb-8 max-w-xs mx-auto">{verdictError}</p>
+                <button onClick={() => setShowVerdictModal(false)} className="px-8 py-3 bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-xl font-bold transition-colors">關閉</button>
               </div>
+            )}
+
+            {verdict && !isAnalyzingVerdict && (
+              <div className="p-8 md:p-12 text-center">
+                <div className="flex justify-center items-center gap-6 mb-8">
+                  <div className="text-6xl md:text-8xl font-serif font-bold text-chef-black">{verdict.score}</div>
+                  <div className="text-left border-l border-stone-100 pl-6">
+                    <div className="text-[9px] font-black uppercase tracking-widest text-chef-gold">Soul Score</div>
+                    <div className="text-xl md:text-2xl font-serif font-bold">{verdict.badge}</div>
+                  </div>
+                </div>
+                <div className="bg-stone-50 p-7 md:p-10 rounded-[2.5rem] mb-8 space-y-6 text-left">
+                  <div className="flex items-center gap-3 mb-2"><BarChart2 size={18} className="text-chef-gold" /><h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-chef-black">評鑑維度分析</h4></div>
+                  {[
+                    { label: '視覺呈現', user: verdict.comparisonData.visual, pro: verdict.comparisonData.proVisual },
+                    { label: '創意發想', user: verdict.comparisonData.creativity, pro: verdict.comparisonData.proCreativity },
+                    { label: '技術精準', user: verdict.comparisonData.technique, pro: verdict.comparisonData.proTechnique }
+                  ].map((item, idx) => (
+                    <div key={idx} className="space-y-3">
+                      <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest"><span className="text-stone-400">{item.label}</span><span className="text-chef-black">{item.user}%</span></div>
+                      <div className="h-1.5 bg-white rounded-full overflow-hidden flex shadow-inner border border-stone-100">
+                        <div style={{ width: `${item.user}%` }} className="h-full bg-chef-gold" />
+                      </div>
+                    </div>
+                  ))}
+                  <p className="pt-6 border-t border-stone-200 text-xs text-stone-500 leading-relaxed italic font-serif">"{verdict.critique}"</p>
+                </div>
+                <button onClick={() => setShowVerdictModal(false)} className="w-full py-5 bg-chef-black text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 transition-all">關閉評鑑</button>
+              </div>
+            )}
           </div>
+        </div>
       )}
     </div>
   );
