@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Newspaper, Globe, ArrowLeft, Heart, Share2, BookOpen, X, Clock, User as UserIcon, ChevronRight } from 'lucide-react';
 import { User } from '../types';
+import { ArticleEditor } from './ArticleEditor';
 
 interface ChroniclesProps {
     onBack: () => void;
@@ -254,26 +255,15 @@ export const Chronicles: React.FC<ChroniclesProps> = ({ onBack }) => {
                 <Newspaper size={28} />
             </button>
 
-            {/* Write Article Modal */}
-            {showWriteModal && (
-                <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-6 animate-fadeIn">
-                    <div className="bg-[#1A1A1A] rounded-3xl p-8 max-w-lg w-full border border-white/10">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-serif font-bold text-white">投稿美食故事</h2>
-                            <button onClick={() => setShowWriteModal(false)} className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-red-500 transition-all">
-                                <X size={20} />
-                            </button>
-                        </div>
-                        <p className="text-stone-400 mb-6">分享您的美食體驗、旅途中的味覺記憶，或是私房食譜背後的故事。我們期待您的投稿！</p>
-                        <input type="text" placeholder="文章標題" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white mb-4 focus:border-chef-gold outline-none" />
-                        <textarea placeholder="寫下您的故事..." rows={5} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white mb-4 focus:border-chef-gold outline-none resize-none" />
-                        <div className="flex gap-4">
-                            <button onClick={() => setShowWriteModal(false)} className="flex-1 py-3 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-colors">取消</button>
-                            <button onClick={() => { alert('感謝您的投稿！我們會盡快審核。'); setShowWriteModal(false); }} className="flex-1 py-3 bg-chef-gold text-black font-bold rounded-full hover:bg-white transition-colors">送出投稿</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Article Editor (Full-Featured) */}
+            <ArticleEditor
+                isOpen={showWriteModal}
+                onClose={() => setShowWriteModal(false)}
+                onSubmit={(article) => {
+                    console.log('New article submitted:', article);
+                    // TODO: Save to backend
+                }}
+            />
         </div>
     );
 };
