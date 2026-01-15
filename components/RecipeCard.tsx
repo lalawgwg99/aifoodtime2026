@@ -253,7 +253,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
           )}
         </div>
         <div className="mt-6 pt-5 border-t border-stone-50 text-center cursor-pointer -mx-6 -mb-6 pb-6 rounded-b-[2rem] transition-colors hover:bg-chef-cream/50" onClick={() => setExpanded(!expanded)}>
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-300">{expanded ? '收合詳情' : '查看完整工法'}</span>
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500 group-hover:text-chef-black transition-colors">{expanded ? '收合詳情' : '查看完整工法'}</span>
         </div>
       </div>
 

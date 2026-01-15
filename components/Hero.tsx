@@ -199,7 +199,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         {/* Quick Context Tags - Situational Filters */}
         <div className="mt-10 md:mt-14">
           <div className="text-center mb-6">
-            <p className="text-xs md:text-sm font-bold uppercase tracking-wider text-stone-400 mb-1">快速情境</p>
+            <p className="text-xs md:text-sm font-bold uppercase tracking-wider text-stone-500 mb-1">快速情境</p>
             <h3 className="text-lg md:text-xl font-serif font-bold text-chef-black">現在想要...</h3>
           </div>
 
@@ -215,7 +215,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">⚡ 趕時間</p>
-                  <p className="text-xs text-chef-accent/70">15 分鐘內完成</p>
+                  <p className="text-xs text-chef-accent">15 分鐘內完成</p>
                 </div>
               </div>
             </button>
@@ -231,7 +231,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">🥗 想健康</p>
-                  <p className="text-xs text-chef-accent/70">低脂高纖維</p>
+                  <p className="text-xs text-chef-accent">低脂高纖維</p>
                 </div>
               </div>
             </button>
@@ -247,7 +247,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">💛 想療癒</p>
-                  <p className="text-xs text-chef-accent/70">古早味、溫暖系</p>
+                  <p className="text-xs text-chef-accent">古早味、溫暖系</p>
                 </div>
               </div>
             </button>
@@ -263,7 +263,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">🔥 想放縱</p>
-                  <p className="text-xs text-chef-accent/70">高熱量、爽快</p>
+                  <p className="text-xs text-chef-accent">高熱量、爽快</p>
                 </div>
               </div>
             </button>

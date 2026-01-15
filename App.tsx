@@ -193,13 +193,13 @@ export default function App() {
             <button onClick={() => setShowSubscriptionModal(true)} className="flex items-center gap-2 px-4 py-2 bg-chef-black text-chef-gold rounded-full text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg border border-chef-gold/30">
               <Crown size={14} /> Pro
             </button>
-            <button onClick={() => setShowOnboarding(true)} className="p-2 text-stone-300 hover:text-chef-black transition-all" title="新手指南">
+            <button onClick={() => setShowOnboarding(true)} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="新手指南">
               <HelpCircle size={22} />
             </button>
-            <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`p-2 transition-all ${showFavoritesOnly ? 'text-chef-gold' : 'text-stone-300 hover:text-chef-black'}`}>
+            <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`p-2 transition-all ${showFavoritesOnly ? 'text-chef-gold-dark' : 'text-stone-500 hover:text-chef-black'}`}>
               <Heart size={22} fill={showFavoritesOnly ? "currentColor" : "none"} />
             </button>
-            <button onClick={() => setCurrentView('community')} className="p-2 text-stone-300 hover:text-chef-black transition-all">
+            <button onClick={() => setCurrentView('community')} className="p-2 text-stone-500 hover:text-chef-black transition-all">
               <Users size={22} />
             </button>
             {currentUser ? (
@@ -298,7 +298,7 @@ export default function App() {
           <div id="results-section" className="mt-24 md:mt-40 animate-fadeIn">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
               <h2 className="text-3xl md:text-5xl font-serif font-bold italic">{showFavoritesOnly ? "收藏菜單" : "策劃菜單"}</h2>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-chef-gold bg-chef-gold/5 px-5 py-2.5 rounded-full self-start md:self-auto">{displayedRecipes.length} 道精選佳餚</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-chef-gold-dark bg-chef-gold/5 px-5 py-2.5 rounded-full self-start md:self-auto">{displayedRecipes.length} 道精選佳餚</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
               {displayedRecipes.map(recipe => (
@@ -308,9 +308,9 @@ export default function App() {
             {/* BUG-006 修復：Empty State 組件 */}
             {displayedRecipes.length === 0 && showFavoritesOnly && (
               <div className="text-center py-20 animate-fadeIn">
-                <Heart className="mx-auto text-stone-200 mb-6" size={56} />
-                <h3 className="text-2xl font-serif font-bold text-stone-400 mb-3">尚無收藏</h3>
-                <p className="text-stone-400 text-sm max-w-xs mx-auto">點擊食譜卡片上的愛心圖示，即可開始收藏您喜愛的料理。</p>
+                <Heart className="mx-auto text-stone-300 mb-6" size={56} />
+                <h3 className="text-2xl font-serif font-bold text-stone-500 mb-3">尚無收藏</h3>
+                <p className="text-stone-500 text-sm max-w-xs mx-auto">點擊食譜卡片上的愛心圖示，即可開始收藏您喜愛的料理。</p>
               </div>
             )}
           </div>

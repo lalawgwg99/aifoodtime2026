@@ -100,7 +100,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose })
                   </span>
                </button>
 
-               <p className="text-center text-[10px] text-stone-400 mt-4 leading-relaxed">
+               <p className="text-center text-[10px] text-stone-500 mt-4 leading-relaxed">
                   點擊即同意 <a href="#" className="underline text-stone-500 hover:text-chef-gold">服務條款</a> 與 <a href="#" className="underline text-stone-500 hover:text-chef-gold">隱私政策</a>
                   <br />支援信用卡 / Apple Pay / Google Pay
                </p>
