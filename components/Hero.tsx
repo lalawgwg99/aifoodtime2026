@@ -464,74 +464,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
       </div>
 
       {/* Login Value Comparison - Conversion Driver */}
-      <div className="mt-16 md:mt-20 max-w-4xl mx-auto px-4">
-        <div className="text-center mb-8">
-          <p className="text-xs md:text-sm font-bold uppercase tracking-wider text-stone-400 mb-2">為什麼要登入？</p>
-          <h3 className="text-xl md:text-2xl font-serif font-bold text-chef-black">解鎖完整 AI 私廚體驗</h3>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-          {/* Free Column */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-stone-200">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-2 h-2 bg-stone-400 rounded-full"></div>
-              <h4 className="font-bold text-stone-600">免費體驗</h4>
-            </div>
-            <ul className="space-y-3 text-sm text-stone-500">
-              <li className="flex items-start gap-2">
-                <span className="text-stone-300 mt-0.5">○</span>
-                <span>每日 3 次靈感</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-stone-300 mt-0.5">○</span>
-                <span>無法收藏食譜</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-stone-300 mt-0.5">○</span>
-                <span>通用建議</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-stone-300 mt-0.5">○</span>
-                <span>無歷史記錄</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Member Column (Luxury Black Gold) */}
-          <div className="bg-gradient-to-br from-chef-black via-stone-900 to-chef-black rounded-2xl p-6 border border-chef-gold shadow-gold-glow relative overflow-hidden group">
-            {/* Dynamic Shine Effect */}
-            <div className="absolute top-0 left-0 w-full h-full bg-silk opacity-10 pointer-events-none"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 bg-chef-gold/20 rounded-full blur-3xl group-hover:bg-chef-gold/30 transition-all duration-700"></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 bg-chef-gold rounded-full animate-pulse"></div>
-                <h4 className="font-bold text-white">會員專享</h4>
-              </div>
-              <ul className="space-y-3 text-sm text-white">
-                <li className="flex items-start gap-2">
-                  <span className="text-chef-gold mt-0.5">●</span>
-                  <span>無限個人化菜單</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-chef-gold mt-0.5">●</span>
-                  <span>跨裝置雲端同步</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-chef-gold mt-0.5">●</span>
-                  <span>專屬口味模型</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-chef-gold mt-0.5">●</span>
-                  <span>味覺記憶庫</span>
-                </li>
-              </ul>
-              <button className="w-full mt-6 py-3 bg-chef-gold text-chef-black rounded-xl font-bold text-sm hover:bg-amber-400 transition-all">
-                立即解鎖 →
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Login Value Comparison moved to Mobile Menu Modal */}
     </div>
   );
 };

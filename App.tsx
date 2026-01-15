@@ -10,6 +10,7 @@ import { ProfileModal } from './components/ProfileModal';
 import { SubscriptionModal } from './components/SubscriptionModal';
 import { Onboarding } from './components/Onboarding';
 import { UsageLimitModal } from './components/UsageLimitModal';
+import { LoginBenefitsModal } from './components/LoginBenefitsModal';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
 import { usageService } from './services/usageService';
 import { SearchState, Recipe, Cuisine, VisionMode, User } from './types';
@@ -40,6 +41,7 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUsageLimitModal, setShowUsageLimitModal] = useState(false);
+  const [showLoginBenefitsModal, setShowLoginBenefitsModal] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'community'>('home');
 
   useEffect(() => {
@@ -248,6 +250,18 @@ export default function App() {
                   <p className="text-xs text-stone-400">解鎖進階功能</p>
                 </div>
               </button>
+
+              {!currentUser && (
+                <button onClick={() => { setShowLoginBenefitsModal(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                  <div className="w-10 h-10 bg-chef-gold/10 rounded-xl flex items-center justify-center">
+                    <Sparkles size={18} className="text-chef-gold-dark" />
+                  </div>
+                  <div className="text-left">
+                    <span className="font-bold text-sm text-chef-black">為什麼要登入？</span>
+                    <p className="text-xs text-stone-500">會員權益比較</p>
+                  </div>
+                </button>
+              )}
               <button onClick={() => { setShowOnboarding(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
                 <div className="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
                   <HelpCircle size={18} className="text-stone-600" />
@@ -341,6 +355,12 @@ export default function App() {
           onClose={() => setShowUsageLimitModal(false)}
           onLogin={() => { setShowUsageLimitModal(false); setShowAuthModal(true); }}
           remainingUses={usageService.getRemainingUses(!!currentUser)}
+        />
+      )}
+      {showLoginBenefitsModal && (
+        <LoginBenefitsModal
+          onClose={() => setShowLoginBenefitsModal(false)}
+          onLogin={() => { setShowLoginBenefitsModal(false); setShowAuthModal(true); }}
         />
       )}
     </div>
