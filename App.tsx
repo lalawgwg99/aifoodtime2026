@@ -217,31 +217,40 @@ export default function App() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             <button onClick={() => setShowSubscriptionModal(true)} className="flex items-center gap-2 px-4 py-2 bg-chef-black text-chef-gold rounded-full text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg border border-chef-gold/30">
               <Crown size={14} /> Pro
             </button>
+
+            {/* Feature Buttons with Labels */}
+            <div className="flex items-center gap-1 bg-stone-100/50 rounded-full p-1">
+              <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold transition-all ${showFavoritesOnly ? 'bg-chef-gold text-white' : 'text-stone-600 hover:bg-white'}`}>
+                <Heart size={14} fill={showFavoritesOnly ? "currentColor" : "none"} />
+                <span className="hidden lg:inline">收藏</span>
+              </button>
+              <button onClick={() => setShowMealPlanner(true)} className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold text-stone-600 hover:bg-white transition-all">
+                <Calendar size={14} />
+                <span className="hidden lg:inline">週計劃</span>
+              </button>
+              <button onClick={() => setCurrentView('chronicles')} className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold transition-all ${currentView === 'chronicles' ? 'bg-chef-gold text-white' : 'text-stone-600 hover:bg-white'}`}>
+                <BookOpen size={14} />
+                <span className="hidden lg:inline">美食誌</span>
+              </button>
+              <button onClick={() => setCurrentView('community')} className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold transition-all ${currentView === 'community' ? 'bg-chef-gold text-white' : 'text-stone-600 hover:bg-white'}`}>
+                <Users size={14} />
+                <span className="hidden lg:inline">社群</span>
+              </button>
+            </div>
+
             <button onClick={() => setShowOnboarding(true)} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="新手指南">
-              <HelpCircle size={22} />
-            </button>
-            <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`p-2 transition-all ${showFavoritesOnly ? 'text-chef-gold-dark' : 'text-stone-500 hover:text-chef-black'}`}>
-              <Heart size={22} fill={showFavoritesOnly ? "currentColor" : "none"} />
-            </button>
-            <button onClick={() => setShowMealPlanner(true)} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="週計劃">
-              <Calendar size={22} />
-            </button>
-            <button onClick={() => setCurrentView('chronicles')} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="美食誌">
-              <BookOpen size={22} />
-            </button>
-            <button onClick={() => setCurrentView('community')} className="p-2 text-stone-500 hover:text-chef-black transition-all">
-              <Users size={22} />
+              <HelpCircle size={20} />
             </button>
             {currentUser ? (
               <button onClick={() => setShowProfileModal(true)} className="outline-none">
-                <img src={currentUser.avatar} className="w-12 h-12 rounded-full border-2 border-chef-gold/30" alt="User" />
+                <img src={currentUser.avatar} className="w-10 h-10 rounded-full border-2 border-chef-gold/30" alt="User" />
               </button>
             ) : (
-              <button onClick={() => setShowAuthModal(true)} className="px-8 py-3 rounded-xl bg-stone-100/50 text-[#1A1818] text-xs font-black uppercase tracking-widest hover:bg-[#1A1818] hover:text-white transition-all">登入</button>
+              <button onClick={() => setShowAuthModal(true)} className="px-6 py-2.5 rounded-xl bg-chef-black text-white text-xs font-black uppercase tracking-widest hover:bg-chef-gold hover:text-black transition-all">登入</button>
             )}
           </div>
 
@@ -305,6 +314,15 @@ export default function App() {
                   <Heart size={18} className={showFavoritesOnly ? 'text-chef-gold' : 'text-stone-600'} fill={showFavoritesOnly ? "currentColor" : "none"} />
                 </div>
                 <span className="font-bold text-sm">我的收藏</span>
+              </button>
+              <button onClick={() => { setShowMealPlanner(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+                  <Calendar size={18} className="text-green-600" />
+                </div>
+                <div className="text-left">
+                  <span className="font-bold text-sm">週計劃 + PDF</span>
+                  <p className="text-xs text-stone-400">規劃一週菜單，下載購物清單</p>
+                </div>
               </button>
               <button onClick={() => { setCurrentView('chronicles'); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
                 <div className="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
