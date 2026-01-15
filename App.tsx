@@ -106,8 +106,13 @@ export default function App() {
     return () => clearInterval(interval);
   }, [loading]);
 
-  const handleSearch = async () => {
-    if (searchState.ingredients.length === 0 && !searchState.goal && !searchState.occasion) return;
+  const handleSearch = async (pendingIngredient?: string) => {
+    // Combine current state ingredients with any pending input
+    const effectiveIngredients = pendingIngredient
+      ? [...searchState.ingredients, pendingIngredient]
+      : searchState.ingredients;
+
+    if (effectiveIngredients.length === 0 && !searchState.goal && !searchState.occasion) return;
 
     // Check usage limits for non-logged-in users
     if (!usageService.canUse(!!currentUser)) {
@@ -116,8 +121,15 @@ export default function App() {
     }
 
     setLoading(true); setError(null); setShowFavoritesOnly(false);
+
+    // If there was a pending ingredient, verify we should commit it to state
+    if (pendingIngredient) {
+      setSearchState(prev => ({ ...prev, ingredients: [...prev.ingredients, pendingIngredient] }));
+    }
+
     try {
-      const results = await generateRecipes(searchState, currentUser);
+      // Use the effective state with the pending ingredient included
+      const results = await generateRecipes({ ...searchState, ingredients: effectiveIngredients }, currentUser);
       setRecipes(results); setHasSearched(true);
       playSuccess(); // ✨ Audio Feedback
 

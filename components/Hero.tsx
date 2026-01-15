@@ -11,7 +11,7 @@ import { DietaryGoal, Cuisine, SearchState, MealOccasion } from '../types';
 interface HeroProps {
   searchState: SearchState;
   setSearchState: React.Dispatch<React.SetStateAction<SearchState>>;
-  onSearch: () => void;
+  onSearch: (pendingIngredient?: string) => void;
   isLoading: boolean;
   onImageUpload: (file: File) => void;
 }
@@ -383,7 +383,11 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
       {/* Main CTA */}
       <div className="mt-10 md:mt-16">
         <button
-          onClick={onSearch}
+          onClick={() => {
+            const pending = inputValue.trim();
+            onSearch(pending || undefined);
+            if (pending) setInputValue('');
+          }}
           disabled={isLoading || (searchState.ingredients.length === 0 && !inputValue.trim() && !searchState.goal && !searchState.occasion)}
           className={`w-full py-5 md:py-7 rounded-[1.5rem] md:rounded-[2rem] relative overflow-hidden group transition-all duration-700 ${isLoading || (searchState.ingredients.length === 0 && !inputValue.trim() && !searchState.goal && !searchState.occasion)
             ? 'bg-stone-100 text-stone-400 cursor-not-allowed border border-stone-200'
