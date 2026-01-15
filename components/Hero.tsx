@@ -22,7 +22,7 @@ const FilterPill: React.FC<{
   label: string;
   active: boolean;
   onClick: () => void;
-  icon?: React.React Node
+  icon?: React.ReactNode
 }> = ({ label, active, onClick, icon }) => (
   <button
     onClick={onClick}
