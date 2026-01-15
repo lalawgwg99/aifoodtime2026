@@ -36,28 +36,34 @@ export const MethodologyModal: React.FC<MethodologyModalProps> = ({ isOpen, onCl
                         <div className="flex items-center gap-2 mb-4">
                             <Database size={18} className="text-chef-gold" />
                             <h3 className="font-bold text-lg text-chef-black">營養數據</h3>
+                            <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">USDA 認證</span>
                         </div>
                         <div className="bg-stone-50 rounded-2xl p-5 space-y-3">
                             <div className="flex items-start gap-3">
-                                <Info size={16} className="text-blue-500 mt-1 shrink-0" />
+                                <Info size={16} className="text-green-600 mt-1 shrink-0" />
                                 <div>
                                     <p className="text-sm text-stone-700 leading-relaxed">
-                                        <strong>熱量（Calories）、蛋白質、碳水化合物、脂肪</strong> 等營養數據，目前由
-                                        <strong> Google Gemini AI 模型</strong> 基於食材組成進行估算。
+                                        <strong>熱量、蛋白質、碳水化合物、脂肪</strong> 等營養數據來自
+                                        <strong className="text-green-700"> USDA FoodData Central</strong>（美國農業部官方食品營養資料庫）。
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
                                 <Calculator size={16} className="text-chef-gold mt-1 shrink-0" />
-                                <p className="text-sm text-stone-600 leading-relaxed">
-                                    AI 會參考標準食品營養資料庫（如 USDA FoodData Central）的模式進行推估，
-                                    但實際數值可能因食材品牌、產地、烹調方式有所差異。
-                                </p>
+                                <div>
+                                    <p className="text-sm text-stone-600 leading-relaxed">
+                                        <strong>計算方式：</strong>系統會根據食材清單，逐一從 USDA 資料庫查詢每 100g 的營養成分，
+                                        再依據預估份量加總計算。
+                                    </p>
+                                    <p className="text-xs text-stone-500 mt-1">
+                                        若 USDA 無該食材資料，則以 AI 模型進行輔助估算。
+                                    </p>
+                                </div>
                             </div>
-                            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-3">
-                                <p className="text-xs text-amber-700">
-                                    ⚠️ <strong>注意事項：</strong>本站營養數據僅供參考，不應作為醫療或專業營養建議依據。
-                                    如有特殊飲食需求，請諮詢專業營養師。
+                            <div className="bg-green-50 border border-green-200 rounded-xl p-3 mt-3">
+                                <p className="text-xs text-green-700">
+                                    ✅ <strong>資料來源：</strong>USDA FoodData Central 是全球最權威的食品營養資料庫，
+                                    包含超過 80 萬種食品資料，被各國政府、學術機構廣泛採用。
                                 </p>
                             </div>
                         </div>

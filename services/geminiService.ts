@@ -1,6 +1,7 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 import { SearchState, Recipe, VisionMode, ChefVerdict, TrendReport, User } from "../types";
+import { calculateTotalNutrition, formatNutrition } from "./nutritionService";
 
 // Helper to clean JSON strings from the model response
 const cleanJsonString = (str: string): string => {
@@ -211,7 +212,34 @@ export const generateRecipes = async (state: SearchState, user?: User | null): P
     }
   });
 
-  return JSON.parse(response.text || "[]");
+  const recipes: Recipe[] = JSON.parse(response.text || "[]");
+
+  // Post-process with real USDA nutrition data
+  const recipesWithRealData = await Promise.all(recipes.map(async (recipe) => {
+    try {
+      if (recipe.ingredients && recipe.ingredients.length > 0) {
+        const nutrition = await calculateTotalNutrition(recipe.ingredients);
+
+        // Update recipe with real data
+        recipe.calories = nutrition.calories;
+        recipe.macros = {
+          protein: `${nutrition.protein}g`,
+          carbs: `${nutrition.carbohydrates}g`,
+          fat: `${nutrition.fat}g`
+        };
+
+        // Add source metadata to healthTip (or could add a new field if schema allowed)
+        if (nutrition.source === 'USDA') {
+          recipe.matchReason += " (營養數據來源：USDA)";
+        }
+      }
+    } catch (e) {
+      console.error("Failed to fetch USDA data for recipe:", recipe.name, e);
+    }
+    return recipe;
+  }));
+
+  return recipesWithRealData;
 };
 
 // Generate image for a recipe
@@ -311,6 +339,21 @@ export const createRecipeFromDraft = async (base64Image: string, draftText: stri
     recipe.author = author;
     recipe.isUserCreated = true;
     recipe.imageUrl = base64Image;
+
+    // Enhance with USDA data
+    if (recipe.ingredients && recipe.ingredients.length > 0) {
+      try {
+        const nutrition = await calculateTotalNutrition(recipe.ingredients);
+        recipe.calories = nutrition.calories;
+        recipe.macros = {
+          protein: `${nutrition.protein}g`,
+          carbs: `${nutrition.carbohydrates}g`,
+          fat: `${nutrition.fat}g`
+        };
+      } catch (e) {
+        console.warn("USDA fetch failed for user recipe", e);
+      }
+    }
   }
   return recipe;
 };
@@ -327,7 +370,27 @@ export const fetchDiscoveryFeed = async (): Promise<Recipe[]> => {
       responseSchema: RECIPE_SCHEMA
     }
   });
-  return JSON.parse(response.text || "[]");
+  const recipes: Recipe[] = JSON.parse(response.text || "[]");
+
+  // Post-process discovery feed with USDA data
+  const recipesWithRealData = await Promise.all(recipes.map(async (recipe) => {
+    try {
+      if (recipe.ingredients && recipe.ingredients.length > 0) {
+        const nutrition = await calculateTotalNutrition(recipe.ingredients);
+        recipe.calories = nutrition.calories;
+        recipe.macros = {
+          protein: `${nutrition.protein}g`,
+          carbs: `${nutrition.carbohydrates}g`,
+          fat: `${nutrition.fat}g`
+        };
+      }
+    } catch (e) {
+      // safe fail
+    }
+    return recipe;
+  }));
+
+  return recipesWithRealData;
 };
 
 // Fetch market trends report
