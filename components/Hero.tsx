@@ -204,7 +204,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
           </div>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4">
-            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, goal: DietaryGoal.QUICK }))}
+              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-marble opacity-30"></div>
               <div className="flex items-center gap-3 relative z-10">
                 <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
@@ -217,7 +220,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               </div>
             </button>
 
-            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, goal: DietaryGoal.HIGH_FIBER }))}
+              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-marble opacity-30"></div>
               <div className="flex items-center gap-3 relative z-10">
                 <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
@@ -230,7 +236,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               </div>
             </button>
 
-            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, goal: DietaryGoal.COMFORT }))}
+              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-marble opacity-30"></div>
               <div className="flex items-center gap-3 relative z-10">
                 <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
@@ -243,7 +252,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               </div>
             </button>
 
-            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, occasion: MealOccasion.LATE_NIGHT }))}
+              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-marble opacity-30"></div>
               <div className="flex items-center gap-3 relative z-10">
                 <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
@@ -277,7 +289,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 relative z-10">
-            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['滷肉飯'], cuisine: Cuisine.TAIWANESE }))}
+              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
               <div className="relative z-10">
                 <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🍚</p>
@@ -286,7 +301,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               </div>
             </button>
 
-            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['蚵仔煎'], cuisine: Cuisine.TAIWANESE }))}
+              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
               <div className="relative z-10">
                 <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🦪</p>
@@ -295,7 +313,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               </div>
             </button>
 
-            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['大腸麵線'], cuisine: Cuisine.TAIWANESE }))}
+              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
               <div className="relative z-10">
                 <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🍜</p>
@@ -304,7 +325,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               </div>
             </button>
 
-            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+            <button
+              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['肉圓'], cuisine: Cuisine.TAIWANESE }))}
+              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
               <div className="relative z-10">
                 <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🥟</p>
@@ -314,7 +338,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             </button>
           </div>
 
-          <button className="w-full mt-4 py-3 bg-gradient-to-r from-chef-black to-stone-800 text-chef-gold hover:text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-lg relative overflow-hidden group/btn">
+          <button
+            onClick={() => setSearchState(prev => ({ ...prev, cuisine: Cuisine.TAIWANESE }))}
+            className="w-full mt-4 py-3 bg-gradient-to-r from-chef-black to-stone-800 text-chef-gold hover:text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-lg relative overflow-hidden group/btn"
+          >
             <div className="absolute inset-0 bg-gradient-to-r from-chef-gold/20 via-transparent to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"></div>
             <span className="relative z-10 flex items-center justify-center gap-2">
               探索更多台灣味道 <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
