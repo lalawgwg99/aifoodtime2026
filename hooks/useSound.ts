@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-// Use a high-quality glass chime sound from a reliable hosted source
-// This one is a crisp, ethereal "ding" suitable for UI success states
-const SUCCESS_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview-primary.mp3";
+// Restaurant-style "order ready" bell - short, pleasant ding
+// Similar to a kitchen service bell or pickup notification
+const SUCCESS_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2568/2568-preview-primary.mp3";
 
 export const useSound = () => {
     const playSuccess = useCallback(() => {

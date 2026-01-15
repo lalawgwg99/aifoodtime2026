@@ -115,8 +115,30 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
 
   return (
     <div className={`group relative bg-white rounded-[2rem] transition-all duration-500 flex flex-col ${expanded ? 'shadow-floating z-20 md:scale-[1.02] ring-1 ring-chef-gold/10' : 'shadow-card hover:shadow-premium hover:-translate-y-2'}`}>
-      <div className="relative aspect-[4/3] overflow-hidden rounded-t-[2rem] cursor-pointer bg-chef-cream" onClick={() => setExpanded(!expanded)}>
-        {recipe.imageUrl ? <img src={recipe.imageUrl} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={recipe.name} /> : <div className="absolute inset-0 flex items-center justify-center text-stone-200"><ChefHat size={48} className="animate-pulse" /></div>}
+      <div className="relative aspect-[4/3] overflow-hidden rounded-t-[2rem] cursor-pointer bg-gradient-to-br from-chef-cream to-stone-100" onClick={() => setExpanded(!expanded)}>
+        {recipe.imageUrl ? <img src={recipe.imageUrl} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={recipe.name} /> : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            {/* Animated Food Emoji Ring */}
+            <div className="relative w-32 h-32">
+              {/* Orbiting food items */}
+              <div className="absolute inset-0 animate-spin" style={{ animationDuration: '12s' }}>
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl">🥬</span>
+                <span className="absolute top-1/4 right-0 text-2xl">🍅</span>
+                <span className="absolute bottom-1/4 right-0 text-2xl">🥕</span>
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-2xl">🐟</span>
+                <span className="absolute bottom-1/4 left-0 text-2xl">🥩</span>
+                <span className="absolute top-1/4 left-0 text-2xl">🍳</span>
+              </div>
+              {/* Center ChefHat */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center">
+                  <ChefHat size={32} className="text-chef-gold" />
+                </div>
+              </div>
+            </div>
+            <p className="absolute bottom-6 text-stone-400 text-sm font-medium">AI 生成料理圖片中...</p>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-chef-black/95 via-chef-black/20 to-transparent" />
 
         {recipe.isUserCreated && (
