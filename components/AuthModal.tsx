@@ -143,18 +143,3 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
     </div>
   );
 };
-
-// TypeScript 全域型別宣告
-declare global {
-  interface Window {
-    google?: {
-      accounts: {
-        id: {
-          initialize: (config: any) => void;
-          renderButton: (element: HTMLElement, config: any) => void;
-          prompt: () => void;
-        };
-      };
-    };
-  }
-}
