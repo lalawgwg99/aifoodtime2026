@@ -384,8 +384,8 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
       <div className="mt-10 md:mt-16">
         <button
           onClick={onSearch}
-          disabled={isLoading || (searchState.ingredients.length === 0 && !searchState.goal && !searchState.occasion)}
-          className={`w-full py-5 md:py-7 rounded-[1.5rem] md:rounded-[2rem] relative overflow-hidden group transition-all duration-700 ${isLoading || (searchState.ingredients.length === 0 && !searchState.goal && !searchState.occasion)
+          disabled={isLoading || (searchState.ingredients.length === 0 && !inputValue.trim() && !searchState.goal && !searchState.occasion)}
+          className={`w-full py-5 md:py-7 rounded-[1.5rem] md:rounded-[2rem] relative overflow-hidden group transition-all duration-700 ${isLoading || (searchState.ingredients.length === 0 && !inputValue.trim() && !searchState.goal && !searchState.occasion)
             ? 'bg-stone-100 text-stone-400 cursor-not-allowed border border-stone-200'
             : 'bg-chef-black text-white hover:shadow-floating hover:-translate-y-1 active:translate-y-0 shadow-premium'
             }`}
