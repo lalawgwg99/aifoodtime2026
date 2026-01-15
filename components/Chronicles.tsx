@@ -412,6 +412,46 @@ export const Chronicles: React.FC<ChroniclesProps> = ({ onBack }) => {
 
 
                     </div>
+
+                    {/* Fixed Bottom Nav - Re-added for better UX */}
+                    <div className="fixed bottom-0 left-0 right-0 z-[101] flex items-center justify-between px-6 py-4 bg-black/90 backdrop-blur-md border-t border-white/10 safe-area-bottom">
+                        {(() => {
+                            const idx = ARTICLES.findIndex(a => a.id === selectedArticle.id);
+                            const prev = idx > 0 ? ARTICLES[idx - 1] : null;
+                            const next = idx < ARTICLES.length - 1 ? ARTICLES[idx + 1] : null;
+                            const hasPrev = !!prev;
+                            const hasNext = !!next;
+
+                            return (
+                                <div className="flex items-center justify-between w-full max-w-3xl mx-auto">
+                                    <button
+                                        onClick={() => prev && setSelectedArticle(prev)}
+                                        disabled={!hasPrev}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${hasPrev ? 'text-stone-300 hover:text-white hover:bg-white/10' : 'text-stone-600 cursor-not-allowed'}`}
+                                    >
+                                        <ArrowLeft size={18} />
+                                        <span className="hidden sm:inline text-sm font-bold">上一篇</span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => setSelectedArticle(null)}
+                                        className="px-8 py-2 bg-chef-gold text-black text-sm font-bold rounded-full hover:scale-105 transition-transform shadow-lg"
+                                    >
+                                        返回列表
+                                    </button>
+
+                                    <button
+                                        onClick={() => next && setSelectedArticle(next)}
+                                        disabled={!hasNext}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${hasNext ? 'text-stone-300 hover:text-white hover:bg-white/10' : 'text-stone-600 cursor-not-allowed'}`}
+                                    >
+                                        <span className="hidden sm:inline text-sm font-bold">下一篇</span>
+                                        <ChevronRight size={18} />
+                                    </button>
+                                </div>
+                            );
+                        })()}
+                    </div>
                 </div>
             )}
 
