@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Search, Camera, X, Info, ChefHat,
   Leaf, Zap, Activity, Heart, Coins, Coffee, Utensils,
@@ -43,10 +43,28 @@ const IngredientTag: React.FC<{ label: string; onRemove: () => void }> = ({ labe
   </div>
 );
 
+const PLACEHOLDER_EXAMPLES = [
+  "我冰箱有：雞蛋、豆腐、高麗菜",
+  "15 分鐘完成的台式晚餐",
+  "低脂、高蛋白、適合減脂期",
+  "只有氣炸鍋能用",
+  "想吃古早味、療癒系料理",
+  "滷肉飯、蚵仔煎等台灣小吃",
+];
+
 export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearch, isLoading, onImageUpload }) => {
   const [inputValue, setInputValue] = useState('');
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Placeholder rotation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % PLACEHOLDER_EXAMPLES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const GoalConfig: Record<DietaryGoal, { label: string, icon: React.ReactNode }> = {
     [DietaryGoal.BALANCED]: { label: '均衡健康', icon: <Activity size={14} /> },
@@ -145,10 +163,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               className="flex-1 pl-3 pr-2 py-2 md:pl-5 md:pr-4 md:py-3 bg-transparent text-base md:text-2xl text-chef-black placeholder-stone-400 focus:outline-none font-serif tracking-tight min-w-0"
-              placeholder={searchState.ingredients.length === 0 ? "今天想吃什麼？" : "還有其他食材？"}
+              placeholder={searchState.ingredients.length === 0 ? PLACEHOLDER_EXAMPLES[placeholderIndex] : "還有其他食材？"}
             />
 
-            <div className="flex items-center gap-2 pr-2 md:pr-4 shrink-0">
+            <div className="flex items-center gap-2 pr-2 md:pr-4 shrink-0 relative group/photo">
               <input
                 type="file"
                 ref={fileInputRef}
@@ -158,11 +176,16 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               />
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3 md:p-4 rounded-xl md:rounded-full bg-white hover:bg-chef-black hover:text-white text-stone-500 shadow-sm border border-stone-100 transition-all duration-500 group/cam active:scale-90 flex items-center justify-center"
-                title="視覺辨識食材"
+                className="p-3 md:p-4 rounded-xl md:rounded-full bg-chef-gold/10 hover:bg-chef-gold text-chef-gold hover:text-white shadow-sm border border-chef-gold/20 transition-all duration-300 active:scale-90 flex items-center justify-center"
+                title="📸 拍照辨識食材"
               >
-                <Camera size={20} className="md:w-[22px] md:h-[22px] group-hover:rotate-12 transition-transform" />
+                <Camera size={20} className="md:w-[22px] md:h-[22px]" />
               </button>
+              {/* Tooltip */}
+              <div className="absolute right-0 top-full mt-2 bg-chef-black text-white text-xs p-3 rounded-xl shadow-lg opacity-0 invisible group-hover/photo:opacity-100 group-hover/photo:visible transition-all duration-200 w-48 z-50 hidden md:block">
+                <p className="font-bold mb-1">📸 智慧拍照辨識</p>
+                <p className="text-stone-400 text-[10px] leading-relaxed">拍下冰箱食材或餐廳料理，AI 自動辨識並生成專屬食譜</p>
+              </div>
             </div>
           </div>
         </div>

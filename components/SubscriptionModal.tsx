@@ -1,129 +1,107 @@
-import React from 'react';
-import { X, Check, Crown, Sparkles, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Check, Crown, Sparkles, Zap, Camera, Award, TrendingUp, Infinity, Shield, MessageCircle } from 'lucide-react';
 
 interface SubscriptionModalProps {
-  onClose: () => void;
+   onClose: () => void;
 }
 
 export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose }) => {
-  return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
-      <div className="bg-white rounded-[2rem] max-w-4xl w-full overflow-hidden shadow-2xl relative animate-[fadeInUp_0.3s_ease-out] flex flex-col md:flex-row">
-        
-        {/* Close Button */}
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-black/5 hover:bg-black/10 rounded-full text-stone-500 transition-colors z-20"
-        >
-          <X size={20} />
-        </button>
+   const [plan, setPlan] = useState<'monthly' | 'yearly'>('yearly');
 
-        {/* Left Side: Value Prop */}
-        <div className="bg-chef-black text-white p-8 md:p-12 md:w-2/5 flex flex-col justify-between relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-64 h-64 bg-chef-gold rounded-full blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/3"></div>
-           
-           <div>
-             <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-chef-gold mb-6">
-                <Crown size={12} />
-                Chef Pro
-             </div>
-             <h2 className="text-3xl font-serif font-bold mb-4 leading-tight">
-               釋放您的<br/>烹飪潛能
-             </h2>
-             <p className="text-stone-400 text-sm leading-relaxed">
-               加入 Chef Pro，獲得米其林等級的 AI 輔助，精準控制營養攝取，讓每一餐都成為藝術。
-             </p>
-           </div>
+   const proFeatures = [
+      { icon: Infinity, title: '無限 AI 食譜', desc: '每日不限次數生成專屬食譜' },
+      { icon: Camera, title: '進階視覺辨識', desc: '拍照清冰箱、味道偷師、營養掃描' },
+      { icon: Award, title: '米其林評比', desc: '上傳成品照，AI 對標三星水準' },
+      { icon: TrendingUp, title: '趨勢分析', desc: '掌握全球當季流行食材與擺盤' },
+      { icon: Shield, title: '無廣告體驗', desc: '純淨閱讀，專注料理' },
+      { icon: MessageCircle, title: '優先客服', desc: '24 小時內回覆您的問題' },
+   ];
 
-           <div className="mt-8 space-y-4">
-              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-chef-gold">
-                    <Sparkles size={16} />
-                 </div>
-                 <span className="text-sm font-medium">無限次 AI 食譜生成</span>
-              </div>
-              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-chef-gold">
-                    <Zap size={16} />
-                 </div>
-                 <span className="text-sm font-medium">深度營養微量元素分析</span>
-              </div>
-              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-chef-gold">
-                    <Crown size={16} />
-                 </div>
-                 <span className="text-sm font-medium">優先使用 GPT-4 / Gemini Ultra 模型</span>
-              </div>
-           </div>
-        </div>
+   return (
+      <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 backdrop-blur-sm p-3 md:p-4 animate-fadeIn">
+         <div className="bg-white rounded-[2rem] max-w-lg w-full overflow-hidden shadow-2xl relative animate-[fadeInUp_0.3s_ease-out] max-h-[95vh] overflow-y-auto">
 
-        {/* Right Side: Pricing */}
-        <div className="p-8 md:p-12 md:w-3/5 bg-stone-50">
-           <div className="text-center mb-8">
-              <h3 className="text-xl font-bold text-chef-black mb-2">選擇您的方案</h3>
-              <p className="text-xs text-stone-500">隨時取消，無隱藏費用</p>
-           </div>
+            {/* Close Button */}
+            <button
+               onClick={onClose}
+               className="absolute top-4 right-4 p-2 bg-black/5 hover:bg-black/10 rounded-full text-stone-500 transition-colors z-20"
+            >
+               <X size={18} />
+            </button>
 
-           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Monthly */}
-              <div className="border-2 border-stone-200 rounded-2xl p-6 hover:border-chef-black cursor-pointer transition-all bg-white group relative">
-                 <h4 className="font-serif font-bold text-lg text-stone-800">Monthly</h4>
-                 <div className="my-4">
-                    <span className="text-3xl font-bold text-chef-black">$120</span>
-                    <span className="text-stone-400 text-xs"> / 月</span>
-                 </div>
-                 <ul className="space-y-2 mb-6">
-                    <li className="flex items-center gap-2 text-xs text-stone-600">
-                       <Check size={12} className="text-green-500" /> 完整 Pro 功能
-                    </li>
-                    <li className="flex items-center gap-2 text-xs text-stone-600">
-                       <Check size={12} className="text-green-500" /> 支持多裝置
-                    </li>
-                 </ul>
-                 <button className="w-full py-2 rounded-lg border border-stone-200 text-sm font-bold text-stone-600 group-hover:bg-chef-black group-hover:text-white group-hover:border-chef-black transition-colors">
-                    選擇月費
-                 </button>
-              </div>
+            {/* Header */}
+            <div className="bg-gradient-to-br from-chef-black to-stone-800 text-white p-6 md:p-8 text-center relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-40 h-40 bg-chef-gold rounded-full blur-[60px] opacity-30 -translate-y-1/2 translate-x-1/3"></div>
 
-              {/* Yearly */}
-              <div className="border-2 border-chef-gold rounded-2xl p-6 bg-white cursor-pointer relative shadow-lg transform scale-105 z-10">
-                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-chef-gold text-chef-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    Most Popular
-                 </div>
-                 <h4 className="font-serif font-bold text-lg text-stone-800">Yearly</h4>
-                 <div className="my-4">
-                    <span className="text-3xl font-bold text-chef-black">$99</span>
-                    <span className="text-stone-400 text-xs"> / 月</span>
-                 </div>
-                 <p className="text-[10px] text-green-600 font-bold mb-4 bg-green-50 inline-block px-2 py-1 rounded">
-                    每年省下 $252
-                 </p>
-                 <ul className="space-y-2 mb-6">
-                    <li className="flex items-center gap-2 text-xs text-stone-600">
-                       <Check size={12} className="text-green-500" /> 包含所有月費功能
-                    </li>
-                    <li className="flex items-center gap-2 text-xs text-stone-600">
-                       <Check size={12} className="text-green-500" /> 獨家主廚大師課
-                    </li>
-                    <li className="flex items-center gap-2 text-xs text-stone-600">
-                       <Check size={12} className="text-green-500" /> 優先客服支援
-                    </li>
-                 </ul>
-                 <button className="w-full py-2 rounded-lg bg-chef-black text-white text-sm font-bold hover:bg-stone-800 transition-colors shadow-lg">
-                    開始 7 天免費試用
-                 </button>
-              </div>
-           </div>
+               <div className="relative z-10">
+                  <div className="inline-flex items-center gap-2 bg-chef-gold/20 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-chef-gold mb-4">
+                     <Crown size={14} />
+                     Chef Pro
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-serif font-bold mb-2">
+                     解鎖<span className="text-chef-gold">米其林級</span>體驗
+                  </h2>
+                  <p className="text-stone-400 text-sm">讓 AI 成為您的私人主廚顧問</p>
+               </div>
+            </div>
 
-           <div className="mt-8 text-center">
-              <p className="text-[10px] text-stone-400">
-                 點擊試用即代表您同意 <a href="#" className="underline">服務條款</a> 與 <a href="#" className="underline">隱私權政策</a>。
-                 <br/>我們目前僅提供信用卡支付 (Stripe)。
-              </p>
-           </div>
-        </div>
+            {/* Plan Toggle */}
+            <div className="p-4 md:p-6">
+               <div className="flex bg-stone-100 rounded-2xl p-1.5 mb-6">
+                  <button
+                     onClick={() => setPlan('monthly')}
+                     className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${plan === 'monthly' ? 'bg-white shadow-sm text-chef-black' : 'text-stone-500'}`}
+                  >
+                     月費方案
+                  </button>
+                  <button
+                     onClick={() => setPlan('yearly')}
+                     className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all relative ${plan === 'yearly' ? 'bg-white shadow-sm text-chef-black' : 'text-stone-500'}`}
+                  >
+                     年費方案
+                     <span className="absolute -top-2 -right-1 bg-green-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">省17%</span>
+                  </button>
+               </div>
 
+               {/* Price Display */}
+               <div className="text-center mb-6">
+                  <div className="flex items-baseline justify-center gap-1">
+                     <span className="text-4xl md:text-5xl font-bold text-chef-black">
+                        ${plan === 'monthly' ? '120' : '99'}
+                     </span>
+                     <span className="text-stone-400 text-sm">/ 月</span>
+                  </div>
+                  {plan === 'yearly' && (
+                     <p className="text-green-600 text-xs font-medium mt-1">
+                        年繳 $1,188，每年省下 $252
+                     </p>
+                  )}
+               </div>
+
+               {/* Features Grid */}
+               <div className="grid grid-cols-2 gap-3 mb-6">
+                  {proFeatures.map((feature, idx) => (
+                     <div key={idx} className="flex items-start gap-2 p-3 bg-stone-50 rounded-xl">
+                        <feature.icon size={16} className="text-chef-gold shrink-0 mt-0.5" />
+                        <div>
+                           <p className="text-xs font-bold text-chef-black">{feature.title}</p>
+                           <p className="text-[10px] text-stone-500 leading-snug">{feature.desc}</p>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+
+               {/* CTA */}
+               <button className="w-full py-4 bg-chef-black text-white rounded-2xl font-bold text-sm uppercase tracking-wider hover:bg-chef-gold hover:text-chef-black transition-all shadow-lg">
+                  {plan === 'yearly' ? '開始 7 天免費試用' : '立即訂閱'}
+               </button>
+
+               <p className="text-center text-[10px] text-stone-400 mt-4 leading-relaxed">
+                  點擊即同意 <a href="#" className="underline">服務條款</a> 與 <a href="#" className="underline">隱私政策</a>
+                  <br />支援信用卡 / Apple Pay / Google Pay
+               </p>
+            </div>
+         </div>
       </div>
-    </div>
-  );
+   );
 };

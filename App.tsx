@@ -9,7 +9,9 @@ import { AuthModal } from './components/AuthModal';
 import { ProfileModal } from './components/ProfileModal';
 import { SubscriptionModal } from './components/SubscriptionModal';
 import { Onboarding } from './components/Onboarding';
+import { UsageLimitModal } from './components/UsageLimitModal';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
+import { usageService } from './services/usageService';
 import { SearchState, Recipe, Cuisine, VisionMode, User } from './types';
 
 const GENERIC_MESSAGES = [
@@ -37,6 +39,7 @@ export default function App() {
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showUsageLimitModal, setShowUsageLimitModal] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'community'>('home');
 
   useEffect(() => {
@@ -77,10 +80,23 @@ export default function App() {
 
   const handleSearch = async () => {
     if (searchState.ingredients.length === 0 && !searchState.goal && !searchState.occasion) return;
+
+    // Check usage limits for non-logged-in users
+    if (!usageService.canUse(!!currentUser)) {
+      setShowUsageLimitModal(true);
+      return;
+    }
+
     setLoading(true); setError(null); setShowFavoritesOnly(false);
     try {
       const results = await generateRecipes(searchState, currentUser);
       setRecipes(results); setHasSearched(true);
+
+      // Increment usage count  for non-logged-in users
+      if (!currentUser) {
+        usageService.incrementUsage();
+      }
+
       setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
       results.forEach(async (recipe) => {
         const imageUrl = await generateRecipeImage(recipe.name, recipe.description);
@@ -320,6 +336,13 @@ export default function App() {
       {showProfileModal && currentUser && <ProfileModal user={currentUser} onClose={() => setShowProfileModal(false)} onLogout={handleLogout} />}
       {showSubscriptionModal && <SubscriptionModal onClose={() => setShowSubscriptionModal(false)} />}
       {showOnboarding && <Onboarding onClose={handleCloseOnboarding} />}
+      {showUsageLimitModal && (
+        <UsageLimitModal
+          onClose={() => setShowUsageLimitModal(false)}
+          onLogin={() => { setShowUsageLimitModal(false); setShowAuthModal(true); }}
+          remainingUses={usageService.getRemainingUses(!!currentUser)}
+        />
+      )}
     </div>
   );
 }
