@@ -18,11 +18,11 @@ export const TrustSection = () => {
                         </div>
                     ))}
                     <div className="w-12 h-12 rounded-full border-[3px] border-chef-paper bg-chef-black text-white flex items-center justify-center text-xs font-bold">
-                        +12k
+                        <ChefHat size={20} />
                     </div>
                 </div>
                 <p className="text-stone-600 font-medium text-lg">
-                    與 <span className="font-bold text-[#1A1818] border-b-2 border-chef-gold/50">12,400+</span> 位生活家一起探索美味。
+                    與 <span className="font-bold text-[#1A1818] border-b-2 border-chef-gold/50">AI 智能主廚</span> 一起探索美味無限可能。
                 </p>
             </div>
 
@@ -32,19 +32,19 @@ export const TrustSection = () => {
                 {/* Card 1 */}
                 <div className="bg-white rounded-[2rem] p-8 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-floating transition-all group">
                     <h3 className="text-4xl md:text-5xl font-serif font-bold text-[#1A1818] mb-2 group-hover:scale-110 transition-transform duration-500">
-                        80,000<span className="text-chef-gold text-3xl">+</span>
+                        ∞<span className="text-chef-gold text-3xl"></span>
                     </h3>
-                    <p className="text-xs font-black tracking-[0.2em] text-stone-500 uppercase">Recipes Generated</p>
-                    <p className="text-sm text-stone-600 mt-1 font-bold">AI 食譜生成總數</p>
+                    <p className="text-xs font-black tracking-[0.2em] text-stone-500 uppercase">Unlimited Recipes</p>
+                    <p className="text-sm text-stone-600 mt-1 font-bold">無限食譜生成</p>
                 </div>
 
                 {/* Card 2 */}
                 <div className="bg-white rounded-[2rem] p-8 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-floating transition-all group">
                     <h3 className="text-4xl md:text-5xl font-serif font-bold text-[#1A1818] mb-2 group-hover:scale-110 transition-transform duration-500">
-                        12,400<span className="text-chef-gold text-3xl">+</span>
+                        24<span className="text-chef-gold text-3xl">/7</span>
                     </h3>
-                    <p className="text-xs font-black tracking-[0.2em] text-stone-500 uppercase">Trusted Users</p>
-                    <p className="text-sm text-stone-600 mt-1 font-bold">活躍創作者</p>
+                    <p className="text-xs font-black tracking-[0.2em] text-stone-500 uppercase">Always Available</p>
+                    <p className="text-sm text-stone-600 mt-1 font-bold">全天候專屬顧問</p>
                 </div>
 
                 {/* Card 3 - Highlight (Gold) */}
