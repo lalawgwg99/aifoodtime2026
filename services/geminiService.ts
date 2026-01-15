@@ -236,15 +236,34 @@ export const generateRecipeImage = async (name: string, description: string): Pr
 
 // Ask the Sous Chef about a recipe
 export const askSousChef = async (recipe: Recipe, question: string): Promise<string> => {
-  const ai = getAIClient();
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: `食譜內容：${JSON.stringify(recipe)}\n使用者問題：${question}`,
-    config: {
-      systemInstruction: "你是一位溫暖且專業的二廚助手。請根據提供的食譜內容，親切地回答使用者的問題，如果問題無關料理，請委婉告知。語言：必須使用台灣繁體中文。"
+  try {
+    const ai = getAIClient();
+
+    const recipeContext = `
+食譜名稱：${recipe.name}
+食材：${recipe.ingredients.join('、')}
+步驟：${recipe.instructions.join(' → ')}
+預估時間：${recipe.timeMinutes} 分鐘
+熱量：${recipe.calories} kcal
+`;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: `${recipeContext}\n\n使用者問題：${question}`,
+      config: {
+        systemInstruction: "你是「饗味食光」的二廚助手，名叫小饗。請用溫暖親切的語氣回答使用者關於這道料理的問題。如果問題與料理無關，請委婉引導回料理話題。回答要簡潔實用，不超過 150 字。語言：必須使用台灣繁體中文。"
+      }
+    });
+
+    const text = response.text?.trim();
+    if (!text) {
+      return "主廚現在有點忙，請稍後再試。";
     }
-  });
-  return response.text || "主廚現在有點忙，請稍後再試。";
+    return text;
+  } catch (error) {
+    console.error('askSousChef error:', error);
+    return "抱歉，二廚暫時無法回應，請稍後再試。";
+  }
 };
 
 // Generate Chef Verdict from image
