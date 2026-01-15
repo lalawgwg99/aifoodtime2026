@@ -31,6 +31,22 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
     }
   }, [transcript]);
 
+  // Track previous listening state for auto-submit
+  const wasListeningRef = useRef(false);
+
+  // Auto-submit message when voice input stops
+  React.useEffect(() => {
+    // Trigger when we just stopped listening and there's content
+    if (wasListeningRef.current && !isListening && inputMessage.trim()) {
+      // Small delay to ensure transcript is fully synced
+      const timer = setTimeout(() => {
+        handleSendMessage();
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+    wasListeningRef.current = isListening;
+  }, [isListening, inputMessage]);
+
   // TTS Helper
   const speakText = (text: string) => {
     if ('speechSynthesis' in window) {
