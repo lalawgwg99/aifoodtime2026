@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu, BookOpen } from 'lucide-react';
+import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu, BookOpen, Calendar } from 'lucide-react';
 import { Hero } from './components/Hero';
 import { RecipeCard } from './components/RecipeCard';
 import { Community } from './components/Community';
@@ -14,6 +14,7 @@ import { SubscriptionModal } from './components/SubscriptionModal';
 import { Onboarding } from './components/Onboarding';
 import { UsageLimitModal } from './components/UsageLimitModal';
 import { LoginBenefitsModal } from './components/LoginBenefitsModal';
+import { MealPlanner } from './components/MealPlanner';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
 import { usageService } from './services/usageService';
 import { SearchState, Recipe, Cuisine, VisionMode, User } from './types';
@@ -55,6 +56,7 @@ export default function App() {
   const [showUsageLimitModal, setShowUsageLimitModal] = useState(false);
   const [showLoginBenefitsModal, setShowLoginBenefitsModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showMealPlanner, setShowMealPlanner] = useState(false);
   const [currentView, setCurrentView] = useState<string>('home');
 
   useEffect(() => {
@@ -224,6 +226,9 @@ export default function App() {
             </button>
             <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`p-2 transition-all ${showFavoritesOnly ? 'text-chef-gold-dark' : 'text-stone-500 hover:text-chef-black'}`}>
               <Heart size={22} fill={showFavoritesOnly ? "currentColor" : "none"} />
+            </button>
+            <button onClick={() => setShowMealPlanner(true)} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="週計劃">
+              <Calendar size={22} />
             </button>
             <button onClick={() => setCurrentView('chronicles')} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="美食誌">
               <BookOpen size={22} />
@@ -414,6 +419,13 @@ export default function App() {
           onLogin={() => { setShowLoginBenefitsModal(false); setShowAuthModal(true); }}
         />
       )}
+
+      {/* Meal Planner */}
+      <MealPlanner
+        isOpen={showMealPlanner}
+        onClose={() => setShowMealPlanner(false)}
+        savedRecipes={favorites}
+      />
 
       {/* Social Trust & Stats */}
       <TrustSection />
