@@ -398,38 +398,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         </button>
       </div>
 
-      {/* Social Verification */}
-      <div className="mt-8 md:mt-12 flex flex-col items-center gap-4 md:gap-5 animate-fadeIn">
-        <div className="flex -space-x-3 md:-space-x-4">
-          {[1, 2, 3, 4, 5, 6].map(i => (
-            <img key={i} className="w-10 h-10 md:w-12 md:h-12 rounded-full border-[3px] md:border-4 border-chef-paper shadow-premium hover:z-10 hover:scale-110 transition-transform cursor-pointer" src={`https://i.pravatar.cc/150?img=${i + 35}`} alt="User" />
-          ))}
-        </div>
-        <p className="text-sm md:text-base text-stone-500 font-medium tracking-tight px-4 text-center">
-          與 <span className="text-chef-black font-black underline decoration-chef-gold underline-offset-4">12,400+</span> 位生活家探索美味。
-        </p>
-      </div>
-
-      {/* Trust Metrics - Luxury Concrete Numbers */}
-      <div className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-3xl mx-auto px-4 relative">
-        {/* Golden Divider */}
-        <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-chef-gold/30 to-transparent"></div>
-
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center shadow-card border border-stone-200/60 hover:border-chef-gold/30 transition-all group">
-          <p className="text-2xl md:text-3xl font-serif font-bold text-chef-black mb-1 group-hover:scale-110 transition-transform bg-clip-text text-transparent bg-gradient-to-b from-chef-black to-stone-600">80,000+</p>
-          <p className="text-[10px] md:text-sm text-stone-500 font-bold tracking-wider uppercase">Recipes Generated</p>
-        </div>
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center shadow-card border border-stone-200/60 hover:border-chef-gold/30 transition-all group">
-          <p className="text-2xl md:text-3xl font-serif font-bold text-chef-black mb-1 group-hover:scale-110 transition-transform bg-clip-text text-transparent bg-gradient-to-b from-chef-black to-stone-600">12,400+</p>
-          <p className="text-[10px] md:text-sm text-stone-500 font-bold tracking-wider uppercase">Trusted Users</p>
-        </div>
-        <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-chef-gold to-chef-gold-dark text-white rounded-2xl p-4 md:p-6 text-center shadow-gold-glow border border-chef-gold relative overflow-hidden group">
-          <div className="absolute inset-0 bg-marble opacity-20"></div>
-          <div className="absolute top-0 right-0 w-16 h-16 bg-white/20 blur-xl rounded-full"></div>
-          <p className="text-2xl md:text-3xl font-serif font-bold text-white mb-1 group-hover:scale-110 transition-transform drop-shadow-md">92%</p>
-          <p className="text-[10px] md:text-sm text-white/90 font-bold tracking-wider uppercase drop-shadow-sm">Taiwanese Flavor</p>
-        </div>
-      </div>
+      {/* Social Verification & Trust Metrics moved to TrustSection.tsx */}
 
       {/* Login Value Comparison - Conversion Driver */}
       {/* Login Value Comparison moved to Mobile Menu Modal */}
