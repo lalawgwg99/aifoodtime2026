@@ -1,11 +1,12 @@
 import React from 'react';
-import { ChefHat, Globe, ShieldCheck, Mail, FileText, Lock } from 'lucide-react';
+import { ChefHat, Globe, ShieldCheck, Mail, FileText, Lock, Beaker } from 'lucide-react';
 
 interface FooterProps {
     onOpenContact?: () => void;
+    onOpenMethodology?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenContact, onOpenMethodology }) => {
     const currentYear = new Date().getFullYear();
 
     return (
@@ -36,6 +37,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
                             <span className="text-white/40 block mb-4">Support</span>
                             <button className="block hover:text-chef-gold transition-colors text-left">系統狀態 <span className="text-stone-600 text-[10px] ml-1">Status</span></button>
                             <button onClick={onOpenContact} className="block hover:text-chef-gold transition-colors text-left">聯絡客服 <span className="text-stone-600 text-[10px] ml-1">Contact</span></button>
+                            <button onClick={onOpenMethodology} className="flex items-center gap-1.5 hover:text-chef-gold transition-colors text-left"><Beaker size={12} /> 計算說明 <span className="text-stone-600 text-[10px] ml-1">Methodology</span></button>
                             <button className="block hover:text-chef-gold transition-colors text-left">資安回報 <span className="text-stone-600 text-[10px] ml-1">Security</span></button>
                         </div>
                         <div className="space-y-4">

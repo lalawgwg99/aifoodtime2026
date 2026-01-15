@@ -15,6 +15,7 @@ import { Onboarding } from './components/Onboarding';
 import { UsageLimitModal } from './components/UsageLimitModal';
 import { LoginBenefitsModal } from './components/LoginBenefitsModal';
 import { MealPlanner } from './components/MealPlanner';
+import { MethodologyModal } from './components/MethodologyModal';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
 import { usageService } from './services/usageService';
 import { SearchState, Recipe, Cuisine, VisionMode, User } from './types';
@@ -56,6 +57,7 @@ export default function App() {
   const [showUsageLimitModal, setShowUsageLimitModal] = useState(false);
   const [showLoginBenefitsModal, setShowLoginBenefitsModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showMethodologyModal, setShowMethodologyModal] = useState(false);
   const [showMealPlanner, setShowMealPlanner] = useState(false);
   const [currentView, setCurrentView] = useState<string>('home');
 
@@ -449,12 +451,21 @@ export default function App() {
       <TrustSection />
 
       {/* Global Footer */}
-      <Footer onOpenContact={() => setShowContactModal(true)} />
+      <Footer
+        onOpenContact={() => setShowContactModal(true)}
+        onOpenMethodology={() => setShowMethodologyModal(true)}
+      />
 
       {/* Contact Modal */}
       {showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
+
+      {/* Methodology / Transparency Modal */}
+      <MethodologyModal
+        isOpen={showMethodologyModal}
+        onClose={() => setShowMethodologyModal(false)}
+      />
     </div>
   );
 }
