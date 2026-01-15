@@ -196,6 +196,107 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
           <span className="text-sm font-medium tracking-wide">輸入食材自動辨識同義詞</span>
         </div>
 
+        {/* Quick Context Tags - Situational Filters */}
+        <div className="mt-10 md:mt-14">
+          <div className="text-center mb-6">
+            <p className="text-xs md:text-sm font-bold uppercase tracking-wider text-stone-400 mb-1">快速情境</p>
+            <h3 className="text-lg md:text-xl font-serif font-bold text-chef-black">現在想要...</h3>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4">
+            <button className="px-6 py-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all group">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                  <Zap className="text-white" size={20} />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-chef-black text-sm">⚡ 趕時間</p>
+                  <p className="text-xs text-stone-500">15 分鐘內完成</p>
+                </div>
+              </div>
+            </button>
+
+            <button className="px-6 py-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl border-2 border-green-200 hover:border-green-400 transition-all group">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                  <Leaf className="text-white" size={20} />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-chef-black text-sm">🥗 想健康</p>
+                  <p className="text-xs text-stone-500">低脂高纖維</p>
+                </div>
+              </div>
+            </button>
+
+            <button className="px-6 py-4 bg-gradient-to-br from-amber-50 to-orange-100 rounded-2xl border-2 border-orange-200 hover:border-orange-400 transition-all group">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                  <Heart className="text-white" size={20} />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-chef-black text-sm">💛 想療癒</p>
+                  <p className="text-xs text-stone-500">古早味、溫暖系</p>
+                </div>
+              </div>
+            </button>
+
+            <button className="px-6 py-4 bg-gradient-to-br from-red-50 to-rose-100 rounded-2xl border-2 border-red-200 hover:border-red-400 transition-all group">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                  <Flame className="text-white" size={20} />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-chef-black text-sm">🔥 想放縱</p>
+                  <p className="text-xs text-stone-500">高熱量、爽快</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Taiwan Snacks Spotlight - Cultural Moat */}
+        <div className="mt-12 md:mt-16 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 rounded-3xl p-6 md:p-8 border-2 border-chef-gold/30">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-2xl">🇹🇼</span>
+                <h3 className="text-lg md:text-xl font-serif font-bold text-chef-black">台灣小吃專區</h3>
+              </div>
+              <p className="text-xs md:text-sm text-stone-500">道地古早味，AI 還原夜市經典</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
+              <p className="text-2xl mb-2">🍚</p>
+              <p className="font-bold text-sm text-chef-black">滷肉飯</p>
+              <p className="text-[10px] text-stone-400 mt-1">南部 vs 北部</p>
+            </button>
+
+            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
+              <p className="text-2xl mb-2">🦪</p>
+              <p className="font-bold text-sm text-chef-black">蚵仔煎</p>
+              <p className="text-[10px] text-stone-400 mt-1">夜市經典</p>
+            </button>
+
+            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
+              <p className="text-2xl mb-2">🍜</p>
+              <p className="font-bold text-sm text-chef-black">大腸麵線</p>
+              <p className="text-[10px] text-stone-400 mt-1">台北招牌</p>
+            </button>
+
+            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
+              <p className="text-2xl mb-2">🥟</p>
+              <p className="font-bold text-sm text-chef-black">肉圓</p>
+              <p className="text-[10px] text-stone-400 mt-1">彰化名產</p>
+            </button>
+          </div>
+
+          <button className="w-full mt-4 py-3 bg-chef-black/5 hover:bg-chef-black hover:text-white text-chef-black rounded-xl font-bold text-sm transition-all">
+            探索更多台灣味道 →
+          </button>
+        </div>
+
         {/* Filters Grouped by Context - Mobile Optimized Horizontal Scroll */}
         <div className="mt-8 md:mt-12 space-y-8 md:space-y-12">
 
