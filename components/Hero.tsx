@@ -203,70 +203,43 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             <h3 className="text-lg md:text-xl font-serif font-bold text-chef-black">現在想要...</h3>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4">
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, goal: DietaryGoal.QUICK }))}
-              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-marble opacity-30"></div>
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
-                  <Zap className="text-white drop-shadow-sm" size={20} />
-                </div>
-                <div className="text-left">
-                  <p className="font-bold text-chef-black text-sm">⚡ 趕時間</p>
-                  <p className="text-xs text-chef-accent">15 分鐘內完成</p>
-                </div>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, goal: DietaryGoal.HIGH_FIBER }))}
-              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-marble opacity-30"></div>
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
-                  <Leaf className="text-white drop-shadow-sm" size={20} />
-                </div>
-                <div className="text-left">
-                  <p className="font-bold text-chef-black text-sm">🥗 想健康</p>
-                  <p className="text-xs text-chef-accent">低脂高纖維</p>
-                </div>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, goal: DietaryGoal.COMFORT }))}
-              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-marble opacity-30"></div>
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
-                  <Heart className="text-white drop-shadow-sm" size={20} />
-                </div>
-                <div className="text-left">
-                  <p className="font-bold text-chef-black text-sm">💛 想療癒</p>
-                  <p className="text-xs text-chef-accent">古早味、溫暖系</p>
-                </div>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, occasion: MealOccasion.LATE_NIGHT }))}
-              className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-marble opacity-30"></div>
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
-                  <Flame className="text-white drop-shadow-sm" size={20} />
-                </div>
-                <div className="text-left">
-                  <p className="font-bold text-chef-black text-sm">🔥 想放縱</p>
-                  <p className="text-xs text-chef-accent">高熱量、爽快</p>
-                </div>
-              </div>
-            </button>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 px-2 md:px-0">
+            {[
+              { label: '⚡ 趕時間', sub: '15 分鐘完成', goal: DietaryGoal.QUICK, color: 'text-amber-500', bg: 'bg-amber-100' },
+              { label: '🥗 想健康', sub: '低脂高纖維', goal: DietaryGoal.HIGH_FIBER, color: 'text-green-600', bg: 'bg-green-100' },
+              { label: '💛 想療癒', sub: '古早味暖心', goal: DietaryGoal.COMFORT, color: 'text-orange-500', bg: 'bg-orange-100' },
+              { label: '🔥 想放縱', sub: '高熱量爽快', occasion: MealOccasion.LATE_NIGHT, color: 'text-red-500', bg: 'bg-red-100' }
+            ].map((item, idx) => {
+              const isActive = item.goal ? searchState.goal === item.goal : searchState.occasion === item.occasion;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    if (item.goal) setSearchState(prev => ({ ...prev, goal: prev.goal === item.goal ? null : item.goal, occasion: null }));
+                    if (item.occasion) setSearchState(prev => ({ ...prev, occasion: prev.occasion === item.occasion ? null : item.occasion, goal: null }));
+                  }}
+                  className={`relative p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center text-center gap-2 group
+                    ${isActive
+                      ? 'bg-white border-chef-gold shadow-gold-glow scale-[1.02]'
+                      : 'bg-white border-stone-100 hover:border-chef-gold/50 hover:shadow-card'
+                    }`}
+                >
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${isActive ? 'bg-chef-gold text-white' : `${item.bg} ${item.color}`}`}>
+                    {idx === 0 && <Zap size={24} />}
+                    {idx === 1 && <Leaf size={24} />}
+                    {idx === 2 && <Heart size={24} />}
+                    {idx === 3 && <Flame size={24} />}
+                  </div>
+                  <div>
+                    <p className={`font-bold text-base mb-1 ${isActive ? 'text-chef-black' : 'text-stone-700'}`}>{item.label}</p>
+                    <p className={`text-xs ${isActive ? 'text-chef-gold-dark font-bold' : 'text-stone-400'}`}>{item.sub}</p>
+                  </div>
+                  {isActive && (
+                    <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-chef-gold animate-pulse"></div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
