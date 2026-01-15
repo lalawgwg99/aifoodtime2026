@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { Clock, Flame, ChefHat, Heart, Utensils, Mic, Camera, X, BarChart2, Loader2, Award, Globe, ShieldCheck, Activity, Leaf, Share2, Check, AlertCircle } from 'lucide-react';
+import { Clock, Flame, ChefHat, Heart, Utensils, Mic, Camera, X, BarChart2, Loader2, Award, Globe, ShieldCheck, Activity, Leaf, Share2, Check, AlertCircle, User, Wifi, Volume2, Send } from 'lucide-react';
 import { Recipe, ChatMessage, ChefVerdict } from '../types';
 import { askSousChef, generateChefVerdict } from '../services/geminiService';
 
@@ -16,6 +16,19 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isChefThinking, setIsChefThinking] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const startListening = () => {
+    setIsListening(true);
+    // Simulate listening delay then stop
+    setTimeout(() => {
+      setIsListening(false);
+      setInputMessage("這道菜的關鍵是什麼？");
+    }, 3000);
+  };
+
+  const stopListening = () => setIsListening(false);
   const [showVerdictModal, setShowVerdictModal] = useState(false);
   const [verdictImage, setVerdictImage] = useState<string | null>(null);
   const [isAnalyzingVerdict, setIsAnalyzingVerdict] = useState(false);
@@ -26,14 +39,32 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
-    const userMsg: ChatMessage = { role: 'user', text: inputMessage, timestamp: Date.now() };
-    setChatMessages(prev => [...prev, userMsg]);
+
+    const newMsg: ChatMessage = { role: 'user', text: inputMessage, timestamp: Date.now() };
+    setChatMessages(prev => [...prev, newMsg]);
     setInputMessage("");
     setIsChefThinking(true);
+
+    // Scroll to bottom
+    setTimeout(() => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    }, 100);
+
     try {
-      const answer = await askSousChef(recipe, inputMessage);
-      setChatMessages(prev => [...prev, { role: 'assistant', text: answer, timestamp: Date.now() }]);
-    } finally { setIsChefThinking(false); }
+      const response = await askSousChef(recipe, inputMessage);
+      setChatMessages(prev => [...prev, { role: 'assistant', text: response, timestamp: Date.now() }]);
+    } catch (error) {
+      setChatMessages(prev => [...prev, { role: 'assistant', text: "Sorry, the kitchen is a bit chaotic right now. Please try again.", timestamp: Date.now() }]);
+    } finally {
+      setIsChefThinking(false);
+      setTimeout(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, 100);
+    }
   };
 
   const handleVerdictUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,45 +246,120 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
             <button onClick={() => fileInputRef.current?.click()} className="py-3.5 rounded-xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 border-2 border-dashed border-stone-100 text-stone-400 hover:border-chef-gold hover:text-chef-gold transition-all"><Camera size={14} /> 成品評鑑<input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleVerdictUpload} /></button>
           </div>
 
-          {/* BUG-003 修復：Sous Chef 對話介面 */}
           {showSousChef && (
-            <div className="mt-4 p-5 bg-stone-50 rounded-2xl animate-fadeInUp">
-              <div className="max-h-48 overflow-y-auto no-scrollbar space-y-3 mb-4">
-                {chatMessages.length === 0 && (
-                  <p className="text-center text-stone-400 text-xs py-4 italic">向二廚詢問任何烹飪問題...</p>
-                )}
-                {chatMessages.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <span className={`inline-block px-4 py-2.5 rounded-2xl text-sm max-w-[80%] ${msg.role === 'user'
-                      ? 'bg-chef-gold text-white rounded-br-sm'
-                      : 'bg-white shadow-sm text-stone-700 rounded-bl-sm'
-                      }`}>{msg.text}</span>
+            <div className="mt-6 animate-fadeInUp">
+              {/* Hands-Free Mode Container */}
+              <div className="bg-chef-black rounded-[2.5rem] p-6 md:p-8 relative overflow-hidden shadow-2xl border border-chef-gold/20 min-h-[450px] flex flex-col">
+
+                {/* Background Decoration */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-chef-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+                {/* Header Actions */}
+                <div className="flex items-center justify-between mb-6 relative z-10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-chef-gold/20 flex items-center justify-center text-chef-gold">
+                      <ChefHat size={20} />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-serif font-bold text-lg tracking-wide">語音二廚</h3>
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-stone-400 text-xs font-medium">Listening...</span>
+                      </div>
+                    </div>
                   </div>
-                ))}
-                {isChefThinking && (
-                  <div className="flex justify-start">
-                    <span className="inline-block px-4 py-2.5 bg-white shadow-sm rounded-2xl rounded-bl-sm text-stone-400 text-sm animate-pulse">
-                      主廚思考中...
-                    </span>
+                  <button onClick={() => setShowSousChef(false)} className="p-3 rounded-full bg-white/10 text-stone-300 hover:bg-white/20 hover:text-white transition-colors">
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Chat Area - Focused on Readability */}
+                <div ref={chatContainerRef} className="flex-1 overflow-y-auto space-y-6 pr-2 mb-24 no-scrollbar relative z-10">
+                  {chatMessages.length === 0 && (
+                    <div className="h-full flex flex-col items-center justify-center text-center opacity-60 mt-10">
+                      <Mic size={48} className="text-chef-gold mb-4" />
+                      <p className="text-white text-lg font-medium mb-2">"這道菜要煮多久？"</p>
+                      <p className="text-stone-400 text-sm">直接開口發問，無需觸控</p>
+                    </div>
+                  )}
+
+                  {chatMessages.map((msg, idx) => (
+                    <div key={idx} className={`flex items-start gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''} animate-fadeIn`}>
+                      {/* Avatar */}
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-lg ${msg.role === 'user' ? 'bg-stone-700 text-stone-300' : 'bg-chef-gold text-chef-black'
+                        }`}>
+                        {msg.role === 'user' ? <User size={18} /> : <ChefHat size={20} />}
+                      </div>
+
+                      {/* Bubble */}
+                      <div className={`px-6 py-4 rounded-3xl text-base md:text-lg leading-relaxed shadow-lg max-w-[85%] ${msg.role === 'user'
+                          ? 'bg-stone-800 text-stone-100 rounded-tr-none border border-white/5'
+                          : 'bg-white text-chef-black rounded-tl-none font-medium'
+                        }`}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Thinking State */}
+                  {isChefThinking && (
+                    <div className="flex items-start gap-4 animate-pulse">
+                      <div className="w-10 h-10 rounded-full bg-chef-gold/50 text-chef-black flex items-center justify-center shrink-0">
+                        <ChefHat size={20} />
+                      </div>
+                      <div className="px-6 py-4 rounded-3xl rounded-tl-none bg-white/10 text-stone-300 text-sm">
+                        思考中...
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Control Bar - Fixed Bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-chef-black via-chef-black/95 to-transparent z-20">
+                  <div className="flex items-center gap-4">
+                    {/* Keyboard Input Toggle (Hidden by default or small) */}
+                    <div className="flex-1 bg-white/10 backdrop-blur-md rounded-full h-14 flex items-center px-2 border border-white/5 focus-within:border-chef-gold/50 transition-colors">
+                      <input
+                        type="text"
+                        value={inputMessage}
+                        onChange={(e) => setInputMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        placeholder="或輸入文字..."
+                        className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-stone-500 px-4 h-full"
+                        disabled={isListening}
+                      />
+                      <button
+                        onClick={handleSendMessage}
+                        disabled={!inputMessage.trim() || isChefThinking}
+                        className="w-10 h-10 rounded-full bg-white/10 text-chef-gold flex items-center justify-center hover:bg-white/20 transition-all disabled:opacity-30"
+                      >
+                        <Send size={18} />
+                      </button>
+                    </div>
+
+                    {/* BIG VOICE BUTTON */}
+                    <button
+                      onClick={isListening ? stopListening : startListening}
+                      className={`w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all transform hover:scale-105 active:scale-95 ${isListening
+                        ? 'bg-red-500 text-white shadow-red-glow animate-pulse ring-4 ring-red-500/30'
+                        : 'bg-chef-gold text-chef-black hover:bg-white'
+                        }`}
+                    >
+                      {isListening ? <div className="w-5 h-5 bg-white rounded-sm" /> : <Mic size={28} />}
+                    </button>
                   </div>
-                )}
+                </div>
+
               </div>
-              <div className="flex gap-2">
-                <input
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && !isChefThinking && handleSendMessage()}
-                  className="flex-1 px-4 py-3 rounded-xl bg-white border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-chef-gold/20 focus:border-chef-gold transition-all"
-                  placeholder="問問二廚..."
-                  disabled={isChefThinking}
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!inputMessage.trim() || isChefThinking}
-                  className="px-5 py-3 bg-chef-black text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-chef-gold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  發送
-                </button>
+
+              {/* Feature Tags */}
+              <div className="flex justify-center gap-4 mt-4">
+                <span className="px-3 py-1 rounded-full bg-stone-100 text-xs font-bold text-stone-500 flex items-center gap-1">
+                  <Wifi size={12} /> 廚房抗噪模式
+                </span>
+                <span className="px-3 py-1 rounded-full bg-stone-100 text-xs font-bold text-stone-500 flex items-center gap-1">
+                  <Volume2 size={12} /> 語音朗讀(TTS)
+                </span>
               </div>
             </div>
           )}

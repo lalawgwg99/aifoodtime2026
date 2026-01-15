@@ -7,6 +7,7 @@ import {
   Carrot, Waves, Tent, PartyPopper, Trees, Apple, Mic
 } from 'lucide-react';
 import { DietaryGoal, Cuisine, SearchState, MealOccasion } from '../types';
+import { useVoiceInput } from '../hooks/useVoiceInput';
 
 interface HeroProps {
   searchState: SearchState;
@@ -162,30 +163,22 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
     }
   };
 
-  const handleVoiceInput = () => {
-    // @ts-ignore
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  // Voice Input Hook
+  const { isListening, transcript, startListening, stopListening, isSupported } = useVoiceInput();
 
-    if (!SpeechRecognition) {
-      alert('您的瀏覽器不支援語音輸入，請使用 Chrome 或 Safari');
+  // Sync voice transcript to input
+  useEffect(() => {
+    if (transcript) {
+      setInputValue(transcript);
+    }
+  }, [transcript]);
+
+  const handleVoiceInput = () => {
+    if (!isSupported) {
+      alert('您的瀏覽器不支援語音輸入功能');
       return;
     }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'zh-TW';
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setInputValue(transcript);
-    };
-
-    recognition.onerror = (event: any) => {
-      console.error('Speech recognition error', event.error);
-    };
-
-    recognition.start();
+    startListening();
   };
 
   return (
@@ -217,35 +210,46 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               placeholder={searchState.ingredients.length === 0 ? PLACEHOLDER_EXAMPLES[placeholderIndex] : "還有其他食材？"}
             />
 
-            <div className="flex items-center gap-2 pr-2 md:pr-4 shrink-0 relative group/photo">
-              {/* Microphone Button */}
-              <button
-                onClick={handleVoiceInput}
-                className="p-3 md:p-4 rounded-xl md:rounded-full bg-chef-gold/10 hover:bg-chef-gold text-chef-gold hover:text-white shadow-sm border border-chef-gold/20 transition-all duration-300 active:scale-90 flex items-center justify-center"
-                title="語音輸入"
-              >
-                <Mic size={20} className="md:w-[22px] md:h-[22px]" />
-              </button>
+            <div className="flex items-center gap-3 pr-2 md:pr-4 shrink-0">
 
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept="image/*"
-                onChange={(e) => e.target.files?.[0] && onImageUpload(e.target.files[0])}
-              />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="p-3 md:p-4 rounded-xl md:rounded-full bg-chef-gold/10 hover:bg-chef-gold text-chef-gold hover:text-white shadow-sm border border-chef-gold/20 transition-all duration-300 active:scale-90 flex items-center justify-center"
-                title="📸 拍照辨識食材"
-              >
-                <Camera size={20} className="md:w-[22px] md:h-[22px]" />
-              </button>
-              {/* Tooltip */}
-              <div className="absolute right-0 top-full mt-2 bg-chef-black text-white text-xs p-3 rounded-xl shadow-lg opacity-0 invisible group-hover/photo:opacity-100 group-hover/photo:visible transition-all duration-200 w-48 z-50 hidden md:block">
-                <p className="font-bold mb-1">📸 智慧拍照辨識</p>
-                <p className="text-stone-400 text-[10px] leading-relaxed">拍下冰箱食材或餐廳料理，AI 自動辨識並生成專屬食譜</p>
+              {/* Microphone Button Group */}
+              <div className="relative group/voice">
+                <button
+                  onClick={handleVoiceInput}
+                  className="p-3 md:p-4 rounded-xl md:rounded-full bg-chef-gold/10 hover:bg-chef-gold text-chef-gold hover:text-white shadow-sm border border-chef-gold/20 transition-all duration-300 active:scale-90 flex items-center justify-center"
+                >
+                  <Mic size={20} className="md:w-[22px] md:h-[22px]" />
+                </button>
+                {/* Voice Tooltip */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 bg-chef-black text-white text-xs px-3 py-2 rounded-lg shadow-lg opacity-0 invisible group-hover/voice:opacity-100 group-hover/voice:visible transition-all duration-200 z-50 whitespace-nowrap pointer-events-none">
+                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-chef-black rotate-45"></div>
+                  <span className="font-bold">語音輸入</span>
+                </div>
               </div>
+
+              {/* Camera Button Group */}
+              <div className="relative group/camera">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) => e.target.files?.[0] && onImageUpload(e.target.files[0])}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="p-3 md:p-4 rounded-xl md:rounded-full bg-chef-gold/10 hover:bg-chef-gold text-chef-gold hover:text-white shadow-sm border border-chef-gold/20 transition-all duration-300 active:scale-90 flex items-center justify-center"
+                >
+                  <Camera size={20} className="md:w-[22px] md:h-[22px]" />
+                </button>
+                {/* Camera Tooltip */}
+                <div className="absolute right-0 top-full mt-3 bg-chef-black text-white text-xs p-3 rounded-xl shadow-lg opacity-0 invisible group-hover/camera:opacity-100 group-hover/camera:visible transition-all duration-200 w-48 z-50 pointer-events-none hidden md:block">
+                  <div className="absolute -top-1 right-6 w-2 h-2 bg-chef-black rotate-45"></div>
+                  <p className="font-bold mb-1">📸 智慧拍照辨識</p>
+                  <p className="text-stone-400 text-[10px] leading-relaxed">拍下冰箱食材或餐廳料理，AI 自動辨識</p>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

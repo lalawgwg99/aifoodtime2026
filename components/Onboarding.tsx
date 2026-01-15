@@ -10,8 +10,8 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<'guide' | 'story'>('guide');
 
   const guideSteps = [
-    { icon: Camera, title: '📸 拍照辨識', desc: '拍下冰箱食材，AI 自動推薦零浪費食譜' },
-    { icon: Mic, title: '🎙️ 語音二廚', desc: '手忙腳亂時，與 AI 對話調整份量' },
+    { icon: Camera, title: '📸 AI 視覺廚房', desc: '不只是拍照！結合您的飲食目標（如增肌、減脂），AI 為您量身轉化冰箱食材。' },
+    { icon: Mic, title: '🗣️ 免手持二廚', desc: '全螢幕語音介面，雙手油膩也能輕鬆對話，即時調整份量或詢問工法。' },
     { icon: TrendingUp, title: '📈 趨勢研究', desc: '掌握當季流行食材與擺盤數據' },
     { icon: Award, title: '⭐ 大師評比', desc: '上傳作品，AI 評比你與米其林的差距' },
     { icon: Globe, title: '🌍 社群創作', desc: '分享或 Remix 其他創作者的靈感' },

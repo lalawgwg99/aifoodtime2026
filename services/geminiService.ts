@@ -129,19 +129,33 @@ const TREND_REPORT_SCHEMA = {
 };
 
 // Analyze image and return recipes
-export const analyzeImage = async (base64Image: string, mode: VisionMode): Promise<Recipe[]> => {
+export const analyzeImage = async (base64Image: string, mode: VisionMode, state?: SearchState): Promise<Recipe[]> => {
   const ai = getAIClient();
   const mimeTypeMatch = base64Image.match(/^data:(image\/[a-zA-Z+]+);base64,/);
   const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
   const cleanBase64 = base64Image.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, "");
 
+  // Construct constraints context
+  let constraints = "";
+  if (state) {
+    const parts = [];
+    if (state.goal) parts.push(`營養目標：${state.goal}`);
+    if (state.occasion) parts.push(`用餐場合：${state.occasion}`);
+    if (state.cuisine && state.cuisine !== "Any") parts.push(`偏好菜系：${state.cuisine}`);
+    if (state.ingredients.length > 0) parts.push(`額外指定食材：${state.ingredients.join(", ")}`);
+
+    if (parts.length > 0) {
+      constraints = `\n\n[使用者額外限制條件] (請務必在生成食譜時同時滿足照片辨識結果與以下條件)：\n${parts.join("\n")}`;
+    }
+  }
+
   let prompt = "";
   if (mode === VisionMode.FRIDGE_XRAY) {
-    prompt = "任務：辨識這張照片中的食材。重要規則：如果照片中沒有任何可辨識的食物、食材或料理，請直接回傳空陣列 `[]`，不要嘗試生成。如果有食材，請根據這些食材生成 3 道美味且具備創意的食譜 JSON。請特別注意營養均衡，並在 healthTip 中提供微量元素分析。";
+    prompt = `任務：辨識這張照片中的食材。重要規則：如果照片中沒有任何可辨識的食物、食材或料理，請直接回傳空陣列 []，不要嘗試生成。如果有食材，請根據這些食材生成 3 道美味且具備創意的食譜 JSON。${constraints}\n請特別注意營養均衡，並在 healthTip 中提供微量元素分析。`;
   } else if (mode === VisionMode.TASTE_THIEF) {
-    prompt = "任務：辨識這張照片中的料理。重要規則：如果照片中沒有食物，請直接回傳空陣列 `[]`。如果有，請嘗試分析其配方，生成 3 道類似或改良版的食譜 JSON。";
+    prompt = `任務：辨識這張照片中的料理。重要規則：如果照片中沒有食物，請直接回傳空陣列 []。如果有，請嘗試分析其配方，生成 3 道類似或改良版的食譜 JSON。${constraints}`;
   } else if (mode === VisionMode.NUTRI_SCANNER) {
-    prompt = "任務：分析營養價值。重要規則：如果照片中沒有食物，請直接回傳空陣列 `[]`。如果有，提供營養價值評估，並推薦 3 道更健康的替代食譜 JSON。";
+    prompt = `任務：分析營養價值。重要規則：如果照片中沒有食物，請直接回傳空陣列 []。如果有，提供營養價值評估，並推薦 3 道更健康的替代食譜 JSON。${constraints}`;
   } else {
     prompt = "辨識照片內容。如果不是食物，回傳空陣列。";
   }

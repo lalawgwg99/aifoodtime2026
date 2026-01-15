@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
-import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu } from 'lucide-react';
+import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu, BookOpen } from 'lucide-react';
 import { Hero } from './components/Hero';
 import { RecipeCard } from './components/RecipeCard';
 import { Community } from './components/Community';
+import { Chronicles } from './components/Chronicles';
 import { MarketTicker } from './components/MarketTicker';
 import { AuthModal } from './components/AuthModal';
 import { ProfileModal } from './components/ProfileModal';
@@ -25,7 +25,8 @@ const GENERIC_MESSAGES = [
 
 // Super Admin Whitelist
 const ADMIN_EMAILS = [
-  "lalawgwg99@gmail.com", // Replace or add your Google email here
+  'yuns@example.com',
+  "lalawgwg99@gmail.com",
   "savorchef.admin@gmail.com"
 ];
 
@@ -50,7 +51,7 @@ export default function App() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUsageLimitModal, setShowUsageLimitModal] = useState(false);
   const [showLoginBenefitsModal, setShowLoginBenefitsModal] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'community'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'community' | 'chronicles'>('home');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('smartchef_user');
@@ -133,7 +134,8 @@ export default function App() {
     reader.onload = async () => {
       try {
         const base64 = reader.result as string;
-        const results = await analyzeImage(base64, VisionMode.FRIDGE_XRAY);
+        // BUG-008 修復：將搜尋標籤 (searchState) 傳入影像分析，確保標籤與影像辨識連動
+        const results = await analyzeImage(base64, VisionMode.FRIDGE_XRAY, searchState);
         if (results.length === 0) {
           setError("這張照片似乎沒有包含可辨識的食材或料理，請換一張試試。");
           return;
@@ -219,6 +221,9 @@ export default function App() {
             <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`p-2 transition-all ${showFavoritesOnly ? 'text-chef-gold-dark' : 'text-stone-500 hover:text-chef-black'}`}>
               <Heart size={22} fill={showFavoritesOnly ? "currentColor" : "none"} />
             </button>
+            <button onClick={() => setCurrentView('chronicles')} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="美食誌">
+              <BookOpen size={22} />
+            </button>
             <button onClick={() => setCurrentView('community')} className="p-2 text-stone-500 hover:text-chef-black transition-all">
               <Users size={22} />
             </button>
@@ -291,6 +296,12 @@ export default function App() {
                   <Heart size={18} className={showFavoritesOnly ? 'text-chef-gold' : 'text-stone-600'} fill={showFavoritesOnly ? "currentColor" : "none"} />
                 </div>
                 <span className="font-bold text-sm">我的收藏</span>
+              </button>
+              <button onClick={() => { setCurrentView('chronicles'); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                <div className="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                  <BookOpen size={18} className="text-stone-600" />
+                </div>
+                <span className="font-bold text-sm">美食誌</span>
               </button>
               <button onClick={() => { setCurrentView('community'); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
                 <div className="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
