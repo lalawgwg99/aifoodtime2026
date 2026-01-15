@@ -52,8 +52,32 @@ const PLACEHOLDER_EXAMPLES = [
   "滷肉飯、蚵仔煎等台灣小吃",
 ];
 
+const TAIWAN_SNACKS_DATA = [
+  { icon: '🍚', label: '滷肉飯', sub: '南部 vs 北部', keyword: '滷肉飯' },
+  { icon: '🦪', label: '蚵仔煎', sub: '夜市經典', keyword: '蚵仔煎' },
+  { icon: '🍜', label: '大腸麵線', sub: '台北招牌', keyword: '大腸麵線' },
+  { icon: '🥟', label: '肉圓', sub: '彰化名產', keyword: '肉圓' },
+  { icon: '🧋', label: '珍珠奶茶', sub: '全球風靡', keyword: '珍珠奶茶' },
+  { icon: '🍗', label: '大雞排', sub: '罪惡宵夜', keyword: '雞排' },
+  { icon: '🧀', label: '臭豆腐', sub: '獨特風味', keyword: '臭豆腐' },
+  { icon: '🥩', label: '牛肉麵', sub: '台灣之光', keyword: '牛肉麵' },
+  { icon: '🥢', label: '小籠包', sub: '皮薄多汁', keyword: '小籠包' },
+  { icon: '🍔', label: '刈包', sub: '台式漢堡', keyword: '刈包' },
+  { icon: '🥞', label: '蔥油餅', sub: '酥脆口感', keyword: '蔥油餅' },
+  { icon: '🍍', label: '鳳梨酥', sub: '必買伴手', keyword: '鳳梨酥' },
+  { icon: '🍧', label: '芒果冰', sub: '夏日限定', keyword: '芒果冰' },
+  { icon: '🥚', label: '滷味', sub: '下酒良伴', keyword: '滷味' },
+  { icon: '🍗', label: '鹽酥雞', sub: '追劇必備', keyword: '鹽酥雞' },
+  { icon: '🍞', label: '棺材板', sub: '台南特色', keyword: '棺材板' },
+  { icon: '🌯', label: '潤餅', sub: '清爽首選', keyword: '潤餅' },
+  { icon: '🍜', label: '擔仔麵', sub: '度小月', keyword: '擔仔麵' },
+  { icon: '🍚', label: '碗粿', sub: '滑嫩口感', keyword: '碗粿' },
+  { icon: '🥚', label: '鐵蛋', sub: '淡水名產', keyword: '鐵蛋' },
+];
+
 export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearch, isLoading, onImageUpload }) => {
   const [inputValue, setInputValue] = useState('');
+  const [showAllSnacks, setShowAllSnacks] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -261,63 +285,30 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 relative z-10">
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['滷肉飯'], cuisine: Cuisine.TAIWANESE }))}
-              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
-              <div className="relative z-10">
-                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🍚</p>
-                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">滷肉飯</p>
-                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">南部 vs 北部</p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['蚵仔煎'], cuisine: Cuisine.TAIWANESE }))}
-              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
-              <div className="relative z-10">
-                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🦪</p>
-                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">蚵仔煎</p>
-                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">夜市經典</p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['大腸麵線'], cuisine: Cuisine.TAIWANESE }))}
-              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
-              <div className="relative z-10">
-                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🍜</p>
-                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">大腸麵線</p>
-                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">台北招牌</p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setSearchState(prev => ({ ...prev, ingredients: ['肉圓'], cuisine: Cuisine.TAIWANESE }))}
-              className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
-              <div className="relative z-10">
-                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🥟</p>
-                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">肉圓</p>
-                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">彰化名產</p>
-              </div>
-            </button>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 relative z-10 transition-all duration-500 ease-in-out">
+            {TAIWAN_SNACKS_DATA.slice(0, showAllSnacks ? undefined : 4).map((snack, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSearchState(prev => ({ ...prev, ingredients: [snack.keyword], cuisine: Cuisine.TAIWANESE }))}
+                className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden animate-fadeIn"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
+                <div className="relative z-10">
+                  <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">{snack.icon}</p>
+                  <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">{snack.label}</p>
+                  <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">{snack.sub}</p>
+                </div>
+              </button>
+            ))}
           </div>
 
           <button
-            onClick={() => setSearchState(prev => ({ ...prev, cuisine: Cuisine.TAIWANESE }))}
+            onClick={() => setShowAllSnacks(!showAllSnacks)}
             className="w-full mt-4 py-3 bg-gradient-to-r from-chef-black to-stone-800 text-chef-gold hover:text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-lg relative overflow-hidden group/btn"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-chef-gold/20 via-transparent to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"></div>
             <span className="relative z-10 flex items-center justify-center gap-2">
-              探索更多台灣味道 <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+              {showAllSnacks ? '收起台灣小吃' : '探索更多台灣味道'} <span className={`transition-transform duration-300 ${showAllSnacks ? '-rotate-90' : 'group-hover/btn:translate-x-1'}`}>{showAllSnacks ? '↑' : '→'}</span>
             </span>
           </button>
         </div>
