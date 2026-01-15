@@ -1,8 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Clock, Flame, ChefHat, Heart, Utensils, Mic, Camera, X, BarChart2, Loader2, Award, Globe, ShieldCheck, Activity, Leaf, Share2, Check, AlertCircle, User, Wifi, Volume2, Send } from 'lucide-react';
-import { Recipe, ChatMessage, ChefVerdict } from '../types';
-import { askSousChef, generateChefVerdict } from '../services/geminiService';
+import { useVoiceInput } from '../hooks/useVoiceInput';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -16,19 +15,68 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isChefThinking, setIsChefThinking] = useState(false);
-  const [isListening, setIsListening] = useState(false);
+
+  // Voice & TTS Logic
+  const { isListening, transcript, startListening, stopListening, isSupported } = useVoiceInput();
+  const [isTTSActive, setIsTTSActive] = useState(false);
+  const [isNoiseCancelActive, setIsNoiseCancelActive] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const startListening = () => {
-    setIsListening(true);
-    // Simulate listening delay then stop
-    setTimeout(() => {
-      setIsListening(false);
-      setInputMessage("這道菜的關鍵是什麼？");
-    }, 3000);
+  // Sync transcript to input
+  React.useEffect(() => {
+    if (transcript) {
+      setInputMessage(transcript);
+    }
+  }, [transcript]);
+
+  // TTS Helper
+  const speakText = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // Stop previous
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-TW';
+      utterance.rate = 1;
+      window.speechSynthesis.speak(utterance);
+    }
   };
 
-  const stopListening = () => setIsListening(false);
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return;
+
+    const newMsg: ChatMessage = { role: 'user', text: inputMessage, timestamp: Date.now() };
+    setChatMessages(prev => [...prev, newMsg]);
+    const currentInput = inputMessage; // Store for API call
+    setInputMessage("");
+    setIsChefThinking(true);
+
+    // Scroll
+    setTimeout(() => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    }, 100);
+
+    try {
+      const response = await askSousChef(recipe, currentInput);
+      setChatMessages(prev => [...prev, { role: 'assistant', text: response, timestamp: Date.now() }]);
+
+      // Auto-Read if TTS is active
+      if (isTTSActive) {
+        speakText(response);
+      }
+    } catch (error) {
+      const errorMsg = "抱歉，廚房有點忙亂，請再說一次。";
+      setChatMessages(prev => [...prev, { role: 'assistant', text: errorMsg, timestamp: Date.now() }]);
+      if (isTTSActive) speakText(errorMsg);
+    } finally {
+      setIsChefThinking(false);
+      setTimeout(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, 100);
+    }
+  };
   const [showVerdictModal, setShowVerdictModal] = useState(false);
   const [verdictImage, setVerdictImage] = useState<string | null>(null);
   const [isAnalyzingVerdict, setIsAnalyzingVerdict] = useState(false);
@@ -293,8 +341,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
 
                       {/* Bubble */}
                       <div className={`px-6 py-4 rounded-3xl text-base md:text-lg leading-relaxed shadow-lg max-w-[85%] ${msg.role === 'user'
-                          ? 'bg-stone-800 text-stone-100 rounded-tr-none border border-white/5'
-                          : 'bg-white text-chef-black rounded-tl-none font-medium'
+                        ? 'bg-stone-800 text-stone-100 rounded-tr-none border border-white/5'
+                        : 'bg-white text-chef-black rounded-tl-none font-medium'
                         }`}>
                         {msg.text}
                       </div>
@@ -352,14 +400,33 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
 
               </div>
 
-              {/* Feature Tags */}
-              <div className="flex justify-center gap-4 mt-4">
-                <span className="px-3 py-1 rounded-full bg-stone-100 text-xs font-bold text-stone-500 flex items-center gap-1">
-                  <Wifi size={12} /> 廚房抗噪模式
-                </span>
-                <span className="px-3 py-1 rounded-full bg-stone-100 text-xs font-bold text-stone-500 flex items-center gap-1">
-                  <Volume2 size={12} /> 語音朗讀(TTS)
-                </span>
+              {/* Feature Tags (Interactive) */}
+              <div className="flex justify-center gap-4 mt-4 select-none">
+                <button
+                  onClick={() => setIsNoiseCancelActive(!isNoiseCancelActive)}
+                  className={`px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${isNoiseCancelActive
+                      ? 'bg-chef-gold text-white shadow-md'
+                      : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
+                    }`}
+                >
+                  <Wifi size={14} />
+                  {isNoiseCancelActive ? '抗噪模式：開啟' : '廚房抗噪模式'}
+                </button>
+
+                <button
+                  onClick={() => {
+                    const newState = !isTTSActive;
+                    setIsTTSActive(newState);
+                    if (newState) speakText("語音助手已啟動");
+                  }}
+                  className={`px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${isTTSActive
+                      ? 'bg-chef-gold text-white shadow-md'
+                      : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
+                    }`}
+                >
+                  <Volume2 size={14} />
+                  {isTTSActive ? '語音朗讀：開啟' : '語音朗讀(TTS)'}
+                </button>
               </div>
             </div>
           )}

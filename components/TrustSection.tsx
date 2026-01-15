@@ -34,8 +34,8 @@ export const TrustSection = () => {
                     <h3 className="text-4xl md:text-5xl font-serif font-bold text-[#1A1818] mb-2 group-hover:scale-110 transition-transform duration-500">
                         80,000<span className="text-chef-gold text-3xl">+</span>
                     </h3>
-                    <p className="text-[10px] md:text-xs font-black tracking-[0.2em] text-stone-400 uppercase">Recipes Generated</p>
-                    <p className="text-[10px] text-stone-300 mt-1 font-bold">AI 食譜生成總數</p>
+                    <p className="text-xs font-black tracking-[0.2em] text-stone-500 uppercase">Recipes Generated</p>
+                    <p className="text-sm text-stone-600 mt-1 font-bold">AI 食譜生成總數</p>
                 </div>
 
                 {/* Card 2 */}
@@ -43,8 +43,8 @@ export const TrustSection = () => {
                     <h3 className="text-4xl md:text-5xl font-serif font-bold text-[#1A1818] mb-2 group-hover:scale-110 transition-transform duration-500">
                         12,400<span className="text-chef-gold text-3xl">+</span>
                     </h3>
-                    <p className="text-[10px] md:text-xs font-black tracking-[0.2em] text-stone-400 uppercase">Trusted Users</p>
-                    <p className="text-[10px] text-stone-300 mt-1 font-bold">活躍創作者</p>
+                    <p className="text-xs font-black tracking-[0.2em] text-stone-500 uppercase">Trusted Users</p>
+                    <p className="text-sm text-stone-600 mt-1 font-bold">活躍創作者</p>
                 </div>
 
                 {/* Card 3 - Highlight (Gold) */}
@@ -57,8 +57,8 @@ export const TrustSection = () => {
                     <h3 className="text-4xl md:text-5xl font-serif font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-500 relative z-10">
                         92<span className="text-3xl">%</span>
                     </h3>
-                    <p className="text-[10px] md:text-xs font-black tracking-[0.2em] text-white/80 uppercase relative z-10">Taiwanese Flavor</p>
-                    <p className="text-[10px] text-white/60 mt-1 font-bold relative z-10">在地口味精準度</p>
+                    <p className="text-xs font-black tracking-[0.2em] text-white/90 uppercase relative z-10">Taiwanese Flavor</p>
+                    <p className="text-sm text-white/90 mt-1 font-bold relative z-10">在地口味精準度</p>
                 </div>
 
             </div>
