@@ -147,12 +147,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
         </div>
 
         <div className="absolute bottom-5 left-6 right-6 text-white z-10">
-          <div className="flex items-center gap-2 mb-2.5 flex-wrap">
-            <span className="bg-chef-gold px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest text-chef-black">{recipe.calories} KCAL</span>
-            <span className="bg-white/10 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 border border-white/10"><Clock size={11} /> {recipe.timeMinutes} MIN</span>
-            <span className="bg-green-500/20 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest text-green-300 border border-green-500/30">≈ NT$ {Math.round(recipe.ingredients.length * 22)}</span>
-          </div>
-          <h3 className="text-xl md:text-2xl font-serif font-bold tracking-tight leading-none">{recipe.name}</h3>
+          <h3 className="text-xl md:text-2xl font-serif font-bold tracking-tight leading-none drop-shadow-lg">{recipe.name}</h3>
         </div>
       </div>
 
@@ -168,6 +163,13 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
         </div>
 
         <div className={`space-y-8 transition-all duration-700 overflow-hidden ${expanded ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+
+          {/* Quick Stats Badges */}
+          <div className="flex items-center gap-2 flex-wrap animate-fadeInUp">
+            <span className="bg-chef-gold px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest text-chef-black shadow-sm">{recipe.calories} KCAL</span>
+            <span className="bg-stone-100 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest text-stone-600 flex items-center gap-1.5"><Clock size={12} /> {recipe.timeMinutes} MIN</span>
+            <span className="bg-green-50 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest text-green-600 border border-green-200">≈ NT$ {Math.round(recipe.ingredients.length * 22)}</span>
+          </div>
 
           {/* Nutrition Analysis Section (Simplified & Breathable) */}
           {recipe.macros && (
