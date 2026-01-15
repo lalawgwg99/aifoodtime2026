@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle } from 'lucide-react';
+import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu } from 'lucide-react';
 import { Hero } from './components/Hero';
 import { RecipeCard } from './components/RecipeCard';
 import { Community } from './components/Community';
@@ -36,6 +36,7 @@ export default function App() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'community'>('home');
 
   useEffect(() => {
@@ -159,56 +160,117 @@ export default function App() {
 
       {/* Navigation */}
       <nav className="w-full bg-chef-paper/80 backdrop-blur-xl transition-all sticky top-0 z-40 border-b border-chef-gold/5">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 md:h-24 flex items-center justify-between">
-          <div className="flex items-center gap-4 group cursor-pointer" onClick={handleLogoClick}>
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-[#1A1818] rounded-xl flex items-center justify-center text-white shadow-xl">
-              <ChefHat size={22} className="md:w-[26px] md:h-[26px]" />
+        <div className="max-w-7xl mx-auto px-4 md:px-12 h-16 md:h-24 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={handleLogoClick}>
+            <div className="w-9 h-9 md:w-12 md:h-12 bg-[#1A1818] rounded-xl flex items-center justify-center text-white shadow-xl">
+              <ChefHat size={18} className="md:w-[26px] md:h-[26px]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg md:text-xl font-bold text-[#1A1818] leading-tight">饗味食光</span>
-              <span className="text-xs md:text-sm tracking-[0.15em] text-chef-gold font-serif italic font-medium mt-0.5">您的專屬暖心私廚</span>
+              <span className="text-base md:text-xl font-bold text-[#1A1818] leading-tight">饗味食光</span>
+              <span className="hidden md:block text-sm tracking-[0.15em] text-chef-gold font-serif italic font-medium mt-0.5">您的專屬暖心私廚</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-8">
-            {/* Pro Button - Always Visible now */}
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
             <button onClick={() => setShowSubscriptionModal(true)} className="flex items-center gap-2 px-4 py-2 bg-chef-black text-chef-gold rounded-full text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg border border-chef-gold/30">
               <Crown size={14} /> Pro
             </button>
-
-            {/* New Onboarding Trigger Button */}
             <button onClick={() => setShowOnboarding(true)} className="p-2 text-stone-300 hover:text-chef-black transition-all" title="新手指南">
               <HelpCircle size={22} />
             </button>
-
             <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} className={`p-2 transition-all ${showFavoritesOnly ? 'text-chef-gold' : 'text-stone-300 hover:text-chef-black'}`}>
               <Heart size={22} fill={showFavoritesOnly ? "currentColor" : "none"} />
             </button>
             <button onClick={() => setCurrentView('community')} className="p-2 text-stone-300 hover:text-chef-black transition-all">
               <Users size={22} />
             </button>
-
             {currentUser ? (
               <button onClick={() => setShowProfileModal(true)} className="outline-none">
-                <img src={currentUser.avatar} className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-chef-gold/30" alt="User" />
+                <img src={currentUser.avatar} className="w-12 h-12 rounded-full border-2 border-chef-gold/30" alt="User" />
               </button>
             ) : (
-              <button onClick={() => setShowAuthModal(true)} className="px-6 py-2.5 md:px-8 md:py-3 rounded-xl bg-stone-100/50 text-[#1A1818] text-xs font-black uppercase tracking-widest hover:bg-[#1A1818] hover:text-white transition-all">登入</button>
+              <button onClick={() => setShowAuthModal(true)} className="px-8 py-3 rounded-xl bg-stone-100/50 text-[#1A1818] text-xs font-black uppercase tracking-widest hover:bg-[#1A1818] hover:text-white transition-all">登入</button>
             )}
+          </div>
+
+          {/* Mobile: Login + Hamburger */}
+          <div className="flex md:hidden items-center gap-3">
+            {currentUser ? (
+              <button onClick={() => setShowProfileModal(true)} className="outline-none">
+                <img src={currentUser.avatar} className="w-9 h-9 rounded-full border-2 border-chef-gold/30" alt="User" />
+              </button>
+            ) : (
+              <button onClick={() => setShowAuthModal(true)} className="px-4 py-2 rounded-lg bg-chef-black text-white text-xs font-bold">登入</button>
+            )}
+            <button onClick={() => setShowMobileMenu(true)} className="p-2 text-chef-black">
+              <Menu size={24} />
+            </button>
           </div>
         </div>
       </nav>
 
+      {/* Mobile Menu Overlay */}
+      {showMobileMenu && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
+          <div className="absolute right-0 top-0 h-full w-72 bg-white shadow-2xl animate-fadeInUp">
+            <div className="p-6 border-b border-stone-100 flex items-center justify-between">
+              <span className="font-bold text-lg">選單</span>
+              <button onClick={() => setShowMobileMenu(false)} className="p-2 hover:bg-stone-100 rounded-full">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4 space-y-2">
+              <button onClick={() => { setShowSubscriptionModal(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                <div className="w-10 h-10 bg-chef-black rounded-xl flex items-center justify-center">
+                  <Crown size={18} className="text-chef-gold" />
+                </div>
+                <div className="text-left">
+                  <span className="font-bold text-sm">升級 Pro</span>
+                  <p className="text-xs text-stone-400">解鎖進階功能</p>
+                </div>
+              </button>
+              <button onClick={() => { setShowOnboarding(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                <div className="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                  <HelpCircle size={18} className="text-stone-600" />
+                </div>
+                <span className="font-bold text-sm">新手指南</span>
+              </button>
+              <button onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${showFavoritesOnly ? 'bg-chef-gold/20' : 'bg-stone-100'}`}>
+                  <Heart size={18} className={showFavoritesOnly ? 'text-chef-gold' : 'text-stone-600'} fill={showFavoritesOnly ? "currentColor" : "none"} />
+                </div>
+                <span className="font-bold text-sm">我的收藏</span>
+              </button>
+              <button onClick={() => { setCurrentView('community'); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                <div className="w-10 h-10 bg-stone-100 rounded-xl flex items-center justify-center">
+                  <Users size={18} className="text-stone-600" />
+                </div>
+                <span className="font-bold text-sm">社群分享</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-6 md:px-12 pt-12 md:pt-24">
-        <div className="text-center mb-16 md:mb-32 animate-fadeIn">
+      <main className="max-w-7xl mx-auto px-6 md:px-12 pt-8 md:pt-20">
+        <div className="text-center mb-12 md:mb-24 animate-fadeIn">
 
-          <h1 className="text-6xl md:text-9xl font-serif font-bold text-[#1A1818] mb-10 md:mb-16 leading-[1.1] tracking-tight">
-            讓食材<span className="text-stone-300 px-2">/</span><span className="text-chef-gold relative inline-block after:content-[''] after:absolute after:bottom-2 after:left-0 after:w-full after:h-4 after:bg-chef-gold/10 after:-z-10">綻放</span><span className="text-stone-300 px-2">/</span>靈魂
-          </h1>
+          {/* Main Headline - Elegant Stacked Layout */}
+          <div className="mb-8 md:mb-12">
+            <p className="text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-chef-gold mb-4 md:mb-6">AI 私廚顧問</p>
+            <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-[#1A1818] leading-[1.15] tracking-tight">
+              讓食材
+              <span className="text-chef-gold block md:inline md:mx-4">綻放靈魂</span>
+            </h1>
+          </div>
 
-          <p className="text-xl md:text-2xl text-stone-500 max-w-3xl mx-auto font-normal leading-relaxed font-serif tracking-wide">
-            「饗味食光」不只是食譜，更是您廚房裡的藝術策展人。讓我們為您編織一場味覺的極致饗宴。
+          <p className="text-base md:text-xl text-stone-500 max-w-2xl mx-auto font-normal leading-relaxed">
+            「饗味食光」不只是食譜，更是您廚房裡的藝術策展人。
+            <span className="hidden md:inline">讓我們為您編織一場味覺的極致饗宴。</span>
           </p>
         </div>
 

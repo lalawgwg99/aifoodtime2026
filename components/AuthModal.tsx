@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { X, LogIn, ChefHat, Sparkles, ShieldCheck, Globe } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, ChefHat, Sparkles, Globe } from 'lucide-react';
 import { User } from '../types';
 
 interface AuthModalProps {
@@ -8,40 +8,99 @@ interface AuthModalProps {
   onLogin: (user: User) => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
-  const [isAnimating, setIsAnimating] = useState(false);
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
-  const handleGoogleLogin = () => {
-    setIsAnimating(true);
-    // 模擬 Google OAuth 回傳與完整 User 物件
-    setTimeout(() => {
-      const mockUser: User = {
-        id: 'u1',
-        name: '星級評論員',
-        email: 'star.chef@google.com',
-        avatar: 'https://i.pravatar.cc/150?u=starchef',
-        level: '三星主廚',
+export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const buttonContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 等待 Google SDK 載入
+    const checkGoogleLoaded = setInterval(() => {
+      if (window.google?.accounts?.id && buttonContainerRef.current) {
+        clearInterval(checkGoogleLoaded);
+
+        try {
+          // 初始化 Google Sign-In
+          window.google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleCredentialResponse,
+            auto_select: false,
+          });
+
+          // 渲染按鈕
+          window.google.accounts.id.renderButton(
+            buttonContainerRef.current,
+            {
+              theme: 'outline',
+              size: 'large',
+              text: 'signin_with',
+              shape: 'rectangular',
+              width: 280,
+              locale: 'zh_TW'
+            }
+          );
+
+          setIsLoading(false);
+        } catch (err) {
+          console.error('Google Sign-In init error:', err);
+          setError('初始化失敗');
+          setIsLoading(false);
+        }
+      }
+    }, 100);
+
+    // 5 秒後超時
+    const timeout = setTimeout(() => {
+      clearInterval(checkGoogleLoaded);
+      if (isLoading) {
+        setError('Google 服務載入超時，請檢查網路連線');
+        setIsLoading(false);
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(checkGoogleLoaded);
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  const handleCredentialResponse = (response: any) => {
+    try {
+      // 解碼 JWT
+      const payload = JSON.parse(atob(response.credential.split('.')[1]));
+
+      const user: User = {
+        id: payload.sub,
+        name: payload.name,
+        email: payload.email,
+        avatar: payload.picture,
+        level: '新進主廚',
         stats: {
-          totalRecipes: 12,
-          averageSoulScore: 92,
+          totalRecipes: 0,
+          averageSoulScore: 0,
           tasteDNA: [
-            { label: '視覺美學 Visual', value: 95 },
-            { label: '創意發想 Creativity', value: 88 },
-            { label: '技術精準 Precision', value: 74 },
-            { label: '地緣風味 Local Taste', value: 65 }
+            { label: '視覺美學 Visual', value: 50 },
+            { label: '創意發想 Creativity', value: 50 },
+            { label: '技術精準 Precision', value: 50 },
+            { label: '地緣風味 Local Taste', value: 50 }
           ]
         }
       };
-      onLogin(mockUser);
+
+      onLogin(user);
       onClose();
-    }, 1500);
+    } catch (err) {
+      setError('登入處理失敗');
+    }
   };
 
   return (
     <div className="fixed inset-0 z-[150] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 animate-fadeIn">
       <div className="bg-white rounded-[3.5rem] max-w-md w-full overflow-hidden shadow-floating relative animate-fadeInUp">
 
-        <button onClick={onClose} className="absolute top-8 right-8 p-2 hover:bg-stone-100 rounded-full text-stone-400 transition-colors">
+        <button onClick={onClose} className="absolute top-8 right-8 p-2 hover:bg-stone-100 rounded-full text-stone-400 transition-colors z-10">
           <X size={24} />
         </button>
 
@@ -55,22 +114,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
         </div>
 
         <div className="p-12 space-y-8 bg-stone-50">
-          <div className="space-y-4">
-            <button
-              onClick={handleGoogleLogin}
-              disabled={isAnimating}
-              className="w-full flex items-center justify-center gap-4 py-5 px-6 bg-white border border-stone-200 rounded-[1.5rem] hover:border-chef-gold hover:shadow-lg transition-all active:scale-95 disabled:opacity-50"
-            >
-              {isAnimating ? <div className="w-5 h-5 border-2 border-chef-gold border-t-transparent rounded-full animate-spin" /> : (
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#EA4335" d="M12 5.04c1.94 0 3.51.68 4.75 1.81l3.51-3.51C17.91 1.24 15.21 0 12 0 7.31 0 3.25 2.67 1.21 6.56L5.3 9.72c.98-2.69 3.51-4.68 6.7-4.68z" />
-                  <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.7 2.87c2.16-1.99 3.42-4.92 3.42-8.69z" />
-                  <path fill="#FBBC05" d="M5.3 14.28c-.26-.79-.41-1.64-.41-2.28 0-.64.15-1.48.41-2.28L1.21 6.56C.44 8.2 0 10.03 0 12s.44 3.8 1.21 5.44l4.09-3.16z" />
-                  <path fill="#34A853" d="M12 24c3.24 0 5.97-1.09 7.96-2.91l-3.7-2.87c-1.08.74-2.48 1.18-4.26 1.18-3.19 0-5.72-1.99-6.7-4.68l-4.09 3.16C3.25 21.33 7.31 24 12 24z" />
-                </svg>
-              )}
-              <span className="text-sm font-bold text-chef-black">使用 Google 一鍵登入</span>
-            </button>
+          <div className="flex flex-col items-center justify-center min-h-[60px]">
+            {isLoading ? (
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 border-2 border-chef-gold border-t-transparent rounded-full animate-spin" />
+                <span className="text-sm text-stone-400">載入 Google 登入...</span>
+              </div>
+            ) : error ? (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            ) : null}
+            <div ref={buttonContainerRef} className={isLoading || error ? 'hidden' : ''} />
           </div>
 
           <div className="pt-8 border-t border-stone-200 grid grid-cols-2 gap-6">
@@ -90,3 +143,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
     </div>
   );
 };
+
+// TypeScript 全域型別宣告
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: any) => void;
+          renderButton: (element: HTMLElement, config: any) => void;
+          prompt: () => void;
+        };
+      };
+    };
+  }
+}

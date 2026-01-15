@@ -24,9 +24,9 @@ const FilterPill: React.FC<{
 }> = ({ label, active, onClick, icon }) => (
   <button
     onClick={onClick}
-    className={`flex-shrink-0 px-4 py-2.5 md:px-5 md:py-3 rounded-full text-xs md:text-sm font-black uppercase tracking-widest transition-all duration-300 border flex items-center gap-2 whitespace-nowrap snap-center ${active
-        ? 'bg-chef-black text-white border-chef-black shadow-premium scale-105 z-10'
-        : 'bg-white text-stone-500 border-stone-100 hover:border-chef-gold/30 hover:text-chef-black hover:bg-chef-cream/30'
+    className={`flex-shrink-0 px-5 py-3 md:px-5 md:py-3 rounded-full text-sm md:text-sm font-bold uppercase tracking-wider transition-all duration-300 border flex items-center gap-2 whitespace-nowrap snap-center ${active
+      ? 'bg-chef-black text-white border-chef-black shadow-premium scale-105 z-10'
+      : 'bg-white text-stone-500 border-stone-200 hover:border-chef-gold/30 hover:text-chef-black hover:bg-chef-cream/30'
       }`}
   >
     {icon && <span className={`${active ? 'text-chef-gold' : 'text-stone-300'}`}>{icon}</span>}
@@ -120,14 +120,12 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
   };
 
   return (
-    <div className="relative z-10 mx-auto max-w-4xl px-0 md:px-4">
-      <div className="bg-white/80 backdrop-blur-2xl rounded-[2rem] md:rounded-[3rem] p-5 md:p-12 shadow-premium border border-white/50 relative overflow-hidden">
-
-        {/* Subtle Decorative Gradient */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-chef-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+    <div className="relative z-10 mx-auto max-w-4xl px-0">
+      {/* No card wrapper - content directly on background */}
+      <div className="relative overflow-hidden">
 
         {/* Search Bar / Tag Input */}
-        <div className="relative group bg-chef-cream rounded-2xl md:rounded-[2.5rem] p-3 md:p-4 shadow-inner border border-stone-200/50 focus-within:ring-2 md:focus-within:ring-4 focus-within:ring-chef-gold/10 transition-all">
+        <div className="relative group bg-white md:bg-chef-cream rounded-2xl md:rounded-[2.5rem] p-4 md:p-4 shadow-lg md:shadow-inner border border-stone-200 md:border-stone-200/50 focus-within:ring-2 md:focus-within:ring-4 focus-within:ring-chef-gold/20 transition-all">
           {searchState.ingredients.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 mb-2 px-2 min-h-[30px] md:min-h-[40px] max-h-[100px] overflow-y-auto no-scrollbar">
               {searchState.ingredients.map((ing, idx) => (
@@ -243,8 +241,8 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             onClick={onSearch}
             disabled={isLoading || (searchState.ingredients.length === 0 && !searchState.goal && !searchState.occasion)}
             className={`w-full py-5 md:py-7 rounded-[1.5rem] md:rounded-[2rem] relative overflow-hidden group transition-all duration-700 ${isLoading || (searchState.ingredients.length === 0 && !searchState.goal && !searchState.occasion)
-                ? 'bg-stone-100 text-stone-400 cursor-not-allowed border border-stone-200'
-                : 'bg-chef-black text-white hover:shadow-floating hover:-translate-y-1 active:translate-y-0 shadow-premium'
+              ? 'bg-stone-100 text-stone-400 cursor-not-allowed border border-stone-200'
+              : 'bg-chef-black text-white hover:shadow-floating hover:-translate-y-1 active:translate-y-0 shadow-premium'
               }`}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-chef-gold/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>

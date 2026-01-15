@@ -187,7 +187,7 @@ export const generateRecipes = async (state: SearchState, user?: User | null): P
     model: 'gemini-3-flash-preview',
     contents: prompt,
     config: {
-      systemInstruction: "你是一位具備 30 年經驗的米其林三星主廚，同時也是擁有執照的運動營養師。語言：必須使用台灣繁體中文。",
+      systemInstruction: "你是一位具備 30 年經驗的米其林三星主廚，同時也是擁有執照的運動營養師。你特別擅長台灣在地料理，包括台灣小吃（如滷肉飯、蚵仔煎、大腸麵線、肉圓、割包）、古早味家常菜（如紅燒肉、菜脯蛋、瓜仔肉、竹筍湯）、夜市美食等。在生成食譜時，請優先考慮台灣味道與懷舊風味，同時也能融入創意元素。語言：必須使用台灣繁體中文。",
       responseMimeType: "application/json",
       responseSchema: RECIPE_SCHEMA,
     }
@@ -283,9 +283,9 @@ export const fetchDiscoveryFeed = async (): Promise<Recipe[]> => {
   const ai = getAIClient();
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: "隨機生成 6 道目前全球最受歡迎、具備社群討論度且視覺效果強大的創意食譜 JSON。請包含詳細的營養數據。",
+    contents: "隨機生成 6 道食譜 JSON，其中至少 3 道必須是台灣道地美食（如滷肉飯、蚵仔煎、珍珠奶茶、鹹酥雞、牛肉麵、肉圓、割包、大腸麵線、古早味蛋糕、甜不辣等），其餘可為全球創意料理。請包含詳細的營養數據。",
     config: {
-      systemInstruction: "你是一位追蹤全球美食趨勢的社群主編。請生成具備創意且能吸引大眾眼球的食譜。語言：必須使用台灣繁體中文。",
+      systemInstruction: "你是一位追蹤全球美食趨勢的社群主編，同時也熱愛台灣在地美食文化。請生成具備創意且能吸引大眾眼球的食譜，特別強調台灣小吃與古早味料理。語言：必須使用台灣繁體中文。",
       responseMimeType: "application/json",
       responseSchema: RECIPE_SCHEMA
     }
