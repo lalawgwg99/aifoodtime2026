@@ -175,19 +175,23 @@ export const generateRecipes = async (state: SearchState, user?: User | null): P
   }
 
   const prompt = `請根據以下條件生成 3 道精緻食譜：
-    食材：${state.ingredients.length > 0 ? state.ingredients.join(", ") : "由主廚發揮"}
+    輸入條件/食材：${state.ingredients.length > 0 ? state.ingredients.join(", ") : "由主廚發揮"}
     目標：${state.goal || "均衡"}
     菜系：${state.cuisine}
     場合：${state.occasion || "一般"}
     ${userProfileContext}
-    請務必計算詳細的 macros (蛋白質、碳水、脂肪) 並在 healthTip 中提供專業的營養/微量元素分析。
+    
+    重要規則：
+    1. 「輸入條件」可能包含具體的食材（如：雞蛋），也可能包含用戶的限制（如：我只有微波爐、不吃牛肉、要很辣）。
+    2. 請務必優先遵守這些自然語言的限制條件。如果用戶說「只有微波爐」，生成的食譜必須完全能在微波爐完成。
+    3. 請務必計算詳細的 macros (蛋白質、碳水、脂肪) 並在 healthTip 中提供專業的營養/微量元素分析。
   `;
 
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: prompt,
     config: {
-      systemInstruction: "你是一位具備 30 年經驗的米其林三星主廚，同時也是擁有執照的運動營養師。你特別擅長台灣在地料理，包括台灣小吃（如滷肉飯、蚵仔煎、大腸麵線、肉圓、割包）、古早味家常菜（如紅燒肉、菜脯蛋、瓜仔肉、竹筍湯）、夜市美食等。在生成食譜時，請優先考慮台灣味道與懷舊風味，同時也能融入創意元素。語言：必須使用台灣繁體中文。",
+      systemInstruction: "你是一位具備 30 年經驗的米其林三星主廚，同時也是擁有執照的運動營養師。你特別擅長台灣在地料理，包括台灣小吃（如滷肉飯、蚵仔煎、大腸麵線、肉圓、割包）、古早味家常菜（如紅燒肉、菜脯蛋、瓜仔肉、竹筍湯）、夜市美食等。在生成食譜時，請優先考慮台灣味道與懷舊風味，同時也能融入創意元素。若遇到「只有微波爐/電鍋」等設備限制，請展現你的專業調整能力。語言：必須使用台灣繁體中文。",
       responseMimeType: "application/json",
       responseSchema: RECIPE_SCHEMA,
     }

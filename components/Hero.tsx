@@ -4,7 +4,7 @@ import {
   Search, Camera, X, Info, ChefHat,
   Leaf, Zap, Activity, Heart, Coins, Coffee, Utensils,
   Compass, Flame, Wine, Moon, Users, Briefcase, Dumbbell, Star,
-  Carrot, Waves, Tent, PartyPopper, Trees, Apple
+  Carrot, Waves, Tent, PartyPopper, Trees, Apple, Mic
 } from 'lucide-react';
 import { DietaryGoal, Cuisine, SearchState, MealOccasion } from '../types';
 
@@ -162,6 +162,32 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
     }
   };
 
+  const handleVoiceInput = () => {
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert('您的瀏覽器不支援語音輸入，請使用 Chrome 或 Safari');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'zh-TW';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInputValue(transcript);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error', event.error);
+    };
+
+    recognition.start();
+  };
+
   return (
     <div className="relative z-10 mx-auto max-w-4xl px-0">
       {/* No card wrapper - content directly on background */}
@@ -192,6 +218,15 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             />
 
             <div className="flex items-center gap-2 pr-2 md:pr-4 shrink-0 relative group/photo">
+              {/* Microphone Button */}
+              <button
+                onClick={handleVoiceInput}
+                className="p-3 md:p-4 rounded-xl md:rounded-full bg-chef-gold/10 hover:bg-chef-gold text-chef-gold hover:text-white shadow-sm border border-chef-gold/20 transition-all duration-300 active:scale-90 flex items-center justify-center"
+                title="語音輸入"
+              >
+                <Mic size={20} className="md:w-[22px] md:h-[22px]" />
+              </button>
+
               <input
                 type="file"
                 ref={fileInputRef}
@@ -222,11 +257,8 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         </div>
 
         {/* Quick Context Tags - Situational Filters */}
-        <div className="mt-10 md:mt-14">
-          <div className="text-center mb-6">
-            <p className="text-xs md:text-sm font-bold uppercase tracking-wider text-stone-500 mb-1">快速情境</p>
-            <h3 className="text-lg md:text-xl font-serif font-bold text-chef-black">現在想要...</h3>
-          </div>
+        <div className="mt-6 md:mt-8">
+          {/* Header Removed as requested */}
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 px-2 md:px-0">
             {[
