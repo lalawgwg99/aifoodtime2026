@@ -190,7 +190,12 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
           <div className="flex items-center gap-2 flex-wrap animate-fadeInUp">
             <span className="bg-chef-gold px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest text-chef-black shadow-sm">{recipe.calories} KCAL</span>
             <span className="bg-stone-100 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest text-stone-600 flex items-center gap-1.5"><Clock size={12} /> {recipe.timeMinutes} MIN</span>
-            <span className="bg-green-50 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest text-green-600 border border-green-200">≈ NT$ {Math.round(recipe.ingredients.length * 22)}</span>
+            <span
+              className="bg-green-50 px-3 py-1.5 rounded-lg text-xs font-bold text-green-700 border border-green-200 cursor-help"
+              title={`預估食材費用：${recipe.ingredients.length} 種食材 × 平均 NT$22/項 ≈ NT$${Math.round(recipe.ingredients.length * 22)}（依實際市場價格為準）`}
+            >
+              預估食材約 NT$ {Math.round(recipe.ingredients.length * 22)}
+            </span>
           </div>
 
           {/* Nutrition Analysis Section (Simplified & Breathable) */}
