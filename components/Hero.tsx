@@ -396,7 +396,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
           >
             <div className="absolute inset-0 bg-gradient-to-r from-chef-gold/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <span className="relative z-10 flex items-center justify-center gap-3 md:gap-4 text-lg md:text-xl font-black tracking-widest uppercase">
-              {isLoading ? '主廚正在編排...' : '解鎖米其林食譜'}
+              {isLoading ? '主廚正在編排...' : '探索極致美味靈感'}
               {!isLoading && <ChefHat size={20} className="md:w-[24px] md:h-[24px] text-chef-gold group-hover:rotate-12 transition-transform" />}
             </span>
           </button>
