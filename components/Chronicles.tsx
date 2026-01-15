@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Newspaper, Globe, ArrowLeft, Heart, Share2, BookOpen, X, Clock, User as UserIcon, ChevronRight } from 'lucide-react';
+import { Newspaper, ArrowLeft, BookOpen, X, Clock, ChevronRight } from 'lucide-react';
 import { User } from '../types';
 import { ArticleEditor } from './ArticleEditor';
 
@@ -23,46 +23,243 @@ interface Article {
 }
 
 const ARTICLES: Article[] = [
+    // 1. Taiwan Local (3篇)
     {
         id: 1,
-        title: "台南牛肉湯的清晨儀式感",
-        subtitle: "凌晨四點的府城，一碗湯喚醒一座城市的靈魂",
+        title: "基隆廟口夜市：雨都的深夜食堂",
+        subtitle: "從鼎邊趖到泡泡冰，探索台灣最密集的味覺戰場",
         category: "在地文化",
-        image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=2671&auto=format&fit=crop",
-        author: "林主廚",
+        image: "https://images.unsplash.com/photo-1552526881-721ce85decc3?q=80&w=2574&auto=format&fit=crop",
+        author: "美食探險家",
         authorAvatar: "https://i.pravatar.cc/150?img=12",
-        readTime: "5 分鐘",
-        publishDate: "2026-01-10",
+        readTime: "6 分鐘",
+        publishDate: "2026-01-14",
         content: [
-            "凌晨四點半，台南安平區的街道還沉浸在夜色中，但「阿村第二代牛肉湯」的鐵門早已拉起。這不是普通的早餐店開業——這是一場延續半世紀的味覺儀式。",
-            "「我們家的牛肉，從來不過夜。」第二代老闆阿村嫂一邊將溫體牛肉切成薄片，一邊解釋。這是台南牛肉湯的核心哲學：新鮮，是唯一的調味料。",
-            "當地人稱這種飲食習慣為「清晨儀式感」。在天亮之前，排隊的人潮已經繞過街角。有西裝筆挺準備上班的業務、有剛下夜班的護理師、也有帶著孫子來「傳承味覺記憶」的阿公阿嬤。",
-            "一碗標準的台南牛肉湯，講究三個層次：首先是高湯——用牛大骨熬煮8小時，加入白蘿蔔去腥增甜；其次是牛肉——溫體黃牛的後腿肉，切成0.3公分的薄片；最後是「沖」——用95度的高湯直接沖燙生牛肉，讓肉片在碗中綻放粉嫩色澤。",
-            "「很多外地人問我，為什麼牛肉湯要這麼早吃？」阿村嫂笑著說，「因為我們追求的不是方便，是『當下』。這碗湯，就是台南人對新鮮的執著。」",
-            "當第一線陽光灑進老店班駁的磁磚牆面，這一天的第一百碗湯已經送出。在台南，美食不只是味蕾的滿足——它是一種生活態度，一種對時間的敬畏，一種代代相傳的城市靈魂。"
+            "基隆，這座總是濕淋淋的城市，卻擁有全台灣最火熱的宵夜文化。廟口夜市不僅是觀光客的打卡點，更是在地人從小吃到大的記憶。",
+            "一碗熱騰騰的鼎邊趖，湯頭鮮甜，米漿滑嫩，配上香菇、金針、蝦仁羹，這是基隆人對海味的極致詮釋。",
+            "走到巷尾，一定要來一杯綿密的花生泡泡冰。堅持手打的口感，讓每一口都吃得到花生的濃郁香氣，甜而不膩。",
+            "在這裡，不管是營養三明治的酥脆，還是天婦羅的Q彈，每一攤都有著幾十年不變的堅持。雨夜裡的黃燈籠下，這裡是台灣最溫暖的角落。"
         ],
-        tags: ["台南", "牛肉湯", "早餐", "溫體牛", "在地文化"]
+        tags: ["基隆", "夜市", "小吃", "海鮮", "在地文化"]
     },
     {
         id: 2,
-        title: "東京深夜食堂：居酒屋的療癒哲學",
-        subtitle: "霓虹燈下的一杯清酒，撫慰了多少疲憊的心",
-        category: "國際視野",
-        image: "https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=2574&auto=format&fit=crop",
-        author: "渡邊美食記",
-        authorAvatar: "https://i.pravatar.cc/150?img=33",
-        readTime: "7 分鐘",
-        publishDate: "2026-01-08",
+        title: "客家庄的米食記憶：從粄條到麻糬",
+        subtitle: "樸實無華的米漿，在客家阿婆手中變幻出的千層滋味",
+        category: "在地文化",
+        image: "https://plus.unsplash.com/premium_photo-1664648119253-066b245a4988?q=80&w=2574&auto=format&fit=crop",
+        author: "阿婆的灶腳",
+        authorAvatar: "https://i.pravatar.cc/150?img=5",
+        readTime: "5 分鐘",
+        publishDate: "2026-01-12",
         content: [
-            "東京新宿的黃金街，只有2.5公尺寬，卻擠進了超過200間酒吧。這裡沒有招牌、沒有菜單、甚至沒有價目表——門一推開，你只需要說一句「おまかせ（交給你了）」。",
-            "這就是日本居酒屋文化的精髓：信任。",
-            "「在這裡，料理是次要的。」在黃金街經營居酒屋35年的老闆田中先生說，「客人來這裡，是為了被理解。」每晚十點過後，田中的小店會擠入形形色色的客人：剛談完失敗合約的業務、被公司裁員的中年男子、甚至是準備離婚的太太。",
-            "一盤毛豆、一碟煎餃、一杯冰鎮清酒——這是最標準的「療癒三件套」。但真正治癒人心的，是田中那句「辛苦了（お疲れ様）」。",
-            "日本居酒屋的設計處處藏著心思：吧台刻意窄小，讓陌生人肩並肩；燈光昏黃，模糊了白天的階級差異；料理份量小巧，鼓勵人們多點幾輪、多待一會。這是一種「被設計的偶然」——在這裡，孤獨的人不再孤獨。",
-            "凌晨兩點，最後一位客人離開時，田中習慣性地鞠躬道別：「下次見。」沒有人問「下次」是什麼時候，因為所有人都心知肚明——當你需要的時候，這扇門永遠會為你打開。",
-            "「居酒屋不是餐廳，是城市的樹洞。」田中在打烊前說，「我們賣的不是酒，是一個可以卸下盔甲的地方。」"
+            "走進苗栗三義的客家庄，空氣中飄散著淡淡的米香。這裡的人們對「米」有著特殊的情感，將其發揮到了淋漓盡致。",
+            "清晨，一碗熱氣騰騰的客家粄條，淋上油蔥酥與瘦肉片，簡單卻雋永。那種Q彈的口感，是機器製作無法比擬的。",
+            "午後，阿婆們聚在禾埕上搓揉著麻糬（粢粑）。沾上花生粉與糖粉，一口咬下，軟糯香甜，象徵著客家人的團結與黏結。",
+            "這些米食不僅是果腹的食物，更是客家文化傳承的載體，每一口都是對土地的感謝。"
         ],
-        tags: ["東京", "居酒屋", "深夜食堂", "日本文化", "清酒"]
+        tags: ["客家", "米食", "粄條", "麻糬", "傳統美食"]
+    },
+    {
+        id: 3,
+        title: "馬告與刺蔥：原民部落的香料魔法",
+        subtitle: "走進深山，尋找台灣土地賜予的最原始風味",
+        category: "在地文化",
+        image: "https://images.unsplash.com/photo-1621852004158-b39178650ef0?q=80&w=2574&auto=format&fit=crop",
+        author: "山林主廚",
+        authorAvatar: "https://i.pravatar.cc/150?img=8",
+        readTime: "7 分鐘",
+        publishDate: "2026-01-10",
+        content: [
+            "在台灣的深山部落裡，藏著許多平地少見的「綠色寶石」。馬告（山胡椒），帶著檸檬與香茅的清香，是原住民料理中的靈魂。",
+            "刺蔥，又名「鳥不踏」，雖然枝幹長滿刺，但其葉片卻有著強烈的辛香，拿來煎蛋或是煮湯，風味獨特。",
+            "這些取之於自然的香料，不僅豐富了味蕾，更蘊含了原住民與山林共存的智慧。每一道料理，都是對大自然的致敬。"
+        ],
+        tags: ["原住民", "香料", "馬告", "刺蔥", "部落美食"]
+    },
+
+    // 2. Japan (JP/TW) (2篇)
+    {
+        id: 4,
+        title: "京都の懐石料理：四季を味わう芸術 (京都懷石料理：品味四季的藝術)",
+        subtitle: "一期一會的極致款待，將季節流轉凝縮於盤中",
+        category: "日本精選",
+        image: "https://images.unsplash.com/photo-1580822184713-fc54006efa4e?q=80&w=2574&auto=format&fit=crop",
+        author: "Yiko Saito",
+        authorAvatar: "https://i.pravatar.cc/150?img=9",
+        readTime: "8 分鐘",
+        publishDate: "2026-01-13",
+        content: [
+            "静寂に包まれた京都の古寺で、懐石料理をいただく。それは単なる食事ではなく、五感で感じる芸術体験だ。",
+            "在寧靜的京都古寺中享用懷石料理，這不僅僅是一頓飯，而是一場五感的藝術體驗。",
+            "旬の筍、初鰹、そして若鮎。料理長は、その時期に最も美味しい食材を厳選し、素材本来の味を引き出す。",
+            "當季的竹筍、初鰹鱼、還有香魚。料理長嚴選當季最美味的食材，引出素材原本的滋味。",
+            "器の選び方、盛り付けの美しさ、そして庭園の眺め。すべてが一体となり、「一期一会」の心を表している。",
+            "器皿的選擇、擺盤的美感、以及庭園的景色。一切融為一體，展現了「一期一會」的心意。"
+        ],
+        tags: ["京都", "懐石料理", "日本文化", "Kyoto", "Kaiseki"]
+    },
+    {
+        id: 5,
+        title: "北海道の海鮮丼：北国の恵みを堪能 (北海道海鮮丼：盡享北國恩惠)",
+        subtitle: "朝市で出会う、宝石箱のような輝き",
+        category: "日本精選",
+        image: "https://images.unsplash.com/photo-1560155016-bd4879ae8f21?q=80&w=2574&auto=format&fit=crop",
+        author: "Hokkaido Eats",
+        authorAvatar: "https://i.pravatar.cc/150?img=11",
+        readTime: "5 分鐘",
+        publishDate: "2026-01-09",
+        content: [
+            "冬の北海道、函館の朝市。寒さを忘れるほどの熱気がそこにはある。",
+            "冬天的北海道，函館朝市。那裡的熱鬧氣氛讓人忘卻了寒冷。",
+            "どんぶりから溢れんばかりのウニ、イクラ、カニ、ホタテ。それはまるで海の宝石箱だ。",
+            "從碗裡滿溢出來的海膽、鮭魚卵、螃蟹、干貝。簡直就像是大海的珠寶盒。",
+            "新鮮な魚介の甘みと旨みが、口の中で弾ける。これぞ、北国の贅沢。",
+            "新鮮海鮮的甘甜與鮮美，在口中迸發。這就是北國的奢華享受。"
+        ],
+        tags: ["北海道", "海鮮丼", "壽司", "Hokkaido", "Seafood"]
+    },
+
+    // 3. Thai/Vietnam (Local/TW) (2篇)
+    {
+        id: 6,
+        title: "Khao Soi: The Golden Curry Noodle of Chiang Mai (清邁金麵：泰北黃金咖哩)",
+        subtitle: "濃郁椰奶與酥脆炸麵的完美交響曲",
+        category: "東南亞風味",
+        image: "https://images.unsplash.com/photo-1559314809-0d155014e29e?q=80&w=2574&auto=format&fit=crop",
+        author: "Thanyarat Cook",
+        authorAvatar: "https://i.pravatar.cc/150?img=20",
+        readTime: "6 分鐘",
+        publishDate: "2026-01-11",
+        content: [
+            "ข้าวซอย (Khao Soi) เป็นอาหารขึ้นชื่อของภาคเหนือไทย โดยเฉพาะจังหวัดเชียงใหม่",
+            "Khao Soi (考摔) 是泰國北部的著名美食，特別是在清邁地區。",
+            "น้ำแกงกะทิเข้มข้น หอมเครื่องเทศ เสิร์ฟพร้อมบะหมี่ไข่นุ่มและหมี่กรอบโรยหน้า",
+            "濃郁的椰奶咖哩湯頭，香料味十足，搭配軟嫩的雞蛋麵與酥脆的炸麵條。",
+            "บีบมะนาวเล็กน้อย เติมพริกผัดและหอมแดงซอย รสชาติจะกลมกล่อมยิ่งขึ้น",
+            "擠一點檸檬汁，加入炒辣椒與紅蔥頭，味道層次更加豐富圓潤。"
+        ],
+        tags: ["泰國", "清邁", "咖哩", "Khao Soi", "Chiang Mai"]
+    },
+    {
+        id: 7,
+        title: "Phở: The Soul of Hanoi (河內河粉：越南的靈魂之湯)",
+        subtitle: "清澈湯頭下的百年底蘊，街頭巷尾的國民早餐",
+        category: "東南亞風味",
+        image: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?q=80&w=2574&auto=format&fit=crop",
+        author: "Nguyen Kitchen",
+        authorAvatar: "https://i.pravatar.cc/150?img=25",
+        readTime: "6 分鐘",
+        publishDate: "2026-01-07",
+        content: [
+            "Phở không chỉ là món ăn, mà là một phần văn hóa của người Hà Nội.",
+            "Phở 不僅僅是一道菜，更是河內人文化的一部分。",
+            "Nước dùng được ninh từ xương bò trong nhiều giờ, tạo nên vị ngọt thanh tự nhiên.",
+            "湯頭是用牛骨熬煮數小時而成，創造出清甜自然的風味。",
+            "Thêm chút hành tây, rau thơm và lát thịt bò tái, tạo nên bát phở hoàn hảo.",
+            "加上一點洋蔥、香草和半熟牛肉片，成就了一碗完美的河粉。"
+        ],
+        tags: ["越南", "河粉", "河內", "Pho", "Vietnam"]
+    },
+
+    // 4. Global Michelin 3-Star (EN/TW) (3篇)
+    {
+        id: 8,
+        title: "The French Laundry: Culinary Perfection in Napa (納帕谷的烹飪極致)",
+        subtitle: "Thomas Keller's masterpiece where ingredients dictate the menu.",
+        category: "米其林傳奇",
+        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2574&auto=format&fit=crop",
+        author: "Global Epicure",
+        authorAvatar: "https://i.pravatar.cc/150?img=3",
+        readTime: "10 分鐘",
+        publishDate: "2026-01-05",
+        content: [
+            "Nestled in the heart of Napa Valley, The French Laundry is more than a restaurant; it's a pilgrimage for gourmets.",
+            "坐落於納帕谷中心，The French Laundry 不僅是一間餐廳，更是美食家的朝聖地。",
+            "Chef Thomas Keller's philosophy of 'Oysters and Pearls' redefines luxury dining with humor and precision.",
+            "主廚 Thomas Keller 的「牡蠣與珍珠」哲學，以幽默與精準重新定義了奢華餐飲。",
+            "Every dish is a testament to the relationship between the farmer, the gardener, and the chef.",
+            "每一道菜都是農夫、園丁與主廚之間緊密連結的見證。"
+        ],
+        tags: ["Michelin", "Napa", "Thomas Keller", "French Cuisine", "米其林"]
+    },
+    {
+        id: 9,
+        title: "Noma: Reinventing Nordic Cuisine (Noma：重塑北歐料理)",
+        subtitle: "Foraging the wild, preserving the seasons.",
+        category: "米其林傳奇",
+        image: "https://images.unsplash.com/photo-1546272989-40c2696b6a3e?q=80&w=2664&auto=format&fit=crop",
+        author: "Nordic Palate",
+        authorAvatar: "https://i.pravatar.cc/150?img=33",
+        readTime: "9 分鐘",
+        publishDate: "2026-01-03",
+        content: [
+            "In Copenhagen, René Redzepi challenged the world to look at moss, ants, and fermented berries as delicacies.",
+            "在哥本哈根，René Redzepi 挑戰世界，將苔蘚、螞蟻和發酵漿果視為珍饈。",
+            "Noma is not just about eating; it's about connecting with time and place through fermentation.",
+            "Noma 不僅是關於吃；它是關於透過發酵與時間和地點連結。",
+            "The menu changes strictly with the seasons: Ocean, Vegetable, and Game & Forest.",
+            "菜單嚴格隨著季節更迭：海洋、蔬菜、以及野味與森林。"
+        ],
+        tags: ["Noma", "Nordic", "Fermentation", "Copenhagen", "北歐料理"]
+    },
+    {
+        id: 10,
+        title: "Osteria Francescana: Tradition in Evolution (傳統的進化論)",
+        subtitle: "Massimo Bottura's storytelling on a plate.",
+        category: "米其林傳奇",
+        image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2574&auto=format&fit=crop",
+        author: "Italiano Vero",
+        authorAvatar: "https://i.pravatar.cc/150?img=50",
+        readTime: "8 分鐘",
+        publishDate: "2026-01-01",
+        content: [
+            "Massimo Bottura asks: 'Five Ages of Parmigiano Reggiano'. It is a study of texture and temperature.",
+            "Massimo Bottura 探問：「帕馬森乾酪的五種熟成」。這是一場關於質地與溫度的研究。",
+            "In 'Oops! I Dropped the Lemon Tart', he finds beauty in imperfection.",
+            "在「哎呀！我打破了檸檬塔」中，他在不完美中發現了美。",
+            "Here, Italian tradition is looked at from 10 kilometers away.",
+            "在這裡，義大利傳統被拉遠到十公里外來重新審視。"
+        ],
+        tags: ["Italy", "Modena", "Massimo Bottura", "Art", "義大利料理"]
+    },
+
+    // 5. Healthy/Weight Loss (2篇)
+    {
+        id: 11,
+        title: "生酮飲食便當：上班族的減脂救星",
+        subtitle: "低碳高脂也能吃得豐盛？一週備餐攻略大公開",
+        category: "健康生活",
+        image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2670&auto=format&fit=crop",
+        author: "營養師 Sarah",
+        authorAvatar: "https://i.pravatar.cc/150?img=43",
+        readTime: "6 分鐘",
+        publishDate: "2026-01-15",
+        content: [
+            "對於忙碌的上班族來說，外食往往是減重計畫的最大殺手。高油、高糖、澱粉爆量，讓體脂居高不下。",
+            "其實，生酮飲食（Keto Diet）並不如想像中困難。核心原則是「好的油脂 + 適量蛋白質 + 大量蔬菜」。",
+            "本週便當提案：煎鮭魚佐酪梨沙拉、迷迭香雞腿排配花椰菜米、奶油菠菜炒牛肉。",
+            "只要善用週末進行備餐（Meal Prep），平日只需微波加熱，就能輕鬆堅持低碳飲食，讓身體重回燃脂模式。"
+        ],
+        tags: ["生酮", "減重", "便當", "低碳", "健康飲食"]
+    },
+    {
+        id: 12,
+        title: "抗發炎飲食：吃出免疫力與好氣色",
+        subtitle: "遠離慢性發炎，從餐盤裡的顏色開始改變",
+        category: "健康生活",
+        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2670&auto=format&fit=crop",
+        author: "自然醫學博士",
+        authorAvatar: "https://i.pravatar.cc/150?img=60",
+        readTime: "7 分鐘",
+        publishDate: "2026-01-14",
+        content: [
+            "現代人常見的疲勞、過敏、甚至心血管疾病，很多時候都源自於體內的「慢性發炎」。",
+            "抗發炎飲食強調攝取富含 Omega-3 的魚類、深色蔬菜、莓果類以及優質油脂（如橄欖油、堅果）。",
+            "薑黃、大蒜、生薑等辛香料，更是廚房裡的天然抗發炎藥。",
+            "拒絕加工食品與精緻糖，擁抱原型食物。這不僅是為了減肥，更是為了讓身體回到最純淨、充滿活力的狀態。"
+        ],
+        tags: ["抗發炎", "免疫力", "原型食物", "健康", "養生"]
     }
 ];
 
@@ -213,35 +410,7 @@ export const Chronicles: React.FC<ChroniclesProps> = ({ onBack }) => {
                             ))}
                         </div>
 
-                        {/* Social Actions */}
-                        <div className="flex items-center gap-4 mt-8">
-                            <button className="flex items-center gap-2 px-6 py-3 bg-chef-gold text-black font-bold rounded-full hover:bg-white transition-colors">
-                                <Heart size={18} /> 收藏文章
-                            </button>
-                            <button className="flex items-center gap-2 px-6 py-3 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-colors">
-                                <Share2 size={18} /> 分享
-                            </button>
-                        </div>
-                    </div>
 
-                    {/* Fixed Bottom Nav */}
-                    <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-black/90 backdrop-blur-md border-t border-white/10">
-                        {(() => {
-                            const idx = ARTICLES.findIndex(a => a.id === selectedArticle.id);
-                            const prev = idx > 0 ? ARTICLES[idx - 1] : null;
-                            const next = idx < ARTICLES.length - 1 ? ARTICLES[idx + 1] : null;
-                            return (
-                                <>
-                                    <button onClick={() => prev && setSelectedArticle(prev)} disabled={!prev} className={`flex items-center gap-2 px-4 py-3 rounded-xl ${prev ? 'bg-white/10 hover:bg-white/20' : 'opacity-30'}`}>
-                                        <ArrowLeft size={18} /> <span className="hidden md:inline">{prev?.title?.slice(0, 12) || ''}...</span>
-                                    </button>
-                                    <button onClick={() => setSelectedArticle(null)} className="px-6 py-3 bg-chef-gold text-black font-bold rounded-full">關閉</button>
-                                    <button onClick={() => next && setSelectedArticle(next)} disabled={!next} className={`flex items-center gap-2 px-4 py-3 rounded-xl ${next ? 'bg-white/10 hover:bg-white/20' : 'opacity-30'}`}>
-                                        <span className="hidden md:inline">{next?.title?.slice(0, 12) || ''}...</span> <ChevronRight size={18} />
-                                    </button>
-                                </>
-                            );
-                        })()}
                     </div>
                 </div>
             )}
