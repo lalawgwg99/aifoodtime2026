@@ -67,6 +67,7 @@ const ARTICLES: Article[] = [
 
 export const Chronicles: React.FC<ChroniclesProps> = ({ onBack }) => {
     const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+    const [showWriteModal, setShowWriteModal] = useState(false);
 
     return (
         <div className="min-h-screen bg-[#121212] text-white selection:bg-chef-gold/30 font-sans pb-20 animate-fadeIn">
@@ -162,14 +163,18 @@ export const Chronicles: React.FC<ChroniclesProps> = ({ onBack }) => {
             {/* Article Detail Modal */}
             {selectedArticle && (
                 <div className="fixed inset-0 z-[100] bg-black/95 overflow-y-auto animate-fadeIn">
-                    <div className="max-w-3xl mx-auto px-6 py-12">
-                        {/* Close Button */}
-                        <button
-                            onClick={() => setSelectedArticle(null)}
-                            className="fixed top-6 right-6 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-chef-gold hover:text-black transition-all z-50"
-                        >
-                            <X size={24} />
+                    {/* Fixed Top Bar */}
+                    <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-black/90 backdrop-blur-md border-b border-white/10">
+                        <button onClick={() => setSelectedArticle(null)} className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white hover:bg-chef-gold hover:text-black transition-all">
+                            <ArrowLeft size={20} />
+                            <span className="font-bold">返回文章列表</span>
                         </button>
+                        <button onClick={() => setSelectedArticle(null)} className="w-12 h-12 bg-red-500/20 hover:bg-red-500 rounded-full flex items-center justify-center transition-all">
+                            <X size={24} className="text-red-400 hover:text-white" />
+                        </button>
+                    </div>
+
+                    <div className="max-w-3xl mx-auto px-6 pt-24 pb-32">
 
                         {/* Article Header */}
                         <img src={selectedArticle.image} className="w-full aspect-video object-cover rounded-2xl mb-8" alt={selectedArticle.title} />
@@ -217,14 +222,58 @@ export const Chronicles: React.FC<ChroniclesProps> = ({ onBack }) => {
                             </button>
                         </div>
                     </div>
+
+                    {/* Fixed Bottom Nav */}
+                    <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-black/90 backdrop-blur-md border-t border-white/10">
+                        {(() => {
+                            const idx = ARTICLES.findIndex(a => a.id === selectedArticle.id);
+                            const prev = idx > 0 ? ARTICLES[idx - 1] : null;
+                            const next = idx < ARTICLES.length - 1 ? ARTICLES[idx + 1] : null;
+                            return (
+                                <>
+                                    <button onClick={() => prev && setSelectedArticle(prev)} disabled={!prev} className={`flex items-center gap-2 px-4 py-3 rounded-xl ${prev ? 'bg-white/10 hover:bg-white/20' : 'opacity-30'}`}>
+                                        <ArrowLeft size={18} /> <span className="hidden md:inline">{prev?.title?.slice(0, 12) || ''}...</span>
+                                    </button>
+                                    <button onClick={() => setSelectedArticle(null)} className="px-6 py-3 bg-chef-gold text-black font-bold rounded-full">關閉</button>
+                                    <button onClick={() => next && setSelectedArticle(next)} disabled={!next} className={`flex items-center gap-2 px-4 py-3 rounded-xl ${next ? 'bg-white/10 hover:bg-white/20' : 'opacity-30'}`}>
+                                        <span className="hidden md:inline">{next?.title?.slice(0, 12) || ''}...</span> <ChevronRight size={18} />
+                                    </button>
+                                </>
+                            );
+                        })()}
+                    </div>
                 </div>
             )}
 
-            {/* FAB */}
-            <button className="fixed bottom-8 right-8 w-16 h-16 bg-chef-gold text-black rounded-full shadow-gold-glow flex items-center justify-center hover:scale-110 transition-transform z-50 group">
+            {/* FAB - Write Article */}
+            <button
+                onClick={() => setShowWriteModal(true)}
+                className="fixed bottom-8 right-8 w-16 h-16 bg-chef-gold text-black rounded-full shadow-gold-glow flex items-center justify-center hover:scale-110 transition-transform z-50 group"
+            >
                 <span className="absolute -top-10 bg-white text-black text-xs font-bold px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">投稿文章</span>
                 <Newspaper size={28} />
             </button>
+
+            {/* Write Article Modal */}
+            {showWriteModal && (
+                <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-6 animate-fadeIn">
+                    <div className="bg-[#1A1A1A] rounded-3xl p-8 max-w-lg w-full border border-white/10">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-serif font-bold text-white">投稿美食故事</h2>
+                            <button onClick={() => setShowWriteModal(false)} className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-red-500 transition-all">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <p className="text-stone-400 mb-6">分享您的美食體驗、旅途中的味覺記憶，或是私房食譜背後的故事。我們期待您的投稿！</p>
+                        <input type="text" placeholder="文章標題" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white mb-4 focus:border-chef-gold outline-none" />
+                        <textarea placeholder="寫下您的故事..." rows={5} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white mb-4 focus:border-chef-gold outline-none resize-none" />
+                        <div className="flex gap-4">
+                            <button onClick={() => setShowWriteModal(false)} className="flex-1 py-3 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-colors">取消</button>
+                            <button onClick={() => { alert('感謝您的投稿！我們會盡快審核。'); setShowWriteModal(false); }} className="flex-1 py-3 bg-chef-gold text-black font-bold rounded-full hover:bg-white transition-colors">送出投稿</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
