@@ -288,6 +288,90 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
           與 <span className="text-chef-black font-black underline decoration-chef-gold underline-offset-4">12,400+</span> 位生活家探索美味。
         </p>
       </div>
+
+      {/* Trust Metrics - Concrete Numbers */}
+      <div className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-3xl mx-auto px-4">
+        <div className="bg-white rounded-2xl p-4 md:p-6 text-center shadow-sm border border-stone-100">
+          <p className="text-2xl md:text-3xl font-bold text-chef-black mb-1">80,000+</p>
+          <p className="text-xs md:text-sm text-stone-500 font-medium">道食譜已生成</p>
+        </div>
+        <div className="bg-white rounded-2xl p-4 md:p-6 text-center shadow-sm border border-stone-100">
+          <p className="text-2xl md:text-3xl font-bold text-chef-black mb-1">12,400+</p>
+          <p className="text-xs md:text-sm text-stone-500 font-medium">位用戶信任</p>
+        </div>
+        <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-chef-gold/10 to-amber-50 rounded-2xl p-4 md:p-6 text-center shadow-sm border border-chef-gold/20">
+          <p className="text-2xl md:text-3xl font-bold text-chef-accent mb-1">92%</p>
+          <p className="text-xs md:text-sm text-stone-600 font-bold">台灣味道還原度</p>
+        </div>
+      </div>
+
+      {/* Login Value Comparison - Conversion Driver */}
+      <div className="mt-16 md:mt-20 max-w-4xl mx-auto px-4">
+        <div className="text-center mb-8">
+          <p className="text-xs md:text-sm font-bold uppercase tracking-wider text-stone-400 mb-2">為什麼要登入？</p>
+          <h3 className="text-xl md:text-2xl font-serif font-bold text-chef-black">解鎖完整 AI 私廚體驗</h3>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+          {/* Free Column */}
+          <div className="bg-white rounded-2xl p-6 border-2 border-stone-200">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-2 h-2 bg-stone-400 rounded-full"></div>
+              <h4 className="font-bold text-stone-600">免費體驗</h4>
+            </div>
+            <ul className="space-y-3 text-sm text-stone-500">
+              <li className="flex items-start gap-2">
+                <span className="text-stone-300 mt-0.5">○</span>
+                <span>每日 3 次靈感</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-stone-300 mt-0.5">○</span>
+                <span>無法收藏食譜</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-stone-300 mt-0.5">○</span>
+                <span>通用建議</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-stone-300 mt-0.5">○</span>
+                <span>無歷史記錄</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Member Column */}
+          <div className="bg-gradient-to-br from-chef-black to-stone-800 rounded-2xl p-6 border-2 border-chef-gold relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-chef-gold/20 rounded-full blur-3xl"></div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-2 h-2 bg-chef-gold rounded-full animate-pulse"></div>
+                <h4 className="font-bold text-white">會員專享</h4>
+              </div>
+              <ul className="space-y-3 text-sm text-white">
+                <li className="flex items-start gap-2">
+                  <span className="text-chef-gold mt-0.5">●</span>
+                  <span>無限個人化菜單</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-chef-gold mt-0.5">●</span>
+                  <span>跨裝置雲端同步</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-chef-gold mt-0.5">●</span>
+                  <span>專屬口味模型</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-chef-gold mt-0.5">●</span>
+                  <span>味覺記憶庫</span>
+                </li>
+              </ul>
+              <button className="w-full mt-6 py-3 bg-chef-gold text-chef-black rounded-xl font-bold text-sm hover:bg-amber-400 transition-all">
+                立即解鎖 →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
