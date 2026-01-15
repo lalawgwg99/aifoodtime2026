@@ -8,6 +8,7 @@ import { MarketTicker } from './components/MarketTicker';
 import { Footer } from './components/Footer';
 import { TrustSection } from './components/TrustSection';
 import { AuthModal } from './components/AuthModal';
+import { ContactModal } from './components/ContactModal';
 import { ProfileModal } from './components/ProfileModal';
 import { SubscriptionModal } from './components/SubscriptionModal';
 import { Onboarding } from './components/Onboarding';
@@ -53,7 +54,8 @@ export default function App() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUsageLimitModal, setShowUsageLimitModal] = useState(false);
   const [showLoginBenefitsModal, setShowLoginBenefitsModal] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'community' | 'chronicles'>('home');
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [currentView, setCurrentView] = useState<string>('home');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('smartchef_user');
@@ -318,62 +320,80 @@ export default function App() {
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-6 md:px-12 pt-8 md:pt-20">
-        <div className="text-center mb-12 md:mb-24 animate-fadeIn">
+        {currentView === 'home' && (
+          <>
+            <div className="text-center mb-12 md:mb-24 animate-fadeIn">
+              {/* Main Headline - Elegant Stacked Layout */}
+              <div className="mb-8 md:mb-12">
+                <p className="text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-chef-gold mb-4 md:mb-6">AI 私廚顧問</p>
+                <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-[#1A1818] leading-[1.15] tracking-tight">
+                  讓食材
+                  <span className="text-chef-gold block md:inline md:mx-4">綻放靈魂</span>
+                </h1>
+              </div>
 
-          {/* Main Headline - Elegant Stacked Layout */}
-          <div className="mb-8 md:mb-12">
-            <p className="text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-chef-gold mb-4 md:mb-6">AI 私廚顧問</p>
-            <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-[#1A1818] leading-[1.15] tracking-tight">
-              讓食材
-              <span className="text-chef-gold block md:inline md:mx-4">綻放靈魂</span>
-            </h1>
-          </div>
-
-          <p className="text-base md:text-xl text-stone-500 max-w-2xl mx-auto font-normal leading-relaxed">
-            「饗味食光」不只是食譜，更是您廚房裡的藝術策展人。
-            <span className="hidden md:inline">讓我們為您編織一場味覺的極致饗宴。</span>
-          </p>
-        </div>
-
-        {/* Search Component */}
-        <Hero searchState={searchState} setSearchState={setSearchState} onSearch={handleSearch} isLoading={loading} onImageUpload={handleImageUpload} />
-
-        {/* Results */}
-        {(hasSearched || showFavoritesOnly) && (
-          <div id="results-section" className="mt-24 md:mt-40 animate-fadeIn">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
-              <h2 className="text-3xl md:text-5xl font-serif font-bold italic">{showFavoritesOnly ? "收藏菜單" : "策劃菜單"}</h2>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-chef-gold-dark bg-chef-gold/5 px-5 py-2.5 rounded-full self-start md:self-auto">{displayedRecipes.length} 道精選佳餚</span>
+              <p className="text-base md:text-xl text-stone-500 max-w-2xl mx-auto font-normal leading-relaxed">
+                「饗味食光」不只是食譜，更是您廚房裡的藝術策展人。
+                <span className="hidden md:inline">讓我們為您編織一場味覺的極致饗宴。</span>
+              </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
-              {displayedRecipes.map(recipe => (
-                <RecipeCard key={recipe.id} recipe={recipe} isFavorite={favorites.some(f => f.id === recipe.id)} onToggleFavorite={() => toggleFavorite(recipe)} />
-              ))}
-            </div>
-            {/* BUG-006 修復：Empty State 組件 */}
-            {displayedRecipes.length === 0 && showFavoritesOnly && (
-              <div className="text-center py-20 animate-fadeIn">
-                <Heart className="mx-auto text-stone-300 mb-6" size={56} />
-                <h3 className="text-2xl font-serif font-bold text-stone-500 mb-3">尚無收藏</h3>
-                <p className="text-stone-500 text-sm max-w-xs mx-auto">點擊食譜卡片上的愛心圖示，即可開始收藏您喜愛的料理。</p>
+
+            {/* Search Component */}
+            <Hero searchState={searchState} setSearchState={setSearchState} onSearch={handleSearch} isLoading={loading} onImageUpload={handleImageUpload} />
+
+            {/* Results */}
+            {(hasSearched || showFavoritesOnly) && (
+              <div id="results-section" className="mt-24 md:mt-40 animate-fadeIn">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
+                  <h2 className="text-3xl md:text-5xl font-serif font-bold italic">{showFavoritesOnly ? "收藏菜單" : "策劃菜單"}</h2>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-chef-gold-dark bg-chef-gold/5 px-5 py-2.5 rounded-full self-start md:self-auto">{displayedRecipes.length} 道精選佳餚</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
+                  {displayedRecipes.map(recipe => (
+                    <RecipeCard key={recipe.id} recipe={recipe} isFavorite={favorites.some(f => f.id === recipe.id)} onToggleFavorite={() => toggleFavorite(recipe)} />
+                  ))}
+                </div>
+                {/* BUG-006 修復：Empty State 組件 */}
+                {displayedRecipes.length === 0 && showFavoritesOnly && (
+                  <div className="text-center py-20 animate-fadeIn">
+                    <Heart className="mx-auto text-stone-300 mb-6" size={56} />
+                    <h3 className="text-2xl font-serif font-bold text-stone-500 mb-3">尚無收藏</h3>
+                    <p className="text-stone-500 text-sm max-w-xs mx-auto">點擊食譜卡片上的愛心圖示，即可開始收藏您喜愛的料理。</p>
+                  </div>
+                )}
               </div>
             )}
-          </div>
+
+            {/* Loading Overlay */}
+            {loading && (
+              <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/98 backdrop-blur-md animate-fadeIn transition-all">
+                <div className="w-20 h-20 mb-12 relative">
+                  <div className="absolute inset-0 border-4 border-stone-50 rounded-[2rem]"></div>
+                  <div className="absolute inset-0 border-4 border-[#1A1818] border-t-transparent rounded-[2rem] animate-spin"></div>
+                  <ChefHat className="absolute inset-0 m-auto text-[#1A1818] animate-pulse" size={28} />
+                </div>
+                <div className="text-center max-w-sm px-8">
+                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1818] mb-3 italic">{GENERIC_MESSAGES[loadingIndex].text}</h3>
+                  <p className="text-stone-400 text-[10px] font-bold tracking-[0.2em] uppercase">{GENERIC_MESSAGES[loadingIndex].sub}</p>
+                </div>
+              </div>
+            )}
+          </>
         )}
 
-        {/* Loading Overlay */}
-        {loading && (
-          <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/98 backdrop-blur-md animate-fadeIn transition-all">
-            <div className="w-20 h-20 mb-12 relative">
-              <div className="absolute inset-0 border-4 border-stone-50 rounded-[2rem]"></div>
-              <div className="absolute inset-0 border-4 border-[#1A1818] border-t-transparent rounded-[2rem] animate-spin"></div>
-              <ChefHat className="absolute inset-0 m-auto text-[#1A1818] animate-pulse" size={28} />
-            </div>
-            <div className="text-center max-w-sm px-8">
-              <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1818] mb-3 italic">{GENERIC_MESSAGES[loadingIndex].text}</h3>
-              <p className="text-stone-400 text-[10px] font-bold tracking-[0.2em] uppercase">{GENERIC_MESSAGES[loadingIndex].sub}</p>
-            </div>
-          </div>
+        {currentView === 'chronicles' && (
+          <Chronicles
+            onBack={() => setCurrentView('home')}
+            currentUser={currentUser}
+          />
+        )}
+
+        {currentView === 'community' && (
+          <Community
+            onBack={() => setCurrentView('home')}
+            currentUser={currentUser}
+            onShowLogin={() => setShowAuthModal(true)}
+          />
         )}
       </main>
 
@@ -399,7 +419,12 @@ export default function App() {
       <TrustSection />
 
       {/* Global Footer */}
-      <Footer />
+      <Footer onOpenContact={() => setShowContactModal(true)} />
+
+      {/* Contact Modal */}
+      {showContactModal && (
+        <ContactModal onClose={() => setShowContactModal(false)} />
+      )}
     </div>
   );
 }

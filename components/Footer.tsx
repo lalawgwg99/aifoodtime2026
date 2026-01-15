@@ -1,11 +1,15 @@
 import React from 'react';
 import { ChefHat, Globe, ShieldCheck, Mail, FileText, Lock } from 'lucide-react';
 
-export const Footer = () => {
+interface FooterProps {
+    onOpenContact?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-[#1A1818] text-stone-400 py-12 md:py-16 mt-20 relative overflow-hidden">
+        <footer className="bg-[#1A1818] text-stone-400 py-12 md:py-16 mt-0 relative overflow-hidden">
             {/* Background Decoration */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-chef-gold/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
@@ -26,25 +30,18 @@ export const Footer = () => {
                         </p>
                     </div>
 
-                    {/* Quick Links Group */}
+                    {/* Quick Links Group - Simplified */}
                     <div className="flex flex-wrap gap-8 md:gap-16 text-xs font-bold tracking-wider uppercase">
                         <div className="space-y-4">
-                            <span className="text-white/40 block mb-4">Platform</span>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">趨勢研究 <span className="text-stone-600 text-[10px] ml-1">Trends</span></a>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">私廚訂閱 <span className="text-stone-600 text-[10px] ml-1">Pricing</span></a>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">關於我們 <span className="text-stone-600 text-[10px] ml-1">About</span></a>
+                            <span className="text-white/40 block mb-4">Support</span>
+                            <button className="block hover:text-chef-gold transition-colors text-left">系統狀態 <span className="text-stone-600 text-[10px] ml-1">Status</span></button>
+                            <button onClick={onOpenContact} className="block hover:text-chef-gold transition-colors text-left">聯絡客服 <span className="text-stone-600 text-[10px] ml-1">Contact</span></button>
+                            <button className="block hover:text-chef-gold transition-colors text-left">資安回報 <span className="text-stone-600 text-[10px] ml-1">Security</span></button>
                         </div>
                         <div className="space-y-4">
                             <span className="text-white/40 block mb-4">Legal</span>
                             <a href="#" className="block hover:text-chef-gold transition-colors">使用條款 <span className="text-stone-600 text-[10px] ml-1">Terms</span></a>
                             <a href="#" className="block hover:text-chef-gold transition-colors">隱私政策 <span className="text-stone-600 text-[10px] ml-1">Privacy</span></a>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">Cookie 設定 <span className="text-stone-600 text-[10px] ml-1">Cookies</span></a>
-                        </div>
-                        <div className="space-y-4">
-                            <span className="text-white/40 block mb-4">Support</span>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">系統狀態 <span className="text-stone-600 text-[10px] ml-1">Status</span></a>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">聯絡客服 <span className="text-stone-600 text-[10px] ml-1">Contact</span></a>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">資安回報 <span className="text-stone-600 text-[10px] ml-1">Security</span></a>
                         </div>
                     </div>
                 </div>

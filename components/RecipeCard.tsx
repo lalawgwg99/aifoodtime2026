@@ -2,6 +2,8 @@
 import React, { useState, useRef } from 'react';
 import { Clock, Flame, ChefHat, Heart, Utensils, Mic, Camera, X, BarChart2, Loader2, Award, Globe, ShieldCheck, Activity, Leaf, Share2, Check, AlertCircle, User, Wifi, Volume2, Send } from 'lucide-react';
 import { useVoiceInput } from '../hooks/useVoiceInput';
+import { Recipe, ChatMessage, ChefVerdict } from '../types';
+import { askSousChef, generateChefVerdict } from '../services/geminiService';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -85,35 +87,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
   const [verdictError, setVerdictError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
 
-    const newMsg: ChatMessage = { role: 'user', text: inputMessage, timestamp: Date.now() };
-    setChatMessages(prev => [...prev, newMsg]);
-    setInputMessage("");
-    setIsChefThinking(true);
-
-    // Scroll to bottom
-    setTimeout(() => {
-      if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-      }
-    }, 100);
-
-    try {
-      const response = await askSousChef(recipe, inputMessage);
-      setChatMessages(prev => [...prev, { role: 'assistant', text: response, timestamp: Date.now() }]);
-    } catch (error) {
-      setChatMessages(prev => [...prev, { role: 'assistant', text: "Sorry, the kitchen is a bit chaotic right now. Please try again.", timestamp: Date.now() }]);
-    } finally {
-      setIsChefThinking(false);
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }
-      }, 100);
-    }
-  };
 
   const handleVerdictUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
@@ -405,8 +379,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
                 <button
                   onClick={() => setIsNoiseCancelActive(!isNoiseCancelActive)}
                   className={`px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${isNoiseCancelActive
-                      ? 'bg-chef-gold text-white shadow-md'
-                      : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
+                    ? 'bg-chef-gold text-white shadow-md'
+                    : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
                     }`}
                 >
                   <Wifi size={14} />
@@ -420,8 +394,8 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
                     if (newState) speakText("語音助手已啟動");
                   }}
                   className={`px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${isTTSActive
-                      ? 'bg-chef-gold text-white shadow-md'
-                      : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
+                    ? 'bg-chef-gold text-white shadow-md'
+                    : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
                     }`}
                 >
                   <Volume2 size={14} />
