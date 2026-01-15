@@ -356,7 +356,7 @@ export default function App() {
       )}
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-6 md:px-12 pt-8 md:pt-20">
+      <main className="max-w-[1600px] mx-auto px-6 md:px-12 pt-8 md:pt-20">
         {currentView === 'home' && (
           <>
             <div className="text-center mb-12 md:mb-24 animate-fadeIn">
