@@ -14,6 +14,7 @@ import { LoginBenefitsModal } from './components/LoginBenefitsModal';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
 import { usageService } from './services/usageService';
 import { SearchState, Recipe, Cuisine, VisionMode, User } from './types';
+import { useSound } from './hooks/useSound';
 
 const GENERIC_MESSAGES = [
   { text: "正在解構食材風味...", sub: "AI 主廚正在優化口感搭配" },
@@ -22,12 +23,19 @@ const GENERIC_MESSAGES = [
   { text: "編排私人米其林食譜...", sub: "正在尋找最適合的烹飪工法" }
 ];
 
+// Super Admin Whitelist
+const ADMIN_EMAILS = [
+  "lalawgwg99@gmail.com", // Replace or add your Google email here
+  "savorchef.admin@gmail.com"
+];
+
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [searchState, setSearchState] = useState<SearchState>({
     ingredients: [], goal: null, cuisine: Cuisine.ANY, occasion: null, mealTime: null
   });
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const { playSuccess } = useSound();
   const [favorites, setFavorites] = useState<Recipe[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -57,6 +65,15 @@ export default function App() {
   }, []);
 
   const handleLogin = (user: User) => {
+    // Admin Check
+    if (ADMIN_EMAILS.includes(user.email)) {
+      user.isAdmin = true;
+      user.level = 'PRO LV5 (Supreme)'; // 最高權限
+    } else {
+      user.isAdmin = false;
+      user.level = 'PRO LV1 (30-Day Free Trial)'; // 免費試用 30 天
+    }
+
     setCurrentUser(user);
     localStorage.setItem('smartchef_user', JSON.stringify(user));
   };
@@ -93,8 +110,9 @@ export default function App() {
     try {
       const results = await generateRecipes(searchState, currentUser);
       setRecipes(results); setHasSearched(true);
+      playSuccess(); // ✨ Audio Feedback
 
-      // Increment usage count  for non-logged-in users
+      // Increment usage count for non-logged-in users
       if (!currentUser) {
         usageService.incrementUsage();
       }

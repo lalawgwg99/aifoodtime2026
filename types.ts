@@ -44,7 +44,7 @@ export enum MealOccasion {
 export interface UserStats {
   totalRecipes: number;
   averageSoulScore: number;
-  tasteDNA: { label: string; value: number }[]; 
+  tasteDNA: { label: string; value: number }[];
 }
 
 export interface User {
@@ -52,13 +52,14 @@ export interface User {
   name: string;
   email: string;
   avatar: string;
-  level: string; 
+  level: string;
   stats: UserStats;
+  isAdmin?: boolean; // Super Admin Flag
 }
 
 export interface MarketTrend {
   title: string;
-  popularity: number; 
+  popularity: number;
   description: string;
   tag: string;
 }
@@ -87,7 +88,7 @@ export interface Recipe {
   authorAvatar?: string;
   likes?: number;
   isUserCreated?: boolean;
-  isPublic?: boolean; 
+  isPublic?: boolean;
   // New Nutrition Data
   macros?: {
     protein: string;
@@ -127,7 +128,7 @@ export interface ChefVerdict {
   badge: string;
   shareText: string;
   comparisonData: {
-    visual: number; 
+    visual: number;
     creativity: number;
     technique: number;
     proVisual: number;

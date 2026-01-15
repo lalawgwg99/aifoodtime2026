@@ -16,6 +16,7 @@ interface HeroProps {
   onImageUpload: (file: File) => void;
 }
 
+
 const FilterPill: React.FC<{
   label: string;
   active: boolean;
@@ -244,8 +245,8 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                   }}
                   className={`relative p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center text-center gap-2 group
                     ${isActive
-                      ? 'bg-white border-chef-gold shadow-gold-glow scale-[1.02]'
-                      : 'bg-white border-stone-100 hover:border-chef-gold/50 hover:shadow-card'
+                      ? 'bg-chef-gold/5 border-chef-gold shadow-md'
+                      : 'bg-white border-stone-100 hover:border-chef-gold/50 hover:shadow-card hover:-translate-y-0.5'
                     }`}
                 >
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${isActive ? 'bg-chef-gold text-white' : `${item.bg} ${item.color}`}`}>
@@ -259,7 +260,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                     <p className={`text-xs ${isActive ? 'text-chef-gold-dark font-bold' : 'text-stone-400'}`}>{item.sub}</p>
                   </div>
                   {isActive && (
-                    <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-chef-gold animate-pulse"></div>
+                    <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-chef-gold shadow-sm animate-pulse"></div>
                   )}
                 </button>
               );

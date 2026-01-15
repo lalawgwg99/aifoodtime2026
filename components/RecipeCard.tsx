@@ -145,34 +145,33 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
 
         <div className={`space-y-8 transition-all duration-700 overflow-hidden ${expanded ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
 
-          {/* Nutrition Analysis Section */}
+          {/* Nutrition Analysis Section (Simplified & Breathable) */}
           {recipe.macros && (
-            <div className="animate-fadeInUp p-5 bg-chef-gold/5 rounded-2xl border border-chef-gold/10">
-              <h4 className="font-serif font-bold text-md mb-4 flex items-center gap-2 text-chef-black">
+            <div className="animate-fadeInUp pt-2 pb-6">
+              <h4 className="font-serif font-bold text-md mb-6 flex items-center gap-2 text-chef-black">
                 <Activity size={16} className="text-chef-gold" /> 深度營養分析
               </h4>
 
-              {/* Macros Grid */}
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                  <div className="text-xs font-black uppercase tracking-widest text-stone-500 mb-1">蛋白質</div>
-                  <div className="text-base font-bold text-chef-black">{recipe.macros.protein}</div>
+              {/* Macros Grid - Minimalist */}
+              <div className="flex justify-between items-center mb-6 px-2">
+                <div className="text-center flex-1 border-r border-stone-100 last:border-0">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1.5">蛋白質</div>
+                  <div className="text-xl font-serif font-bold text-chef-black">{recipe.macros.protein}</div>
                 </div>
-                <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                  <div className="text-xs font-black uppercase tracking-widest text-stone-500 mb-1">碳水</div>
-                  <div className="text-base font-bold text-chef-black">{recipe.macros.carbs}</div>
+                <div className="text-center flex-1 border-r border-stone-100 last:border-0">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1.5">碳水</div>
+                  <div className="text-xl font-serif font-bold text-chef-black">{recipe.macros.carbs}</div>
                 </div>
-                <div className="bg-white p-3 rounded-xl text-center shadow-sm">
-                  <div className="text-xs font-black uppercase tracking-widest text-stone-500 mb-1">脂肪</div>
-                  <div className="text-base font-bold text-chef-black">{recipe.macros.fat}</div>
+                <div className="text-center flex-1">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1.5">脂肪</div>
+                  <div className="text-xl font-serif font-bold text-chef-black">{recipe.macros.fat}</div>
                 </div>
               </div>
 
-              {/* Health Tip */}
+              {/* Health Tip - Clean */}
               {recipe.healthTip && (
-                <div className="flex gap-3 items-start bg-white p-3 rounded-xl shadow-sm">
-                  <Leaf size={16} className="text-green-500 shrink-0 mt-0.5" />
-                  <p className="text-sm text-stone-700 leading-relaxed font-serif italic">
+                <div className="flex gap-3 items-start pl-2 border-l-2 border-chef-gold/30">
+                  <p className="text-sm text-stone-600 leading-relaxed font-serif italic">
                     {recipe.healthTip}
                   </p>
                 </div>
@@ -180,25 +179,32 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = fal
             </div>
           )}
 
-          <div className="animate-fadeInUp">
-            <h4 className="font-serif font-bold text-lg mb-3 flex items-center gap-2.5"><Utensils size={14} className="text-chef-gold" /> 嚴選食材</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {/* Ingredients Section - Clean Magazine Style */}
+          <div className="animate-fadeInUp pt-4 pb-6 border-t border-stone-50">
+            <h4 className="font-serif font-bold text-md mb-6 flex items-center gap-2 text-chef-black">
+              <Utensils size={16} className="text-chef-gold" /> 嚴選食材
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pl-2">
               {recipe.ingredients.map((ing, i) => (
-                <div key={i} className="text-xs text-stone-600 flex items-center gap-2">
-                  <div className="w-1 h-1 rounded-full bg-chef-gold" />
+                <div key={i} className="text-sm text-stone-700 flex items-center gap-3 font-serif border-b border-stone-50 pb-2 last:border-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-chef-gold shrink-0" />
                   {ing}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="animate-fadeInUp">
-            <h4 className="font-serif font-bold text-lg mb-4 flex items-center gap-2.5"><Flame size={14} className="text-chef-gold" /> 烹飪工法</h4>
-            <div className="space-y-5">
+          {/* Instructions Section - Elegant Flow */}
+          <div className="animate-fadeInUp pt-4 pb-8 border-t border-stone-50">
+            <h4 className="font-serif font-bold text-md mb-8 flex items-center gap-2 text-chef-black">
+              <Flame size={16} className="text-chef-gold" /> 烹飪工法
+            </h4>
+            <div className="space-y-8 pl-2 border-l border-stone-100 ml-2">
               {recipe.instructions.map((step, i) => (
-                <div key={i} className="flex gap-4">
-                  <div className="w-6 h-6 rounded-full bg-chef-black text-white text-xs font-black flex items-center justify-center shrink-0 shadow-lg">{i + 1}</div>
-                  <p className="text-xs text-stone-600 leading-relaxed font-serif">{step}</p>
+                <div key={i} className="relative pl-6 group">
+                  <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-chef-gold transition-colors group-hover:bg-chef-gold" />
+                  <span className="absolute -left-8 top-0 text-[10px] font-black text-stone-300 w-6 text-right pt-1">0{i + 1}</span>
+                  <p className="text-sm text-stone-600 leading-relaxed font-serif tracking-wide">{step}</p>
                 </div>
               ))}
             </div>
