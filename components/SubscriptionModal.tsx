@@ -29,44 +29,45 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose })
                <X size={18} />
             </button>
 
-            {/* Header */}
-            <div className="bg-gradient-to-br from-chef-black to-stone-800 text-white p-6 md:p-8 text-center relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-40 h-40 bg-chef-gold rounded-full blur-[60px] opacity-30 -translate-y-1/2 translate-x-1/3"></div>
+            {/* Header - Luxury Black Gold */}
+            <div className="bg-gradient-to-br from-chef-black via-stone-900 to-chef-black text-white p-6 md:p-8 text-center relative overflow-hidden">
+               <div className="absolute inset-0 bg-silk opacity-20 pointer-events-none"></div>
+               <div className="absolute top-0 right-0 w-40 h-40 bg-chef-gold rounded-full blur-[60px] opacity-30 -translate-y-1/2 translate-x-1/3 animate-pulse"></div>
 
                <div className="relative z-10">
-                  <div className="inline-flex items-center gap-2 bg-chef-gold/20 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-chef-gold mb-4">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-chef-gold to-chef-gold-dark px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-chef-black mb-4 shadow-lg shadow-chef-gold/20">
                      <Crown size={14} />
                      Chef Pro
                   </div>
                   <h2 className="text-2xl md:text-3xl font-serif font-bold mb-2">
-                     解鎖<span className="text-chef-gold">米其林級</span>體驗
+                     解鎖<span className="text-transparent bg-clip-text bg-gradient-to-r from-chef-gold to-white">米其林級</span>體驗
                   </h2>
                   <p className="text-stone-400 text-sm">讓 AI 成為您的私人主廚顧問</p>
                </div>
             </div>
 
             {/* Plan Toggle */}
-            <div className="p-4 md:p-6">
-               <div className="flex bg-stone-100 rounded-2xl p-1.5 mb-6">
+            <div className="p-4 md:p-6 bg-paper">
+               <div className="flex bg-stone-100/50 rounded-2xl p-1.5 mb-6 border border-stone-200">
                   <button
                      onClick={() => setPlan('monthly')}
-                     className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${plan === 'monthly' ? 'bg-white shadow-sm text-chef-black' : 'text-stone-500'}`}
+                     className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${plan === 'monthly' ? 'bg-white shadow-card text-chef-black border border-stone-100' : 'text-stone-500 hover:text-stone-700'}`}
                   >
                      月費方案
                   </button>
                   <button
                      onClick={() => setPlan('yearly')}
-                     className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all relative ${plan === 'yearly' ? 'bg-white shadow-sm text-chef-black' : 'text-stone-500'}`}
+                     className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all relative ${plan === 'yearly' ? 'bg-gradient-to-br from-chef-black to-stone-800 shadow-lg text-chef-gold border border-chef-black' : 'text-stone-500 hover:text-stone-700'}`}
                   >
                      年費方案
-                     <span className="absolute -top-2 -right-1 bg-green-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">省17%</span>
+                     <span className="absolute -top-2 -right-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold shadow-sm">省17%</span>
                   </button>
                </div>
 
                {/* Price Display */}
                <div className="text-center mb-6">
                   <div className="flex items-baseline justify-center gap-1">
-                     <span className="text-4xl md:text-5xl font-bold text-chef-black">
+                     <span className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-chef-black to-stone-600">
                         ${plan === 'monthly' ? '120' : '99'}
                      </span>
                      <span className="text-stone-400 text-sm">/ 月</span>
@@ -81,8 +82,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose })
                {/* Features Grid */}
                <div className="grid grid-cols-2 gap-3 mb-6">
                   {proFeatures.map((feature, idx) => (
-                     <div key={idx} className="flex items-start gap-2 p-3 bg-stone-50 rounded-xl">
-                        <feature.icon size={16} className="text-chef-gold shrink-0 mt-0.5" />
+                     <div key={idx} className="flex items-start gap-2 p-3 bg-white border border-stone-100 rounded-xl hover:border-chef-gold/30 hover:shadow-gold-glow transition-all group">
+                        <feature.icon size={16} className="text-chef-gold shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
                         <div>
                            <p className="text-xs font-bold text-chef-black">{feature.title}</p>
                            <p className="text-[10px] text-stone-500 leading-snug">{feature.desc}</p>
@@ -92,12 +93,15 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose })
                </div>
 
                {/* CTA */}
-               <button className="w-full py-4 bg-chef-black text-white rounded-2xl font-bold text-sm uppercase tracking-wider hover:bg-chef-gold hover:text-chef-black transition-all shadow-lg">
-                  {plan === 'yearly' ? '開始 7 天免費試用' : '立即訂閱'}
+               <button className="w-full py-4 bg-gradient-to-r from-chef-gold to-chef-gold-dark text-white rounded-2xl font-bold text-sm uppercase tracking-wider hover:shadow-gold-glow hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                     {plan === 'yearly' ? '開始 7 天免費試用' : '立即訂閱'} <Sparkles size={16} />
+                  </span>
                </button>
 
                <p className="text-center text-[10px] text-stone-400 mt-4 leading-relaxed">
-                  點擊即同意 <a href="#" className="underline">服務條款</a> 與 <a href="#" className="underline">隱私政策</a>
+                  點擊即同意 <a href="#" className="underline text-stone-500 hover:text-chef-gold">服務條款</a> 與 <a href="#" className="underline text-stone-500 hover:text-chef-gold">隱私政策</a>
                   <br />支援信用卡 / Apple Pay / Google Pay
                </p>
             </div>

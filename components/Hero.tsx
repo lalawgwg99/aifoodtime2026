@@ -204,50 +204,54 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
           </div>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4">
-            <button className="px-6 py-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all group">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                  <Zap className="text-white" size={20} />
+            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+              <div className="absolute inset-0 bg-marble opacity-30"></div>
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
+                  <Zap className="text-white drop-shadow-sm" size={20} />
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">⚡ 趕時間</p>
-                  <p className="text-xs text-stone-500">15 分鐘內完成</p>
+                  <p className="text-xs text-chef-accent/70">15 分鐘內完成</p>
                 </div>
               </div>
             </button>
 
-            <button className="px-6 py-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl border-2 border-green-200 hover:border-green-400 transition-all group">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                  <Leaf className="text-white" size={20} />
+            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+              <div className="absolute inset-0 bg-marble opacity-30"></div>
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
+                  <Leaf className="text-white drop-shadow-sm" size={20} />
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">🥗 想健康</p>
-                  <p className="text-xs text-stone-500">低脂高纖維</p>
+                  <p className="text-xs text-chef-accent/70">低脂高纖維</p>
                 </div>
               </div>
             </button>
 
-            <button className="px-6 py-4 bg-gradient-to-br from-amber-50 to-orange-100 rounded-2xl border-2 border-orange-200 hover:border-orange-400 transition-all group">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
-                  <Heart className="text-white" size={20} />
+            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+              <div className="absolute inset-0 bg-marble opacity-30"></div>
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
+                  <Heart className="text-white drop-shadow-sm" size={20} />
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">💛 想療癒</p>
-                  <p className="text-xs text-stone-500">古早味、溫暖系</p>
+                  <p className="text-xs text-chef-accent/70">古早味、溫暖系</p>
                 </div>
               </div>
             </button>
 
-            <button className="px-6 py-4 bg-gradient-to-br from-red-50 to-rose-100 rounded-2xl border-2 border-red-200 hover:border-red-400 transition-all group">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
-                  <Flame className="text-white" size={20} />
+            <button className="px-6 py-4 bg-gradient-to-br from-chef-champagne/40 to-chef-gold/10 rounded-2xl border-2 border-chef-gold/30 hover:border-chef-gold hover:shadow-gold-glow transition-all group relative overflow-hidden">
+              <div className="absolute inset-0 bg-marble opacity-30"></div>
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-10 h-10 bg-gradient-to-br from-chef-gold to-chef-gold-dark rounded-full flex items-center justify-center shadow-inner-gold">
+                  <Flame className="text-white drop-shadow-sm" size={20} />
                 </div>
                 <div className="text-left">
                   <p className="font-bold text-chef-black text-sm">🔥 想放縱</p>
-                  <p className="text-xs text-stone-500">高熱量、爽快</p>
+                  <p className="text-xs text-chef-accent/70">高熱量、爽快</p>
                 </div>
               </div>
             </button>
@@ -255,45 +259,66 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         </div>
 
         {/* Taiwan Snacks Spotlight - Cultural Moat */}
-        <div className="mt-12 md:mt-16 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 rounded-3xl p-6 md:p-8 border-2 border-chef-gold/30">
-          <div className="flex items-center justify-between mb-6">
+        {/* Taiwan Snacks Spotlight - Cultural Moat (Luxury Edition) */}
+        <div className="mt-12 md:mt-16 bg-silk rounded-3xl p-6 md:p-8 border border-chef-gold/30 shadow-premium relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-chef-gold/10 to-transparent rounded-bl-full pointer-events-none"></div>
+
+          <div className="flex items-center justify-between mb-6 relative z-10">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl">🇹🇼</span>
-                <h3 className="text-lg md:text-xl font-serif font-bold text-chef-black">台灣小吃專區</h3>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl drop-shadow-md">🇹🇼</span>
+                <h3 className="text-lg md:text-xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-chef-black to-chef-accent">台灣小吃專區</h3>
               </div>
-              <p className="text-xs md:text-sm text-stone-500">道地古早味，AI 還原夜市經典</p>
+              <p className="text-xs md:text-sm text-chef-accent/80 font-medium">道地古早味，AI 還原夜市經典</p>
+            </div>
+            <div className="hidden md:block">
+              <span className="px-3 py-1 bg-chef-gold/10 border border-chef-gold/20 rounded-full text-[10px] text-chef-gold-dark font-bold tracking-widest uppercase">TAIWANESE STREET FOOD</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
-              <p className="text-2xl mb-2">🍚</p>
-              <p className="font-bold text-sm text-chef-black">滷肉飯</p>
-              <p className="text-[10px] text-stone-400 mt-1">南部 vs 北部</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 relative z-10">
+            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
+              <div className="relative z-10">
+                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🍚</p>
+                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">滷肉飯</p>
+                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">南部 vs 北部</p>
+              </div>
             </button>
 
-            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
-              <p className="text-2xl mb-2">🦪</p>
-              <p className="font-bold text-sm text-chef-black">蚵仔煎</p>
-              <p className="text-[10px] text-stone-400 mt-1">夜市經典</p>
+            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
+              <div className="relative z-10">
+                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🦪</p>
+                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">蚵仔煎</p>
+                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">夜市經典</p>
+              </div>
             </button>
 
-            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
-              <p className="text-2xl mb-2">🍜</p>
-              <p className="font-bold text-sm text-chef-black">大腸麵線</p>
-              <p className="text-[10px] text-stone-400 mt-1">台北招牌</p>
+            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
+              <div className="relative z-10">
+                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🍜</p>
+                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">大腸麵線</p>
+                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">台北招牌</p>
+              </div>
             </button>
 
-            <button className="bg-white p-4 rounded-xl border border-stone-200 hover:border-chef-gold hover:shadow-md transition-all text-center group">
-              <p className="text-2xl mb-2">🥟</p>
-              <p className="font-bold text-sm text-chef-black">肉圓</p>
-              <p className="text-[10px] text-stone-400 mt-1">彰化名產</p>
+            <button className="bg-marble p-4 rounded-xl border border-chef-gold/20 hover:border-chef-gold hover:shadow-gold-glow transition-all text-center group/card relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-transparent"></div>
+              <div className="relative z-10">
+                <p className="text-3xl mb-2 filter drop-shadow hover:scale-110 transition-transform duration-300">🥟</p>
+                <p className="font-bold text-sm text-chef-black group-hover/card:text-chef-gold-dark transition-colors">肉圓</p>
+                <p className="text-[10px] text-chef-accent/60 mt-1 font-medium">彰化名產</p>
+              </div>
             </button>
           </div>
 
-          <button className="w-full mt-4 py-3 bg-chef-black/5 hover:bg-chef-black hover:text-white text-chef-black rounded-xl font-bold text-sm transition-all">
-            探索更多台灣味道 →
+          <button className="w-full mt-4 py-3 bg-gradient-to-r from-chef-black to-stone-800 text-chef-gold hover:text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-lg relative overflow-hidden group/btn">
+            <div className="absolute inset-0 bg-gradient-to-r from-chef-gold/20 via-transparent to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"></div>
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              探索更多台灣味道 <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+            </span>
           </button>
         </div>
 
@@ -390,19 +415,24 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         </p>
       </div>
 
-      {/* Trust Metrics - Concrete Numbers */}
-      <div className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-3xl mx-auto px-4">
-        <div className="bg-white rounded-2xl p-4 md:p-6 text-center shadow-sm border border-stone-100">
-          <p className="text-2xl md:text-3xl font-bold text-chef-black mb-1">80,000+</p>
-          <p className="text-xs md:text-sm text-stone-500 font-medium">道食譜已生成</p>
+      {/* Trust Metrics - Luxury Concrete Numbers */}
+      <div className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-3xl mx-auto px-4 relative">
+        {/* Golden Divider */}
+        <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-chef-gold/30 to-transparent"></div>
+
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center shadow-card border border-stone-200/60 hover:border-chef-gold/30 transition-all group">
+          <p className="text-2xl md:text-3xl font-serif font-bold text-chef-black mb-1 group-hover:scale-110 transition-transform bg-clip-text text-transparent bg-gradient-to-b from-chef-black to-stone-600">80,000+</p>
+          <p className="text-[10px] md:text-sm text-stone-500 font-bold tracking-wider uppercase">Recipes Generated</p>
         </div>
-        <div className="bg-white rounded-2xl p-4 md:p-6 text-center shadow-sm border border-stone-100">
-          <p className="text-2xl md:text-3xl font-bold text-chef-black mb-1">12,400+</p>
-          <p className="text-xs md:text-sm text-stone-500 font-medium">位用戶信任</p>
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center shadow-card border border-stone-200/60 hover:border-chef-gold/30 transition-all group">
+          <p className="text-2xl md:text-3xl font-serif font-bold text-chef-black mb-1 group-hover:scale-110 transition-transform bg-clip-text text-transparent bg-gradient-to-b from-chef-black to-stone-600">12,400+</p>
+          <p className="text-[10px] md:text-sm text-stone-500 font-bold tracking-wider uppercase">Trusted Users</p>
         </div>
-        <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-chef-gold/10 to-amber-50 rounded-2xl p-4 md:p-6 text-center shadow-sm border border-chef-gold/20">
-          <p className="text-2xl md:text-3xl font-bold text-chef-accent mb-1">92%</p>
-          <p className="text-xs md:text-sm text-stone-600 font-bold">台灣味道還原度</p>
+        <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-chef-gold to-chef-gold-dark text-white rounded-2xl p-4 md:p-6 text-center shadow-gold-glow border border-chef-gold relative overflow-hidden group">
+          <div className="absolute inset-0 bg-marble opacity-20"></div>
+          <div className="absolute top-0 right-0 w-16 h-16 bg-white/20 blur-xl rounded-full"></div>
+          <p className="text-2xl md:text-3xl font-serif font-bold text-white mb-1 group-hover:scale-110 transition-transform drop-shadow-md">92%</p>
+          <p className="text-[10px] md:text-sm text-white/90 font-bold tracking-wider uppercase drop-shadow-sm">Taiwanese Flavor</p>
         </div>
       </div>
 
@@ -440,9 +470,11 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             </ul>
           </div>
 
-          {/* Member Column */}
-          <div className="bg-gradient-to-br from-chef-black to-stone-800 rounded-2xl p-6 border-2 border-chef-gold relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-chef-gold/20 rounded-full blur-3xl"></div>
+          {/* Member Column (Luxury Black Gold) */}
+          <div className="bg-gradient-to-br from-chef-black via-stone-900 to-chef-black rounded-2xl p-6 border border-chef-gold shadow-gold-glow relative overflow-hidden group">
+            {/* Dynamic Shine Effect */}
+            <div className="absolute top-0 left-0 w-full h-full bg-silk opacity-10 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-chef-gold/20 rounded-full blur-3xl group-hover:bg-chef-gold/30 transition-all duration-700"></div>
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 bg-chef-gold rounded-full animate-pulse"></div>
