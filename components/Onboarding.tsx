@@ -10,11 +10,11 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<'guide' | 'story'>('guide');
 
   const guideSteps = [
-    { icon: Camera, title: '📸 AI 視覺廚房', desc: '不只是拍照！結合您的飲食目標（如增肌、減脂），AI 為您量身轉化冰箱食材。' },
-    { icon: Mic, title: '💬 問問二廚', desc: '料理過程中有任何問題，隨時輸入詢問，即時獲得專業回覆。' },
-    { icon: TrendingUp, title: '📈 趨勢研究', desc: '掌握當季流行食材與擺盤數據' },
-    { icon: Award, title: '⭐ 大師評比', desc: '上傳作品，AI 評比你與米其林的差距' },
-    { icon: Globe, title: '🌍 社群創作', desc: '分享或 Remix 其他創作者的靈感' },
+    { icon: Camera, title: '📸 AI 智能冰箱透視', desc: '不只是拍照！AI 瞬間分析冰箱食材，結合您的增肌減脂目標，變出米其林級健康菜單。' },
+    { icon: Mic, title: '💬 24H 專屬私廚顧問', desc: '料理過程卡關？隨時呼叫您的 AI 二廚，從從備料到調味，即時獲得大師級指引。' },
+    { icon: TrendingUp, title: '📈 全球食尚情報', desc: '獨家掌握全球最新美食趨勢、當季熱門食材與爆紅擺盤風格，讓您永遠走在食尚尖端。' },
+    { icon: Award, title: '⭐ 星級擺盤導師', desc: '上傳您的料理作品，AI 依照米其林標準進行評分，並提供擺盤升級建議，讓家常菜瞬間變大菜。' },
+    { icon: Globe, title: '🌍 連結全球靈感', desc: '加入全球美食家社群，分享您的創作，Remix 他人的靈感，激盪出無限美味可能。' },
   ];
 
   return (
@@ -37,13 +37,13 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
             <ChefHat size={36} className="text-chef-gold mb-4 md:mb-6" />
             <h2 className="text-2xl md:text-3xl font-serif font-bold leading-tight mb-2 md:mb-3">
               {activeTab === 'guide' ? (
-                <>主廚養成<span className="text-chef-gold">手冊</span></>
+                <>解鎖您的<span className="text-chef-gold block mt-2">私廚潛能</span></>
               ) : (
-                <>靈魂創作<span className="text-chef-gold">故事</span></>
+                <>一封給美食的<span className="text-chef-gold block mt-2">科技情書</span></>
               )}
             </h2>
-            <p className="text-stone-400 text-xs md:text-sm font-medium leading-relaxed hidden md:block">
-              {activeTab === 'guide' ? '五步驟，從料理愛好者晉升為味覺藝術家。' : '這不僅是程式碼，更是對美食的一封情書。'}
+            <p className="text-stone-400 text-xs md:text-sm font-medium leading-relaxed hidden md:block mt-4">
+              {activeTab === 'guide' ? '5 個步驟，讓 AI 成為您廚房裡最強大的創意夥伴。' : '探索饗味食光背後的初心－用數據找回對生活的熱情。'}
             </p>
           </div>
 
@@ -53,13 +53,13 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
               onClick={() => setActiveTab('guide')}
               className={`flex-1 py-2.5 md:py-3 rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all border ${activeTab === 'guide' ? 'bg-chef-gold text-chef-black border-chef-gold' : 'border-white/20 text-stone-400 hover:text-white hover:border-white/40'}`}
             >
-              快速指南
+              極致體驗
             </button>
             <button
               onClick={() => setActiveTab('story')}
               className={`flex-1 py-2.5 md:py-3 rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all border ${activeTab === 'story' ? 'bg-white text-chef-black border-white' : 'border-white/20 text-stone-400 hover:text-white hover:border-white/40'}`}
             >
-              開發故事
+              靈魂故事
             </button>
           </div>
         </div>
@@ -70,52 +70,55 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
           {activeTab === 'guide' && (
             <div className="space-y-3 md:space-y-5 animate-fadeIn">
               {guideSteps.map((step, idx) => (
-                <div key={idx} className="flex items-start gap-4 group bg-white p-4 md:p-5 rounded-2xl shadow-sm hover:shadow-md transition-all">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-stone-100 rounded-xl flex items-center justify-center text-chef-black shrink-0 group-hover:bg-chef-gold group-hover:text-white transition-all">
+                <div key={idx} className="flex items-start gap-4 group bg-white p-4 md:p-5 rounded-2xl shadow-sm hover:shadow-md transition-all border border-transparent hover:border-chef-gold/10">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-id-100 rounded-xl flex items-center justify-center text-chef-black shrink-0 group-hover:bg-chef-gold group-hover:text-white transition-all duration-300 shadow-sm">
                     <step.icon size={20} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-base md:text-lg mb-0.5 text-chef-black">{step.title}</h3>
-                    <p className="text-xs md:text-sm text-stone-500 leading-relaxed">{step.desc}</p>
+                    <h3 className="font-bold text-base md:text-lg mb-1 text-chef-black group-hover:text-chef-gold-dark transition-colors">{step.title}</h3>
+                    <p className="text-xs md:text-sm text-stone-500 leading-relaxed font-medium">{step.desc}</p>
                   </div>
-                  <ArrowRight size={16} className="text-stone-300 shrink-0 mt-1 hidden md:block" />
+                  <ArrowRight size={16} className="text-stone-300 shrink-0 mt-1 hidden md:block group-hover:translate-x-1 transition-transform text-chef-gold" />
                 </div>
               ))}
 
               {/* Start Button for Mobile */}
               <button
                 onClick={onClose}
-                className="w-full py-4 bg-chef-black text-white rounded-2xl font-bold text-sm uppercase tracking-wider mt-4 hover:bg-chef-gold hover:text-chef-black transition-all md:hidden"
+                className="w-full py-4 bg-chef-black text-white rounded-2xl font-bold text-sm uppercase tracking-wider mt-4 hover:bg-chef-gold hover:text-chef-black transition-all md:hidden shadow-lg"
               >
-                開始探索 →
+                開始探索極致美味 →
               </button>
             </div>
           )}
 
           {activeTab === 'story' && (
-            <div className="space-y-5 animate-fadeIn">
+            <div className="space-y-6 animate-fadeIn">
               {/* Quote Card */}
-              <div className="p-5 md:p-6 bg-chef-black text-white rounded-2xl relative overflow-hidden">
-                <Sparkles className="absolute top-3 right-3 text-chef-gold/40" size={20} />
-                <p className="font-serif italic text-base md:text-lg leading-relaxed">
-                  「我們不只想解決『晚餐吃什麼』，我們想解決的是對生活的麻木。」
+              <div className="p-6 md:p-8 bg-gradient-to-br from-chef-black to-stone-900 text-white rounded-[2rem] relative overflow-hidden shadow-gold-glow">
+                <Sparkles className="absolute top-4 right-4 text-chef-gold animate-pulse" size={24} />
+                <div className="absolute -left-10 -bottom-10 w-32 h-32 bg-chef-gold/10 rounded-full blur-[40px]"></div>
+                <p className="font-serif italic text-lg md:text-xl leading-relaxed text-center relative z-10">
+                  「我們解決的不只是『<span className="text-chef-gold border-b border-chef-gold/30">晚餐吃什麼</span>』，<br />而是試圖喚醒那份對<span className="text-chef-gold border-b border-chef-gold/30">生活的熱愛</span>。」
                 </p>
               </div>
 
               {/* Story Content */}
-              <div className="space-y-4 text-sm text-stone-600 leading-relaxed">
+              <div className="space-y-5 text-sm md:text-base text-stone-600 leading-loose">
                 <p>
-                  <strong className="text-chef-black">饗味食光</strong>的開發初衷，是結合<span className="text-chef-gold font-bold">數據科學</span>與<span className="text-chef-gold font-bold">廚藝藝術</span>。
+                  <strong className="text-chef-black text-lg block mb-2">一切始於一個簡單的信念。</strong>
+                  饗味食光 (SavorChef) 的誕生，源於我們對<span className="text-chef-gold font-bold">數據科學</span>與<span className="text-chef-gold font-bold">烹飪藝術</span>的極致追求。我們相信，科技不該是冰冷的，它應該有溫度、有味道。
                 </p>
                 <p>
-                  在現代忙碌的生活中，冰箱裡的食材往往被遺忘，而料理也逐漸變成一種例行公事。
+                  在忙碌的現代生活中，冰箱深處的食材常被遺忘，做菜變成了一種機械式的家務。我們問自己：<span className="italic text-stone-800 font-medium">「如果 AI 能像一位米其林主廚朋友一樣，陪你一起料理呢？」</span>
                 </p>
                 <p>
-                  我們利用 <strong>Gemini AI</strong> 的視覺與語言理解力，打破了食譜的僵化。App 能即時進行全球市場調查，讓你了解什麼食材正在流行；它甚至能充當嚴厲且專業的評論家，幫你對標米其林水準。
+                  於是，我們運用了 <strong>Gemini AI</strong> 原生多模態能力，賦予了 App <span className="underline decoration-chef-gold/30 decoration-2 underline-offset-2">看見食材</span> 與 <span className="underline decoration-chef-gold/30 decoration-2 underline-offset-2">理解風味</span> 的能力。它不再只是拋給你生硬的食譜，而是能讀懂你的營養需求、理解你的口味偏好，甚至能像一位嚴師般，評鑑你的擺盤美學。
                 </p>
 
-                <div className="flex items-center gap-2 text-chef-terracotta font-bold text-xs pt-4 border-t border-stone-200">
-                  <Heart size={14} fill="currentColor" /> 讓科技充滿溫度，讓味蕾重拾感動。
+                <div className="flex items-center justify-center gap-3 text-chef-terracotta font-bold text-sm pt-6 border-t border-stone-200 mt-6">
+                  <Heart size={16} fill="currentColor" className="animate-beat" />
+                  <span>讓科技充滿溫度，讓味蕾重拾感動。</span>
                 </div>
               </div>
             </div>

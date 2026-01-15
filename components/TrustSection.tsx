@@ -22,7 +22,7 @@ export const TrustSection = () => {
                     </div>
                 </div>
                 <p className="text-stone-600 font-medium text-lg">
-                    與 <span className="font-bold text-[#1A1818] border-b-2 border-chef-gold/50">AI 智能主廚</span> 一起探索美味無限可能。
+                    與 <span className="font-bold text-[#1A1818] border-b-2 border-chef-gold/50">智能主廚</span> 一起探索美味無限可能。
                 </p>
             </div>
 

@@ -6,49 +6,59 @@
 
 ### 🍳 讓食材綻放靈魂 — 全球趨勢與極致私廚系統
 
-[![React](https://img.shields.io/badge/React-19.0-61DAFB?style=flat-square&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
-[![Gemini AI](https://img.shields.io/badge/Gemini_AI-Powered-8E75B2?style=flat-square&logo=google)](https://ai.google.dev/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+<div align="center">
+
+[![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
+[![Gemini AI](https://img.shields.io/badge/Gemini_AI_Pro-8E75B2?style=for-the-badge&logo=google)](https://ai.google.dev/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
+
+[![](https://img.shields.io/badge/Demo-Live_Preview-success?style=for-the-badge&logo=vercel)](https://ai.studio/apps/drive/1C43Glk1UIKgOmpyzBsyNFu-U5YlKT1Ol)
 
 </div>
 
 ---
 
-## ✨ 專案簡介
+## ✨ 專案亮點
 
-**饗味食光** 是一款頂級 AI 私廚系統，結合 **全球美食趨勢研究**、**米其林大師量化評比**、**拍照食材辨識** 與 **智能問答**，讓每一口料理都具備靈魂。
+> **「這不只是一個食譜 App，這是您廚房裡的米其林大腦。」**
 
-透過 Google Gemini AI 的強大能力，為您打造專屬的味覺饗宴體驗。
+**饗味食光 (SavorChef)** 是一款深度整合 Google Gemini AI 的頂級私廚系統。我們致力於解決現代人的「料理倦怠」，透過科技重拾對食物的熱情。
+
+🌟 **核心差異：**
+
+* **不只是搜尋**：AI 主動為您策劃菜單，而非等待您輸入。
+* **不只是辨識**：看懂食材的靈魂，結合您的健身目標（增肌/減脂）給予建議。
+* **不只是做菜**：像嚴師一樣評鑑您的擺盤，推動您的廚藝達到星級水準。
 
 ---
 
-## 🚀 核心功能
+## 🚀 為什麼選擇 SavorChef？
 
-### 🔮 AI 智慧功能
+### 🔮 極致 AI 體驗
 
-| 功能 | 說明 |
-|------|------|
-| **🍽️ 智慧食譜推薦** | 根據食材、飲食目標、料理風格與用餐場合，AI 量身打造專屬食譜 |
-| **📸 食材 X 光透視** | **[強大升級]** 結合您的飲食目標（如增肌、減脂）與冰箱照片，AI 自動客製化食譜 |
-| **🎯 味道竊取者** | 看到美食照片？AI 幫您逆向工程還原食譜！ |
-| **📊 營養分析師** | 掃描任何餐點，即時獲得熱量與營養成分分析 |
-| **👨‍🍳 主廚評鑑** | 上傳您的料理作品，獲得 AI 米其林級評語與擺盤建議 |
-| **🌍 全球趨勢** | 追蹤最新美食趨勢、當季食材與擺盤風格 |
+| 功能模組 | 深度解析 |
+|---------|----------|
+| **🍽️ 靈感策展人** | 厭倦了不知道吃什麼？AI 根據您的心情、天氣、甚至當下的穿搭風格，推薦最適合的料理。 |
+| **📸 視覺魔術師** | **[旗艦功能]** 拍下冰箱剩餘食材，AI 瞬間變出三道不同國家的米其林級食譜 (含視覺預覽)。 |
+| **🎯 逆向工程師** | 在餐廳吃到神級美味？拍下來，AI 幫您拆解食譜與烹飪工法，讓您在家復刻。 |
+| **🍎 營養精算師** | 每一口都在掌控之中。即時計算卡路里與巨量營養素，讓美味與健康不再妥協。 |
+| **👨‍🍳 星級評鑑官** | 勇敢上傳您的作品！獲得 AI 針對「色、香、味、形」的專業毒舌與建設性指導。 |
+| **🌍 趨勢獵人** | 連線全球美食資料庫，告訴您現在紐約、東京、巴黎正在流行什麼食材。 |
 
 ### 🎯 飲食目標支援
 
-- 🥗 均衡飲食 (Balanced)
-- 🏃 減重計畫 (Weight Loss)
-- 💪 增肌飲食 (Muscle Gain)
-- ⚡ 快速簡餐 (Quick & Easy)
-- 💰 經濟實惠 (Budget Friendly)
-- 🍜 療癒美食 (Comfort Food)
-- 🥑 生酮飲食 (Keto Friendly)
-- 🌱 植物性飲食 (Plant Based)
-- 🌾 高纖飲食 (High Fiber)
-- 🧂 低鈉飲食 (Low Sodium)
+* 🥗 均衡飲食 (Balanced)
+* 🏃 減重計畫 (Weight Loss)
+* 💪 增肌飲食 (Muscle Gain)
+* ⚡ 快速簡餐 (Quick & Easy)
+* 💰 經濟實惠 (Budget Friendly)
+* 🍜 療癒美食 (Comfort Food)
+* 🥑 生酮飲食 (Keto Friendly)
+* 🌱 植物性飲食 (Plant Based)
+* 🌾 高纖飲食 (High Fiber)
+* 🧂 低鈉飲食 (Low Sodium)
 
 ### 🌏 支援料理風格
 
@@ -99,9 +109,9 @@
 
 ### 系統需求
 
-- Node.js 18+
-- npm 或 yarn
-- Google Gemini API Key
+* Node.js 18+
+* npm 或 yarn
+* Google Gemini API Key
 
 ### 安裝步驟
 
@@ -145,9 +155,9 @@ export const IS_APP_STORE_BUILD = false;
 
 ### 權限需求 (`metadata.json`)
 
-- 📷 **相機** — 食材拍照辨識
-- 💬 **問問二廚** — 智能文字問答助手
-- 📍 **定位** — 在地化食材推薦
+* 📷 **相機** — 食材拍照辨識
+* 💬 **問問二廚** — 智能文字問答助手
+* 📍 **定位** — 在地化食材推薦
 
 ---
 
@@ -182,15 +192,15 @@ export const IS_APP_STORE_BUILD = false;
 
 ## 🗺️ 開發路線圖
 
-- [x] ✅ 核心食譜推薦系統
-- [x] ✅ AI 視覺辨識 (三種模式)
-- [x] ✅ 主廚評鑑系統
-- [x] ✅ 全球趨勢分析
-- [x] ✅ 社群分享功能
-- [x] ✅ 問問二廚 (Text Chat Mode)
-- [ ] 🔜 智慧購物清單
-- [ ] 🔜 跨裝置同步
-- [ ] 🔜 AR 擺盤指導
+* [x] ✅ 核心食譜推薦系統
+* [x] ✅ AI 視覺辨識 (三種模式)
+* [x] ✅ 主廚評鑑系統
+* [x] ✅ 全球趨勢分析
+* [x] ✅ 社群分享功能
+* [x] ✅ 問問二廚 (Text Chat Mode)
+* [ ] 🔜 智慧購物清單
+* [ ] 🔜 跨裝置同步
+* [ ] 🔜 AR 擺盤指導
 
 ---
 
