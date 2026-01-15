@@ -5,6 +5,8 @@ import { RecipeCard } from './components/RecipeCard';
 import { Community } from './components/Community';
 import { Chronicles } from './components/Chronicles';
 import { MarketTicker } from './components/MarketTicker';
+import { Footer } from './components/Footer';
+import { TrustSection } from './components/TrustSection';
 import { AuthModal } from './components/AuthModal';
 import { ProfileModal } from './components/ProfileModal';
 import { SubscriptionModal } from './components/SubscriptionModal';
@@ -392,6 +394,12 @@ export default function App() {
           onLogin={() => { setShowLoginBenefitsModal(false); setShowAuthModal(true); }}
         />
       )}
+
+      {/* Social Trust & Stats */}
+      <TrustSection />
+
+      {/* Global Footer */}
+      <Footer />
     </div>
   );
 }
