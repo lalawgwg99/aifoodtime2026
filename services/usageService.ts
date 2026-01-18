@@ -37,21 +37,12 @@ export const usageService = {
 
     // 檢查是否可以使用（未登入用戶）
     canUse(isLoggedIn: boolean): boolean {
-        if (isLoggedIn) {
-            return true; // 登入用戶無限制
-        }
-
-        return this.getTodayUsage() < MAX_FREE_USES;
+        return true; // 全面開放，不限次數
     },
 
     // 取得剩餘次數
     getRemainingUses(isLoggedIn: boolean): number {
-        if (isLoggedIn) {
-            return Infinity;
-        }
-
-        const used = this.getTodayUsage();
-        return Math.max(0, MAX_FREE_USES - used);
+        return Infinity; // 無限次數
     },
 
     // 私有方法

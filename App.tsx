@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu, BookOpen, Calendar } from 'lucide-react';
+import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu, BookOpen, Calendar, Coffee } from 'lucide-react';
 import { Hero } from './components/Hero';
 import { RecipeCard } from './components/RecipeCard';
 import { Community } from './components/Community';
@@ -20,6 +20,7 @@ import { VisionModeModal } from './components/VisionModeModal';
 import { AnalysisResult } from './components/AnalysisResult';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
 import { usageService } from './services/usageService';
+import { enhancedStorage } from './services/enhancedStorage';
 import { SearchState, Recipe, Cuisine, VisionMode, User, VisionResult } from './types';
 import { useSound } from './hooks/useSound';
 
@@ -58,10 +59,10 @@ export default function App() {
 
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  // const [showSubscriptionModal, setShowSubscriptionModal] = useState(false); // Removed for free access
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showUsageLimitModal, setShowUsageLimitModal] = useState(false);
+  // const [showUsageLimitModal, setShowUsageLimitModal] = useState(false); // Removed for free access
   const [showLoginBenefitsModal, setShowLoginBenefitsModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showMethodologyModal, setShowMethodologyModal] = useState(false);
@@ -70,15 +71,38 @@ export default function App() {
 
   useEffect(() => {
     const savedUser = localStorage.getItem('smartchef_user');
-    if (savedUser) try { setCurrentUser(JSON.parse(savedUser)); } catch (e) { }
-    const savedFavorites = localStorage.getItem('smartchef_favorites');
-    if (savedFavorites) try { setFavorites(JSON.parse(savedFavorites)); } catch (e) { }
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setCurrentUser(parsedUser);
+        // Load user favorites
+        const userFavs = enhancedStorage.getFavorites(parsedUser.id);
+        setFavorites(userFavs);
+      } catch (e) { console.error("Failed to load user", e); }
+    } else {
+      // Load guest favorites (legacy support)
+      const savedFavorites = localStorage.getItem('smartchef_favorites');
+      if (savedFavorites) try { setFavorites(JSON.parse(savedFavorites)); } catch (e) { }
+    }
+
     // BUG-005 修復：新用戶首次訪問自動顯示 Onboarding
     const hasSeenOnboarding = localStorage.getItem('smartchef_onboarding_seen');
     if (!hasSeenOnboarding) {
       setShowOnboarding(true);
     }
   }, []);
+
+  // Sync favorites when user changes (Login/Logout)
+  useEffect(() => {
+    if (currentUser) {
+      const userFavs = enhancedStorage.getFavorites(currentUser.id);
+      setFavorites(userFavs);
+    } else {
+      // Optional: Clear favorites on logout or revert to guest? 
+      // User requested: "Logout then login, favorites gone" -> implies logout clears current view
+      setFavorites([]);
+    }
+  }, [currentUser?.id]);
 
   const handleLogin = (user: User) => {
     // Admin Check
@@ -124,11 +148,13 @@ export default function App() {
 
     if (effectiveIngredients.length === 0 && !searchState.goal && !searchState.occasion) return;
 
-    // Check usage limits for non-logged-in users
-    if (!usageService.canUse(!!currentUser)) {
-      setShowUsageLimitModal(true);
-      return;
-    }
+    if (effectiveIngredients.length === 0 && !searchState.goal && !searchState.occasion) return;
+
+    // Check usage limits - DISABLED (Free for everyone)
+    // if (!usageService.canUse(!!currentUser)) {
+    //   setShowUsageLimitModal(true);
+    //   return;
+    // }
 
     setLoading(true); setError(null); setShowFavoritesOnly(false);
 
@@ -219,7 +245,19 @@ export default function App() {
     setFavorites(prev => {
       const isFav = prev.some(f => f.id === recipe.id);
       const next = isFav ? prev.filter(f => f.id !== recipe.id) : [...prev, recipe];
-      localStorage.setItem('smartchef_favorites', JSON.stringify(next));
+
+      if (currentUser) {
+        // Save to User Storage
+        if (isFav) {
+          enhancedStorage.removeFavorite(currentUser.id, recipe.id);
+        } else {
+          enhancedStorage.addFavorite(currentUser.id, recipe);
+        }
+      } else {
+        // Save to Guest Storage
+        localStorage.setItem('smartchef_favorites', JSON.stringify(next));
+      }
+
       return next;
     });
   };
@@ -270,9 +308,14 @@ export default function App() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <button onClick={() => setShowSubscriptionModal(true)} className="flex items-center gap-2 px-4 py-2 bg-chef-black text-chef-gold rounded-full text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg border border-chef-gold/30">
-              <Crown size={14} /> Pro
-            </button>
+            <a
+              href="https://buymeacoffee.com/laladoo99"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#FFDD00] text-black rounded-full text-xs font-black tracking-widest hover:scale-105 transition-transform shadow-lg border border-yellow-400"
+            >
+              <Coffee size={14} /> 請我喝杯咖啡
+            </a>
 
             {/* Feature Buttons with Labels */}
             <div className="flex items-center gap-1 bg-stone-100/50 rounded-full p-1">
@@ -334,15 +377,15 @@ export default function App() {
               </button>
             </div>
             <div className="p-4 space-y-2">
-              <button onClick={() => { setShowSubscriptionModal(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
-                <div className="w-10 h-10 bg-chef-black rounded-xl flex items-center justify-center">
-                  <Crown size={18} className="text-chef-gold" />
+              <a href="https://buymeacoffee.com/laladoo99" target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
+                <div className="w-10 h-10 bg-[#FFDD00] rounded-xl flex items-center justify-center">
+                  <Coffee size={18} className="text-black" />
                 </div>
                 <div className="text-left">
-                  <span className="font-bold text-sm">升級 Pro</span>
-                  <p className="text-xs text-stone-400">解鎖進階功能</p>
+                  <span className="font-bold text-sm">請我喝杯咖啡</span>
+                  <p className="text-xs text-stone-400">支持開發者</p>
                 </div>
-              </button>
+              </a>
 
               {!currentUser && (
                 <button onClick={() => { setShowLoginBenefitsModal(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
@@ -488,7 +531,7 @@ export default function App() {
 
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={handleLogin} />}
       {showProfileModal && currentUser && <ProfileModal user={currentUser} onClose={() => setShowProfileModal(false)} onLogout={handleLogout} />}
-      {showSubscriptionModal && <SubscriptionModal onClose={() => setShowSubscriptionModal(false)} />}
+      {/* {showSubscriptionModal && <SubscriptionModal onClose={() => setShowSubscriptionModal(false)} />} */}
 
       {/* Vision Mode Selector Modal */}
       {showVisionModal && (
@@ -499,13 +542,7 @@ export default function App() {
       )}
 
       {showOnboarding && <Onboarding onClose={handleCloseOnboarding} />}
-      {showUsageLimitModal && (
-        <UsageLimitModal
-          onClose={() => setShowUsageLimitModal(false)}
-          onLogin={() => { setShowUsageLimitModal(false); setShowAuthModal(true); }}
-          remainingUses={usageService.getRemainingUses(!!currentUser)}
-        />
-      )}
+
       {showLoginBenefitsModal && (
         <LoginBenefitsModal
           onClose={() => setShowLoginBenefitsModal(false)}

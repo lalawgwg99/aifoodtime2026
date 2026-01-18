@@ -13,6 +13,7 @@ const STORAGE_KEY = 'savorchef_user_data';
 export const enhancedStorage = {
     // 取得用戶資料
     getUserData(userId: string): UserData | null {
+        if (typeof window === 'undefined') return null;
         try {
             const allData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
             return allData[userId] || null;
@@ -23,6 +24,7 @@ export const enhancedStorage = {
 
     // 儲存用戶資料
     saveUserData(userId: string, data: Partial<UserData>): void {
+        if (typeof window === 'undefined') return;
         try {
             const allData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
             allData[userId] = {
@@ -78,6 +80,7 @@ export const enhancedStorage = {
 
     // 清除用戶資料
     clearUserData(userId: string): void {
+        if (typeof window === 'undefined') return;
         try {
             const allData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
             delete allData[userId];
@@ -89,6 +92,7 @@ export const enhancedStorage = {
 
     // 取得所有用戶（用於遷移）
     getAllUsers(): string[] {
+        if (typeof window === 'undefined') return [];
         try {
             const allData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
             return Object.keys(allData);
