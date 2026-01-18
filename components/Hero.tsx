@@ -167,23 +167,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
   return (
     <div className="relative z-10 mx-auto max-w-5xl px-4">
 
-      {/* Hero Title Section */}
-      <div className="text-center mb-12 animate-fadeIn">
-        <div className="inline-block px-4 py-1.5 rounded-full bg-orange-50 border border-orange-200 mb-6">
-          <span className="text-orange-600 text-xs font-bold tracking-wider uppercase">AI 智能菜單規劃師</span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-serif leading-tight mb-4 text-stone-800">
-          讓食材
-          <span className="font-black text-orange-600 ml-3">綻放靈魂</span>
-        </h1>
-        <p className="text-stone-600 text-lg md:text-xl max-w-2xl mx-auto">
-          米其林私廚 × 全球趨勢 × AI 完美演繹
-        </p>
-      </div>
+      {/* Hero Title Section - REMOVED (Handled in App.tsx) */}
 
-      {/* Search Bar */}
       <div className="relative mb-8">
-        <div className="relative group bg-white rounded-3xl p-4 md:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-stone-100 focus-within:shadow-[0_8px_40px_rgba(249,115,22,0.15)] transition-all duration-300">
+        <div className="relative group bg-white rounded-[2rem] p-3 md:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-stone-100 focus-within:shadow-[0_8px_40px_rgba(249,115,22,0.15)] transition-all duration-300">
           {searchState.ingredients.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 mb-4 min-h-[40px]">
               {searchState.ingredients.map((ing, idx) => (
@@ -202,7 +189,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 px-4 py-2 bg-transparent text-xl text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0"
+              className="flex-1 px-2 md:px-4 py-2 bg-transparent text-lg md:text-xl text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0"
               placeholder={searchState.ingredients.length === 0 ? PLACEHOLDER_EXAMPLES[placeholderIndex] : "還有其他食材？"}
             />
 
@@ -225,9 +212,10 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                   onSearch(inputValue);
                   setInputValue('');
                 }}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-stone-900 text-white font-bold hover:bg-chef-gold hover:text-black transition-all shadow-lg active:scale-95"
+                className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-full bg-stone-900 text-white font-bold hover:bg-chef-gold hover:text-black transition-all shadow-lg active:scale-95"
               >
-                <span>搜尋食譜</span>
+                <Search className="w-5 h-5 md:hidden" />
+                <span className="hidden md:inline">搜尋食譜</span>
               </button>
             </div>
           </div>
@@ -350,8 +338,8 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {(showAllSnacks ? TAIWAN_SNACKS_DATA : TAIWAN_SNACKS_DATA.slice(0, 10)).map((snack, idx) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+          {(showAllSnacks ? TAIWAN_SNACKS_DATA : TAIWAN_SNACKS_DATA.slice(0, 4)).map((snack, idx) => (
             <button
               key={idx}
               onClick={() => {
