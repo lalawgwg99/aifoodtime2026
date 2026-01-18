@@ -4,7 +4,8 @@ import {
   Search, Camera, X, Info, ChefHat,
   Leaf, Zap, Activity, Heart, Coins, Coffee, Utensils,
   Compass, Flame, Wine, Moon, Users, Briefcase, Dumbbell, Star,
-  Carrot, Waves, Tent, PartyPopper, Trees, Apple
+  Carrot, Waves, Tent, PartyPopper, Trees, Apple,
+  ArrowRight, ChevronDown, ChevronUp, TrendingUp, Sparkles, Globe, Clock
 } from 'lucide-react';
 import { DietaryGoal, Cuisine, SearchState, MealOccasion } from '../types';
 
@@ -77,9 +78,52 @@ const TAIWAN_SNACKS_DATA = [
   { icon: '🥚', label: '鐵蛋', sub: '淡水名產', keyword: '鐵蛋' },
 ];
 
+// Configuration for filters
+const GoalConfig: Record<DietaryGoal, { label: string; icon: React.ReactNode }> = {
+  [DietaryGoal.BALANCED]: { label: '均衡健康', icon: <Activity size={14} /> },
+  [DietaryGoal.WEIGHT_LOSS]: { label: '減脂輕食', icon: <Leaf size={14} /> },
+  [DietaryGoal.MUSCLE_GAIN]: { label: '增肌高蛋', icon: <Dumbbell size={14} /> },
+  [DietaryGoal.QUICK]: { label: '15分鐘快手', icon: <Zap size={14} /> },
+  [DietaryGoal.BUDGET]: { label: '省錢料理', icon: <Coins size={14} /> },
+  [DietaryGoal.COMFORT]: { label: '療癒暖胃', icon: <Heart size={14} /> },
+  [DietaryGoal.KETO]: { label: '低碳生酮', icon: <Flame size={14} /> },
+  [DietaryGoal.VEGAN]: { label: '純植物性', icon: <Carrot size={14} /> },
+  [DietaryGoal.HIGH_FIBER]: { label: '高纖排毒', icon: <Waves size={14} /> },
+  [DietaryGoal.LOW_SODIUM]: { label: '低卡低鈉', icon: <Apple size={14} /> }
+};
+
+const OccasionConfig: Record<MealOccasion, { label: string; icon: React.ReactNode }> = {
+  [MealOccasion.DATE]: { label: '浪漫約會', icon: <Sparkles size={14} /> },
+  [MealOccasion.SOLO]: { label: '一人獨享', icon: <Coffee size={14} /> },
+  [MealOccasion.FAMILY]: { label: '家庭聚餐', icon: <Users size={14} /> },
+  [MealOccasion.WORK]: { label: '效率午餐', icon: <Briefcase size={14} /> },
+  [MealOccasion.LATE_NIGHT]: { label: '深夜食堂', icon: <Flame size={14} /> },
+  [MealOccasion.FITNESS]: { label: '運動補給', icon: <Dumbbell size={14} /> },
+  [MealOccasion.PARTY]: { label: '派對狂歡', icon: <PartyPopper size={14} /> },
+  [MealOccasion.PICNIC]: { label: '戶外野餐', icon: <Trees size={14} /> },
+  [MealOccasion.CAMPING]: { label: '露營野炊', icon: <Tent size={14} /> },
+  [MealOccasion.FESTIVAL]: { label: '節慶盛宴', icon: <Star size={14} /> }
+};
+
+const CuisineConfig: Record<Exclude<Cuisine, Cuisine.ANY>, { label: string; icon: React.ReactNode }> = {
+  [Cuisine.TAIWANESE]: { label: '台式經典', icon: <Utensils size={14} /> },
+  [Cuisine.JAPANESE]: { label: '精緻日式', icon: <Star size={14} /> },
+  [Cuisine.ITALIAN]: { label: '道地義式', icon: <ChefHat size={14} /> },
+  [Cuisine.CHINESE]: { label: '中式私廚', icon: <Compass size={14} /> },
+  [Cuisine.WESTERN]: { label: '西式餐酒', icon: <Wine size={14} /> },
+  [Cuisine.THAI]: { label: '泰式辛香', icon: <Zap size={14} /> },
+  [Cuisine.FRENCH]: { label: '法式優雅', icon: <ChefHat size={14} /> },
+  [Cuisine.KOREAN]: { label: '韓式風味', icon: <Utensils size={14} /> },
+  [Cuisine.VIETNAMESE]: { label: '越式清爽', icon: <Waves size={14} /> },
+  [Cuisine.INDIAN]: { label: '印度咖哩', icon: <Compass size={14} /> },
+  [Cuisine.MEXICAN]: { label: '墨西哥風', icon: <Flame size={14} /> },
+  [Cuisine.AMERICAN]: { label: '美式豪邁', icon: <Utensils size={14} /> }
+};
+
 export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearch, isLoading, onImageUpload, onOpenSmartVision }) => {
   const [inputValue, setInputValue] = useState('');
   const [showAllSnacks, setShowAllSnacks] = useState(false);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -92,46 +136,6 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
     return () => clearInterval(interval);
   }, []);
 
-  const GoalConfig: Record<DietaryGoal, { label: string, icon: React.ReactNode }> = {
-    [DietaryGoal.BALANCED]: { label: '均衡健康', icon: <Activity size={14} /> },
-    [DietaryGoal.WEIGHT_LOSS]: { label: '減脂輕食', icon: <Leaf size={14} /> },
-    [DietaryGoal.MUSCLE_GAIN]: { label: '增肌高蛋', icon: <Dumbbell size={14} /> },
-    [DietaryGoal.QUICK]: { label: '15分鐘快手', icon: <Zap size={14} /> },
-    [DietaryGoal.BUDGET]: { label: '省錢料理', icon: <Coins size={14} /> },
-    [DietaryGoal.COMFORT]: { label: '療癒暖胃', icon: <Heart size={14} /> },
-    [DietaryGoal.KETO]: { label: '低碳生酮', icon: <Flame size={14} /> },
-    [DietaryGoal.VEGAN]: { label: '純植物性', icon: <Carrot size={14} /> },
-    [DietaryGoal.HIGH_FIBER]: { label: '高纖排毒', icon: <Waves size={14} /> },
-    [DietaryGoal.LOW_SODIUM]: { label: '低卡低鈉', icon: <Apple size={14} /> }
-  };
-
-  const OccasionConfig: Record<MealOccasion, { label: string, icon: React.ReactNode }> = {
-    [MealOccasion.DATE]: { label: '浪漫約會', icon: <Wine size={14} /> },
-    [MealOccasion.SOLO]: { label: '一人獨享', icon: <Coffee size={14} /> },
-    [MealOccasion.FAMILY]: { label: '家庭聚餐', icon: <Users size={14} /> },
-    [MealOccasion.WORK]: { label: '效率午餐', icon: <Briefcase size={14} /> },
-    [MealOccasion.LATE_NIGHT]: { label: '深夜食堂', icon: <Moon size={14} /> },
-    [MealOccasion.FITNESS]: { label: '運動補給', icon: <Dumbbell size={14} /> },
-    [MealOccasion.PARTY]: { label: '派對狂歡', icon: <PartyPopper size={14} /> },
-    [MealOccasion.PICNIC]: { label: '戶外野餐', icon: <Trees size={14} /> },
-    [MealOccasion.CAMPING]: { label: '露營野炊', icon: <Tent size={14} /> },
-    [MealOccasion.FESTIVAL]: { label: '節慶盛宴', icon: <Star size={14} /> }
-  };
-
-  const CuisineConfig: Record<Exclude<Cuisine, Cuisine.ANY>, { label: string, icon: React.ReactNode }> = {
-    [Cuisine.TAIWANESE]: { label: '台式經典', icon: <Utensils size={14} /> },
-    [Cuisine.JAPANESE]: { label: '精緻日式', icon: <Star size={14} /> },
-    [Cuisine.ITALIAN]: { label: '道地義式', icon: <Flame size={14} /> },
-    [Cuisine.CHINESE]: { label: '中式私廚', icon: <Compass size={14} /> },
-    [Cuisine.WESTERN]: { label: '西式餐酒', icon: <Wine size={14} /> },
-    [Cuisine.THAI]: { label: '泰式辛香', icon: <Zap size={14} /> },
-    [Cuisine.FRENCH]: { label: '法式優雅', icon: <ChefHat size={14} /> },
-    [Cuisine.KOREAN]: { label: '韓式風味', icon: <Utensils size={14} /> },
-    [Cuisine.VIETNAMESE]: { label: '越式清爽', icon: <Waves size={14} /> },
-    [Cuisine.INDIAN]: { label: '印度咖哩', icon: <Compass size={14} /> },
-    [Cuisine.MEXICAN]: { label: '墨西哥風', icon: <Flame size={14} /> },
-    [Cuisine.AMERICAN]: { label: '美式豪邁', icon: <Utensils size={14} /> }
-  };
 
   const addIngredient = (val: string) => {
     const trimmed = val.trim();
@@ -153,7 +157,8 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      onSearch();
+      onSearch(inputValue);
+      setInputValue('');
     } else if (e.key === 'Backspace' && !inputValue && searchState.ingredients.length > 0) {
       removeIngredient(searchState.ingredients.length - 1);
     }
@@ -178,7 +183,7 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
 
       {/* Search Bar */}
       <div className="relative mb-8">
-        <div className="relative group bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-stone-100 focus-within:shadow-[0_8px_40px_rgba(249,115,22,0.15)] transition-all duration-300">
+        <div className="relative group bg-white rounded-3xl p-4 md:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-stone-100 focus-within:shadow-[0_8px_40px_rgba(249,115,22,0.15)] transition-all duration-300">
           {searchState.ingredients.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 mb-4 min-h-[40px]">
               {searchState.ingredients.map((ing, idx) => (
@@ -187,9 +192,9 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             </div>
           )}
 
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <div className="flex items-center shrink-0 pl-2">
-              <Search className="h-6 w-6 text-orange-500" />
+              <Search className="h-6 w-6 text-stone-400" />
             </div>
             <input
               ref={inputRef}
@@ -197,13 +202,32 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 pl-4 pr-4 py-3 bg-transparent text-xl text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0"
+              className="flex-1 px-4 py-2 bg-transparent text-xl text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0"
               placeholder={searchState.ingredients.length === 0 ? PLACEHOLDER_EXAMPLES[placeholderIndex] : "還有其他食材？"}
             />
 
-            <div className="flex items-center gap-3 shrink-0">
-              <button onClick={() => onOpenSmartVision?.()} className="p-3 rounded-full hover:bg-orange-50 transition-colors group/camera">
-                <Camera className="h-6 w-6 text-stone-500 group-hover/camera:text-orange-600 transition-colors" />
+            {/* Right Action Buttons */}
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Camera Button */}
+              <button
+                onClick={() => onOpenSmartVision?.()}
+                className="p-3 rounded-full text-stone-500 hover:bg-orange-50 hover:text-orange-600 transition-colors group/camera"
+                title="AI 視覺辨識"
+              >
+                <Camera className="h-6 w-6" />
+              </button>
+
+              <div className="w-px h-8 bg-stone-200 mx-1" />
+
+              {/* Submit Button - Explicit User Request */}
+              <button
+                onClick={() => {
+                  onSearch(inputValue);
+                  setInputValue('');
+                }}
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-stone-900 text-white font-bold hover:bg-chef-gold hover:text-black transition-all shadow-lg active:scale-95"
+              >
+                <span>搜尋食譜</span>
               </button>
             </div>
           </div>
@@ -212,58 +236,102 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         {/* Helper Text */}
         <div className="flex items-center justify-center gap-2 mt-4 text-sm text-stone-500">
           <Info size={14} />
-          <span>或上傳照片即刻辨識</span>
+          <span>支援多種食材同時搜尋，例如：「雞蛋 豆腐 蔥」</span>
         </div>
       </div>
 
-      {/* Smart Filter Bar - Compact Design */}
+      {/* Smart Filter System */}
       <div className="mb-12">
-        <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-2 mask-linear-fade">
-          {/* Quick Access Filters - Mixed Categories */}
-          <FilterPill
-            label="趕時間?"
-            active={searchState.goal === DietaryGoal.QUICK}
-            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.QUICK ? null : DietaryGoal.QUICK }))}
-            icon={<Zap size={14} />}
-          />
-          <FilterPill
-            label="想健康"
-            active={searchState.goal === DietaryGoal.BALANCED}
-            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.BALANCED ? null : DietaryGoal.BALANCED }))}
-            icon={<Leaf size={14} />}
-          />
-          <FilterPill
-            label="台式經典"
-            active={searchState.cuisine === Cuisine.TAIWANESE}
-            onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.TAIWANESE ? Cuisine.ANY : Cuisine.TAIWANESE }))}
-            icon={<Utensils size={14} />}
-          />
-          <FilterPill
-            label="療癒系"
-            active={searchState.goal === DietaryGoal.COMFORT}
-            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.COMFORT ? null : DietaryGoal.COMFORT }))}
-            icon={<Heart size={14} />}
-          />
-          <div className="w-px h-8 bg-stone-200 mx-1 shrink-0" />
-          {/* More options expanding horizontally */}
-          <FilterPill
-            label="減脂"
-            active={searchState.goal === DietaryGoal.WEIGHT_LOSS}
-            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.WEIGHT_LOSS ? null : DietaryGoal.WEIGHT_LOSS }))}
-            icon={<Activity size={14} />}
-          />
-          <FilterPill
-            label="增肌"
-            active={searchState.goal === DietaryGoal.MUSCLE_GAIN}
-            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.MUSCLE_GAIN ? null : DietaryGoal.MUSCLE_GAIN }))}
-            icon={<Dumbbell size={14} />}
-          />
-          <FilterPill
-            label="日式"
-            active={searchState.cuisine === Cuisine.JAPANESE}
-            onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.JAPANESE ? Cuisine.ANY : Cuisine.JAPANESE }))}
-            icon={<Star size={14} />}
-          />
+        {/* Header with Expand Toggle */}
+        <div className="flex items-center justify-between mb-4 px-2">
+          <h3 className="font-bold text-stone-800 text-sm uppercase tracking-wider flex items-center gap-2">
+            <Activity size={16} className="text-chef-gold" />
+            料理靈感
+          </h3>
+          <button
+            onClick={() => setShowFilterMenu(!showFilterMenu)}
+            className="flex items-center gap-1 text-xs font-bold text-stone-500 hover:text-chef-gold transition-colors"
+          >
+            {showFilterMenu ? '收起更多' : '顯示全部篩選'}
+          </button>
+        </div>
+
+        {/* Animated Expandable Area */}
+        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showFilterMenu ? 'max-h-[800px] opacity-100' : 'max-h-[60px] opacity-100'}`}>
+
+          {showFilterMenu ? (
+            /* Expanded View: Full Categories */
+            <div className="bg-white/50 backdrop-blur-md rounded-3xl p-6 border border-stone-100 space-y-8 animate-fadeIn">
+
+              {/* Goals */}
+              <div>
+                <div className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">飲食目標</div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(GoalConfig).map(([key, config]) => (
+                    <FilterPill
+                      key={key}
+                      label={config.label}
+                      active={searchState.goal === key}
+                      onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === key ? null : key as DietaryGoal }))}
+                      icon={config.icon}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Occasions */}
+              <div>
+                <div className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">用餐場合</div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(OccasionConfig).map(([key, config]) => (
+                    <FilterPill
+                      key={key}
+                      label={config.label}
+                      active={searchState.occasion === key}
+                      onClick={() => setSearchState(prev => ({ ...prev, occasion: prev.occasion === key ? null : key as MealOccasion }))}
+                      icon={config.icon}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Cuisines */}
+              <div>
+                <div className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">菜系風格</div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(CuisineConfig).map(([key, config]) => (
+                    <FilterPill
+                      key={key}
+                      label={config.label}
+                      active={searchState.cuisine === key}
+                      onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === key ? Cuisine.ANY : key as Cuisine }))}
+                      icon={config.icon}
+                    />
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          ) : (
+            /* Collapsed View: Horizontal Scroll Recommendations */
+            <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2 mask-linear-fade">
+              <button
+                onClick={() => setShowFilterMenu(true)}
+                className="flex-shrink-0 px-4 py-3 rounded-full bg-stone-100 text-stone-500 hover:bg-stone-200 transition-colors flex items-center gap-2 text-sm font-bold"
+              >
+                <span className="w-5 h-5 rounded-full bg-stone-300 text-white flex items-center justify-center text-xs">+</span>
+                更多
+              </button>
+              {/* Mix of popular filters */}
+              <FilterPill label="15分鐘快手" active={searchState.goal === DietaryGoal.QUICK} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.QUICK ? null : DietaryGoal.QUICK }))} icon={<Zap size={14} />} />
+              <FilterPill label="台式經典" active={searchState.cuisine === Cuisine.TAIWANESE} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.TAIWANESE ? Cuisine.ANY : Cuisine.TAIWANESE }))} icon={<Utensils size={14} />} />
+              <FilterPill label="減脂" active={searchState.goal === DietaryGoal.WEIGHT_LOSS} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.WEIGHT_LOSS ? null : DietaryGoal.WEIGHT_LOSS }))} icon={<Leaf size={14} />} />
+              <FilterPill label="增肌" active={searchState.goal === DietaryGoal.MUSCLE_GAIN} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.MUSCLE_GAIN ? null : DietaryGoal.MUSCLE_GAIN }))} icon={<Dumbbell size={14} />} />
+              <FilterPill label="療癒暖胃" active={searchState.goal === DietaryGoal.COMFORT} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.COMFORT ? null : DietaryGoal.COMFORT }))} icon={<Heart size={14} />} />
+              <FilterPill label="日式" active={searchState.cuisine === Cuisine.JAPANESE} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.JAPANESE ? Cuisine.ANY : Cuisine.JAPANESE }))} icon={<Star size={14} />} />
+              <FilterPill label="義式" active={searchState.cuisine === Cuisine.ITALIAN} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.ITALIAN ? Cuisine.ANY : Cuisine.ITALIAN }))} icon={<Flame size={14} />} />
+            </div>
+          )}
         </div>
       </div>
 
