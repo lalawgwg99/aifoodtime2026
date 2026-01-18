@@ -16,9 +16,11 @@ import { UsageLimitModal } from './components/UsageLimitModal';
 import { LoginBenefitsModal } from './components/LoginBenefitsModal';
 import { MealPlanner } from './components/MealPlanner';
 import { MethodologyModal } from './components/MethodologyModal';
+import { VisionModeModal } from './components/VisionModeModal';
+import { AnalysisResult } from './components/AnalysisResult';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
 import { usageService } from './services/usageService';
-import { SearchState, Recipe, Cuisine, VisionMode, User } from './types';
+import { SearchState, Recipe, Cuisine, VisionMode, User, VisionResult } from './types';
 import { useSound } from './hooks/useSound';
 
 const GENERIC_MESSAGES = [
@@ -48,6 +50,11 @@ export default function App() {
   const [loadingIndex, setLoadingIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+
+  // Vision Mode State
+  const [showVisionModal, setShowVisionModal] = useState(false);
+  const [selectedVisionMode, setSelectedVisionMode] = useState<VisionMode | null>(null);
+  const [visionResult, setVisionResult] = useState<VisionResult | null>(null);
 
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -107,6 +114,9 @@ export default function App() {
   }, [loading]);
 
   const handleSearch = async (pendingIngredient?: string) => {
+    // Reset any previous vision results to keep UI clean
+    setVisionResult(null);
+
     // Combine current state ingredients with any pending input
     const effectiveIngredients = pendingIngredient
       ? [...searchState.ingredients, pendingIngredient]
@@ -146,30 +156,57 @@ export default function App() {
     } catch (err) { setError("連線忙碌中，請稍後再試。"); } finally { setLoading(false); }
   };
 
-  // BUG-001 修復：將 finally 移至正確位置，處理非同步錯誤
+  // Trigger file selection after mode is chosen
+  const handleModeSelection = (mode: VisionMode) => {
+    setSelectedVisionMode(mode);
+    setShowVisionModal(false);
+    // Programmatically click the hidden file input in Hero
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) fileInput.click();
+  };
+
   const handleImageUpload = async (file: File) => {
+    if (!selectedVisionMode) return; // Should not happen if flow is correct
+
     setLoading(true); setError(null);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
       try {
         const base64 = reader.result as string;
-        // BUG-008 修復：將搜尋標籤 (searchState) 傳入影像分析，確保標籤與影像辨識連動
-        const results = await analyzeImage(base64, VisionMode.FRIDGE_XRAY, searchState);
-        if (results.length === 0) {
-          setError("這張照片似乎沒有包含可辨識的食材或料理，請換一張試試。");
-          return;
+        // Analyze image with the selected mode 
+        const result = await analyzeImage(base64, selectedVisionMode, searchState);
+
+        setVisionResult(result);
+        setHasSearched(true);
+        playSuccess();
+
+        // Handle different result types
+        if (result.mode === VisionMode.FRIDGE_XRAY) {
+          // For Fridge mode, populate standard recipes logic
+          const recipeData = result.data as Recipe[];
+          if (recipeData.length === 0) {
+            setError("這張照片似乎沒有包含可辨識的食材或料理，請換一張試試。");
+            setLoading(false);
+            return;
+          }
+          setRecipes(recipeData);
+          // Hydrate images for these recipes
+          recipeData.forEach(async (recipe) => {
+            const imageUrl = await generateRecipeImage(recipe.name, recipe.description);
+            if (imageUrl) setRecipes(prev => prev.map(r => r.id === recipe.id ? { ...r, imageUrl } : r));
+          });
         }
-        setRecipes(results); setHasSearched(true);
+
         setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
-        results.forEach(async (recipe) => {
-          const imageUrl = await generateRecipeImage(recipe.name, recipe.description);
-          if (imageUrl) setRecipes(prev => prev.map(r => r.id === recipe.id ? { ...r, imageUrl } : r));
-        });
+
       } catch (err) {
+        console.error(err);
         setError("辨識失敗，請重試。");
       } finally {
         setLoading(false);
+        // Reset mode after upload
+        setSelectedVisionMode(null);
       }
     };
     reader.onerror = () => {
@@ -191,6 +228,7 @@ export default function App() {
   const handleLogoClick = () => {
     setSearchState({ ingredients: [], goal: null, cuisine: Cuisine.ANY, occasion: null, mealTime: null });
     setRecipes([]);
+    setVisionResult(null);
     setHasSearched(false);
     setShowFavoritesOnly(false);
     setError(null);
@@ -376,10 +414,24 @@ export default function App() {
             </div>
 
             {/* Search Component */}
-            <Hero searchState={searchState} setSearchState={setSearchState} onSearch={handleSearch} isLoading={loading} onImageUpload={handleImageUpload} />
+            <Hero
+              searchState={searchState}
+              setSearchState={setSearchState}
+              onSearch={handleSearch}
+              isLoading={loading}
+              onImageUpload={handleImageUpload}
+              onOpenSmartVision={() => setShowVisionModal(true)}
+            />
 
-            {/* Results */}
-            {(hasSearched || showFavoritesOnly) && (
+            {/* Vision Analysis Result (Non-Recipe Modes) */}
+            {visionResult && visionResult.mode !== VisionMode.FRIDGE_XRAY && (
+              <div id="results-section" className="mt-12 md:mt-24">
+                <AnalysisResult result={visionResult} onReset={() => setVisionResult(null)} />
+              </div>
+            )}
+
+            {/* Recipe Results (Fridge Mode & Search) */}
+            {(hasSearched || showFavoritesOnly) && (!visionResult || visionResult.mode === VisionMode.FRIDGE_XRAY) && (
               <div id="results-section" className="mt-24 md:mt-40 animate-fadeIn">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
                   <h2 className="text-3xl md:text-5xl font-serif font-bold italic">{showFavoritesOnly ? "收藏菜單" : "策劃菜單"}</h2>
@@ -437,6 +489,15 @@ export default function App() {
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLogin={handleLogin} />}
       {showProfileModal && currentUser && <ProfileModal user={currentUser} onClose={() => setShowProfileModal(false)} onLogout={handleLogout} />}
       {showSubscriptionModal && <SubscriptionModal onClose={() => setShowSubscriptionModal(false)} />}
+
+      {/* Vision Mode Selector Modal */}
+      {showVisionModal && (
+        <VisionModeModal
+          onClose={() => setShowVisionModal(false)}
+          onSelectMode={handleModeSelection}
+        />
+      )}
+
       {showOnboarding && <Onboarding onClose={handleCloseOnboarding} />}
       {showUsageLimitModal && (
         <UsageLimitModal

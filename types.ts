@@ -107,10 +107,45 @@ export interface SearchState {
 }
 
 export enum VisionMode {
-  TASTE_THIEF = 'Taste Thief',
-  FRIDGE_XRAY = 'Fridge X-Ray',
-  NUTRI_SCANNER = 'Nutri-Scanner'
+  TASTE_THIEF = 'Taste Thief', // Dining Mode (Dish Analysis)
+  FRIDGE_XRAY = 'Fridge X-Ray', // Cooking Mode (Recipe Gen)
+  NUTRI_SCANNER = 'Nutri-Scanner' // Health Mode (Health Score)
 }
+
+export interface DishAnalysis {
+  name: string;
+  description: string;
+  ingredients: string[];
+  calories: number;
+  macros: {
+    protein: string;
+    carbs: string;
+    fat: string;
+  };
+  allergens: string[];
+  flavorProfile: string; // e.g. "Umami-rich, Savory, Spicy"
+  chefComment: string; // "This looks like a sous-vide prepared steak..."
+}
+
+export interface HealthInsight {
+  name: string;
+  calories: number;
+  healthScore: number; // 0-100
+  trafficLight: 'Green' | 'Yellow' | 'Red';
+  macros: {
+    protein: string;
+    carbs: string;
+    fat: string;
+  };
+  positiveNutrients: string[];
+  negativeNutrients: string[];
+  dietitianAdvice: string; // "High in sodium, suggest pairing with wate..."
+}
+
+export type VisionResult =
+  | { mode: VisionMode.FRIDGE_XRAY; data: Recipe[] }
+  | { mode: VisionMode.TASTE_THIEF; data: DishAnalysis }
+  | { mode: VisionMode.NUTRI_SCANNER; data: HealthInsight };
 
 export interface NutritionAnalysis {
   calories: number;

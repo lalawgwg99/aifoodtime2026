@@ -216,66 +216,55 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         </div>
       </div>
 
-      {/* Filter Sections */}
-      <div className="space-y-6 mb-12">
-
-        {/* Dietary Goals */}
-        <div className="bg-gradient-to-r from-orange-50 to-transparent rounded-3xl p-6 border border-orange-100">
-          <div className="flex items-center gap-2 mb-4">
-            <Activity className="text-orange-600" size={20} />
-            <h3 className="font-bold text-stone-800 text-sm uppercase tracking-wider">飲食目標</h3>
-          </div>
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 snap-x">
-            {Object.entries(GoalConfig).map(([key, config]) => (
-              <FilterPill
-                key={key}
-                label={config.label}
-                active={searchState.goal === key}
-                onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === key ? null : key as DietaryGoal }))}
-                icon={config.icon}
-              />
-            ))}
-          </div>
+      {/* Smart Filter Bar - Compact Design */}
+      <div className="mb-12">
+        <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-2 mask-linear-fade">
+          {/* Quick Access Filters - Mixed Categories */}
+          <FilterPill
+            label="趕時間?"
+            active={searchState.goal === DietaryGoal.QUICK}
+            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.QUICK ? null : DietaryGoal.QUICK }))}
+            icon={<Zap size={14} />}
+          />
+          <FilterPill
+            label="想健康"
+            active={searchState.goal === DietaryGoal.BALANCED}
+            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.BALANCED ? null : DietaryGoal.BALANCED }))}
+            icon={<Leaf size={14} />}
+          />
+          <FilterPill
+            label="台式經典"
+            active={searchState.cuisine === Cuisine.TAIWANESE}
+            onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.TAIWANESE ? Cuisine.ANY : Cuisine.TAIWANESE }))}
+            icon={<Utensils size={14} />}
+          />
+          <FilterPill
+            label="療癒系"
+            active={searchState.goal === DietaryGoal.COMFORT}
+            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.COMFORT ? null : DietaryGoal.COMFORT }))}
+            icon={<Heart size={14} />}
+          />
+          <div className="w-px h-8 bg-stone-200 mx-1 shrink-0" />
+          {/* More options expanding horizontally */}
+          <FilterPill
+            label="減脂"
+            active={searchState.goal === DietaryGoal.WEIGHT_LOSS}
+            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.WEIGHT_LOSS ? null : DietaryGoal.WEIGHT_LOSS }))}
+            icon={<Activity size={14} />}
+          />
+          <FilterPill
+            label="增肌"
+            active={searchState.goal === DietaryGoal.MUSCLE_GAIN}
+            onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.MUSCLE_GAIN ? null : DietaryGoal.MUSCLE_GAIN }))}
+            icon={<Dumbbell size={14} />}
+          />
+          <FilterPill
+            label="日式"
+            active={searchState.cuisine === Cuisine.JAPANESE}
+            onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.JAPANESE ? Cuisine.ANY : Cuisine.JAPANESE }))}
+            icon={<Star size={14} />}
+          />
         </div>
-
-        {/* Occasions */}
-        <div className="bg-gradient-to-r from-orange-50 to-transparent rounded-3xl p-6 border border-orange-100">
-          <div className="flex items-center gap-2 mb-4">
-            <Users className="text-orange-600" size={20} />
-            <h3 className="font-bold text-stone-800 text-sm uppercase tracking-wider">用餐場合</h3>
-          </div>
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 snap-x">
-            {Object.entries(OccasionConfig).map(([key, config]) => (
-              <FilterPill
-                key={key}
-                label={config.label}
-                active={searchState.occasion === key}
-                onClick={() => setSearchState(prev => ({ ...prev, occasion: prev.occasion === key ? null : key as MealOccasion }))}
-                icon={config.icon}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Cuisines */}
-        <div className="bg-gradient-to-r from-orange-50 to-transparent rounded-3xl p-6 border border-orange-100">
-          <div className="flex items-center gap-2 mb-4">
-            <Compass className="text-orange-600" size={20} />
-            <h3 className="font-bold text-stone-800 text-sm uppercase tracking-wider">菜系風格</h3>
-          </div>
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 snap-x">
-            {Object.entries(CuisineConfig).map(([key, config]) => (
-              <FilterPill
-                key={key}
-                label={config.label}
-                active={searchState.cuisine === key}
-                onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === key ? Cuisine.ANY : key as Cuisine }))}
-                icon={config.icon}
-              />
-            ))}
-          </div>
-        </div>
-
       </div>
 
       {/* Taiwan Snacks */}

@@ -129,14 +129,62 @@ const TREND_REPORT_SCHEMA = {
   required: ["seasonTitle", "topIngredients", "platingTrend", "globalInsight", "marketTrends"]
 };
 
-// Analyze image and return recipes
-export const analyzeImage = async (base64Image: string, mode: VisionMode, state?: SearchState): Promise<Recipe[]> => {
+// Schema for Dish Analysis (Taste Thief)
+const DISH_ANALYSIS_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    name: { type: Type.STRING },
+    description: { type: Type.STRING },
+    ingredients: { type: Type.ARRAY, items: { type: Type.STRING } },
+    calories: { type: Type.NUMBER },
+    macros: {
+      type: Type.OBJECT,
+      properties: {
+        protein: { type: Type.STRING },
+        carbs: { type: Type.STRING },
+        fat: { type: Type.STRING }
+      },
+      required: ["protein", "carbs", "fat"]
+    },
+    allergens: { type: Type.ARRAY, items: { type: Type.STRING } },
+    flavorProfile: { type: Type.STRING },
+    chefComment: { type: Type.STRING }
+  },
+  required: ["name", "description", "ingredients", "calories", "macros", "allergens", "flavorProfile", "chefComment"]
+};
+
+// Schema for Health Insight (Nutri Scanner)
+const HEALTH_INSIGHT_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    name: { type: Type.STRING },
+    calories: { type: Type.NUMBER },
+    healthScore: { type: Type.NUMBER },
+    trafficLight: { type: Type.STRING, enum: ["Green", "Yellow", "Red"] },
+    macros: {
+      type: Type.OBJECT,
+      properties: {
+        protein: { type: Type.STRING },
+        carbs: { type: Type.STRING },
+        fat: { type: Type.STRING }
+      },
+      required: ["protein", "carbs", "fat"]
+    },
+    positiveNutrients: { type: Type.ARRAY, items: { type: Type.STRING } },
+    negativeNutrients: { type: Type.ARRAY, items: { type: Type.STRING } },
+    dietitianAdvice: { type: Type.STRING }
+  },
+  required: ["name", "calories", "healthScore", "trafficLight", "macros", "positiveNutrients", "negativeNutrients", "dietitianAdvice"]
+};
+
+// Analyze image with specific mode logic
+export const analyzeImage = async (base64Image: string, mode: VisionMode, state?: SearchState): Promise<import("../types").VisionResult> => {
   const ai = getAIClient();
   const mimeTypeMatch = base64Image.match(/^data:(image\/[a-zA-Z+]+);base64,/);
   const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
   const cleanBase64 = base64Image.replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, "");
 
-  // Construct constraints context
+  // Common constraints
   let constraints = "";
   if (state) {
     const parts = [];
@@ -146,19 +194,42 @@ export const analyzeImage = async (base64Image: string, mode: VisionMode, state?
     if (state.ingredients.length > 0) parts.push(`額外指定食材：${state.ingredients.join(", ")}`);
 
     if (parts.length > 0) {
-      constraints = `\n\n[使用者額外限制條件] (請務必在生成食譜時同時滿足照片辨識結果與以下條件)：\n${parts.join("\n")}`;
+      constraints = `\n\n[使用者額外限制條件]：\n${parts.join("\n")}`;
     }
   }
 
+  // Define prompt and schema based on mode
   let prompt = "";
-  if (mode === VisionMode.FRIDGE_XRAY) {
-    prompt = `任務：辨識這張照片中的食材。重要規則：如果照片中沒有任何可辨識的食物、食材或料理，請直接回傳空陣列 []，不要嘗試生成。如果有食材，請根據這些食材生成 3 道美味且具備創意的食譜 JSON。${constraints}\n請特別注意營養均衡，並在 healthTip 中提供微量元素分析。`;
-  } else if (mode === VisionMode.TASTE_THIEF) {
-    prompt = `任務：辨識這張照片中的料理。重要規則：如果照片中沒有食物，請直接回傳空陣列 []。如果有，請嘗試分析其配方，生成 3 道類似或改良版的食譜 JSON。${constraints}`;
-  } else if (mode === VisionMode.NUTRI_SCANNER) {
-    prompt = `任務：分析營養價值。重要規則：如果照片中沒有食物，請直接回傳空陣列 []。如果有，提供營養價值評估，並推薦 3 道更健康的替代食譜 JSON。${constraints}`;
-  } else {
-    prompt = "辨識照片內容。如果不是食物，回傳空陣列。";
+  let schema = null;
+  let systemInstruction = "";
+
+  switch (mode) {
+    case VisionMode.FRIDGE_XRAY:
+      prompt = `任務：辨識冰箱或檯面上的原始食材。
+      重要規則：如果照片沒有可辨識食材，回傳空陣列 []。
+      目標：根據識別出的食材，推薦 3 道食譜。${constraints}`;
+      schema = RECIPE_SCHEMA;
+      systemInstruction = "你是一位擅長清冰箱料理的米其林主廚。請根據食材發想創意食譜。語言：台灣繁體中文。";
+      break;
+
+    case VisionMode.TASTE_THIEF:
+      prompt = `任務：逆向工程這道餐廳料理。
+      重要規則：分析這道菜的組成、烹飪手法與風味。
+      目標：拆解出食材清單、初估熱量與營養、過敏原提示，並給予主廚級的風味點評。${constraints}`;
+      schema = DISH_ANALYSIS_SCHEMA;
+      systemInstruction = "你是一位擁有絕對味蕾的美食評論家。請精準拆解眼前的料理。語言：台灣繁體中文。";
+      break;
+
+    case VisionMode.NUTRI_SCANNER:
+      prompt = `任務：掃描食物並進行嚴格的健康評估。
+      重要規則：計算熱量、營養素，並給出健康紅綠燈 (Green/Yellow/Red)。
+      目標：提供條列式的優缺點營養分析與營養師建議。${constraints}`;
+      schema = HEALTH_INSIGHT_SCHEMA;
+      systemInstruction = "你是一位嚴格的臨床營養師。請客觀分析食物的營養價值。語言：台灣繁體中文。";
+      break;
+
+    default:
+      throw new Error("Unknown Vision Mode");
   }
 
   const response = await ai.models.generateContent({
@@ -170,13 +241,22 @@ export const analyzeImage = async (base64Image: string, mode: VisionMode, state?
       ]
     },
     config: {
-      systemInstruction: "你是一位具備頂尖視覺辨識能力的米其林主廚與專業營養師。首先必須驗證圖片是否為食物或食材，如果不是，為了節省資源，請務必回傳空陣列。語言：必須使用台灣繁體中文。",
+      systemInstruction,
       responseMimeType: "application/json",
-      responseSchema: RECIPE_SCHEMA,
+      responseSchema: schema,
     },
   });
 
-  return JSON.parse(response.text || "[]");
+  const rawResult = JSON.parse(response.text || "{}");
+
+  // Type guard and return wrapped result
+  if (mode === VisionMode.FRIDGE_XRAY) {
+    return { mode: VisionMode.FRIDGE_XRAY, data: Array.isArray(rawResult) ? rawResult : [] };
+  } else if (mode === VisionMode.TASTE_THIEF) {
+    return { mode: VisionMode.TASTE_THIEF, data: rawResult };
+  } else {
+    return { mode: VisionMode.NUTRI_SCANNER, data: rawResult };
+  }
 };
 
 // Generate recipes based on search state and optional user profile
