@@ -10,40 +10,36 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact, onOpenMethodology
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-[#1A1818] text-stone-400 py-12 md:py-16 mt-0 relative overflow-hidden">
+        <footer className="bg-[#1A1818] text-stone-400 py-4 md:py-6 mt-0 relative overflow-hidden">
             {/* Background Decoration */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-chef-gold/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6 md:px-12">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-12 border-b border-white/10 pb-12">
-
-                    {/* Brand Identity */}
-                    <div>
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 bg-chef-gold/10 rounded-xl flex items-center justify-center text-chef-gold">
-                                <ChefHat size={20} />
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-start gap-4 mb-4 border-b border-white/5 pb-4">
+                    {/* Brand Identity - Compact */}
+                    <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 bg-chef-gold/10 rounded-lg flex items-center justify-center text-chef-gold">
+                                <ChefHat size={16} />
                             </div>
-                            <span className="text-xl font-bold text-white tracking-wide font-serif">饗味食光</span>
+                            <span className="text-lg font-bold text-white tracking-wide font-serif">饗味食光</span>
                         </div>
-                        <p className="text-xs text-stone-500 max-w-sm leading-relaxed">
-                            結合全球美食趨勢數據與米其林極致私廚工法，
-                            <br />為您獻上每一口都有靈魂的味覺體驗。
+                        <p className="text-[10px] text-stone-500 max-w-md leading-relaxed hidden md:block">
+                            結合全球美食趨勢數據與米其林極致私廚工法，為您獻上每一口都有靈魂的味覺體驗。
                         </p>
                     </div>
 
-                    {/* Quick Links Group - Simplified */}
-                    <div className="flex flex-wrap gap-8 md:gap-16 text-xs font-bold tracking-wider uppercase">
-                        <div className="space-y-4">
-                            <span className="text-white/40 block mb-4">Support</span>
-                            <button className="block hover:text-chef-gold transition-colors text-left">系統狀態 <span className="text-stone-600 text-[10px] ml-1">Status</span></button>
-                            <button onClick={onOpenContact} className="block hover:text-chef-gold transition-colors text-left">聯絡客服 <span className="text-stone-600 text-[10px] ml-1">Contact</span></button>
-                            <button onClick={onOpenMethodology} className="flex items-center gap-1.5 hover:text-chef-gold transition-colors text-left"><Beaker size={12} /> 計算說明 <span className="text-stone-600 text-[10px] ml-1">Methodology</span></button>
-                            <button className="block hover:text-chef-gold transition-colors text-left">資安回報 <span className="text-stone-600 text-[10px] ml-1">Security</span></button>
+                    {/* Quick Links Group - Horizontal & Compact */}
+                    <div className="flex flex-row flex-wrap gap-x-8 gap-y-2 text-[10px] font-bold tracking-wider uppercase items-center">
+                        <div className="flex items-center gap-4">
+                            <span className="text-white/30 text-[9px]">Support</span>
+                            <button onClick={onOpenContact} className="hover:text-chef-gold transition-colors">聯絡客服</button>
+                            <button onClick={onOpenMethodology} className="hover:text-chef-gold transition-colors">計算說明</button>
                         </div>
-                        <div className="space-y-4">
-                            <span className="text-white/40 block mb-4">Legal</span>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">使用條款 <span className="text-stone-600 text-[10px] ml-1">Terms</span></a>
-                            <a href="#" className="block hover:text-chef-gold transition-colors">隱私政策 <span className="text-stone-600 text-[10px] ml-1">Privacy</span></a>
+                        <div className="flex items-center gap-4">
+                            <span className="text-white/30 text-[9px]">Legal</span>
+                            <a href="#" className="hover:text-chef-gold transition-colors">使用條款</a>
+                            <a href="#" className="hover:text-chef-gold transition-colors">隱私政策</a>
                         </div>
                     </div>
                 </div>

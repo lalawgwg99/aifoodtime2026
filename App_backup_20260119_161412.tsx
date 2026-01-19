@@ -4,7 +4,6 @@ import { Hero } from './components/Hero';
 import { RecipeCard } from './components/RecipeCard';
 import { Community } from './components/Community';
 import { Chronicles } from './components/Chronicles';
-import { AmbientBackground } from './components/AmbientBackground';
 
 import { Footer } from './components/Footer';
 import { TrustSection } from './components/TrustSection';
@@ -280,8 +279,7 @@ export default function App() {
   const displayedRecipes = showFavoritesOnly ? favorites : recipes;
 
   return (
-    <div className="min-h-screen bg-chef-paper selection:bg-chef-gold/30 font-sans relative flex flex-col">
-      <AmbientBackground />
+    <div className="min-h-screen bg-chef-paper selection:bg-chef-gold/30 pb-24 font-sans relative">
 
       {/* 1. Market Ticker - The "Market Research" Vibe */}
 
@@ -339,22 +337,16 @@ export default function App() {
               </button>
             </div>
 
-            {/* Desktop: Help + Login */}
-            <div className="hidden md:flex items-center gap-3">
-              <button onClick={() => setShowOnboarding(true)} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="新手指南">
-                <HelpCircle size={20} />
+            <button onClick={() => setShowOnboarding(true)} className="p-2 text-stone-500 hover:text-chef-black transition-all" title="新手指南">
+              <HelpCircle size={20} />
+            </button>
+            {currentUser ? (
+              <button onClick={() => setShowProfileModal(true)} className="outline-none">
+                <img src={currentUser.avatar} className="w-10 h-10 rounded-full border-2 border-chef-gold/30" alt="User" />
               </button>
-              {currentUser ? (
-                <button onClick={() => setShowProfileModal(true)} className="outline-none">
-                  <img src={currentUser.avatar} className="w-10 h-10 rounded-full border-2 border-chef-gold/30" alt="User" />
-                </button>
-              ) : (
-                <button onClick={() => setShowAuthModal(true)} className="px-6 py-2.5 bg-stone-900 text-white text-xs font-bold hover:bg-stone-800 transition-all">登入</button>
-              )}
-              <button onClick={() => setShowMobileMenu(true)} className="p-2 text-chef-black">
-                <Menu size={24} />
-              </button>
-            </div>
+            ) : (
+              <button onClick={() => setShowAuthModal(true)} className="px-6 py-2.5 rounded-xl bg-chef-black text-white text-xs font-black uppercase tracking-widest hover:bg-chef-gold hover:text-black transition-all">登入</button>
+            )}
           </div>
 
           {/* Mobile: Login + Hamburger */}
@@ -445,30 +437,43 @@ export default function App() {
       )}
 
       {/* Hero Section */}
-      <main className="flex-1 max-w-[1600px] mx-auto px-6 md:px-12 pt-8 md:pt-20 w-full">
+      <main className="max-w-[1600px] mx-auto px-6 md:px-12 pt-8 md:pt-20">
         {currentView === 'home' && (
           <>
-            {/* Pure Text Hero - No Background Image */}
-            <div className="text-center mb-12 md:mb-16 px-6 md:px-12 pt-8 md:pt-12 animate-fadeIn">
-              {/* Small Label */}
-              <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-stone-400 mb-6">
-                AI 私廚顧問
-              </p>
+            {/* Hero Background with Wave Bottom */}
+            <div className="relative mb-12 md:mb-24 -mx-6 md:-mx-12">
+              {/* Wave Bottom Background Image Container */}
+              <div
+                className="relative h-[450px] md:h-[550px] overflow-hidden"
+                style={{
+                  maskImage: 'radial-gradient(ellipse 100% 100% at 50% 0%, black 60%, transparent 100%)',
+                  WebkitMaskImage: 'radial-gradient(ellipse 100% 100% at 50% 0%, black 60%, transparent 100%)',
+                }}
+              >
+                {/* Background Image - No overlay needed, image has natural dark area */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: 'url(/hero-bg.jpg)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center 30%',
+                    backgroundRepeat: 'no-repeat',
+                  }}
+                />
 
-              {/* Main Title */}
-              <h1 className="text-5xl md:text-8xl font-serif font-bold text-stone-900 leading-[1.05] tracking-tight mb-6 md:mb-8">
-                讓食材
-                <span className="block md:inline text-stone-600 md:mx-4">綻放靈魂</span>
-              </h1>
-
-              {/* Subtitle */}
-              <p className="text-base md:text-xl text-stone-500 max-w-2xl mx-auto font-serif font-light leading-relaxed italic">
-                這不僅是食譜，更是您廚房裡的藝術策展人，
-                為您喚醒食材靈魂，編織一場味覺的極致饗宴。
-              </p>
-
-              {/* Minimal Divider */}
-              <div className="w-24 h-[1px] bg-stone-300 mx-auto mt-8 md:mt-12"></div>
+                {/* Hero Text Overlay - Positioned on Natural Dark Area */}
+                <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 md:px-12 pt-12 md:pt-20 animate-fadeIn">
+                  <p className="text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-chef-gold mb-4 md:mb-6">AI 私廚顧問</p>
+                  <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-white leading-[1.15] tracking-tight mb-6 md:mb-8">
+                    讓食材
+                    <span className="text-chef-gold block md:inline md:mx-4">綻放靈魂</span>
+                  </h1>
+                  <p className="text-base md:text-xl text-white/95 max-w-2xl mx-auto font-normal leading-relaxed">
+                    這不僅是食譜，更是您廚房裡的藝術策展人，<br className="hidden md:block" />
+                    為您喚醒食材靈魂，編織一場味覺的極致饗宴。
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Search Component */}
@@ -572,6 +577,8 @@ export default function App() {
         savedRecipes={favorites}
       />
 
+      {/* Social Trust & Stats */}
+      <TrustSection />
 
       {/* Global Footer */}
       <Footer

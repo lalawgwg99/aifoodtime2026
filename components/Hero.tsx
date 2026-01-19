@@ -27,13 +27,13 @@ const FilterPill: React.FC<{
 }> = ({ label, active, onClick, icon }) => (
   <button
     onClick={onClick}
-    className={`flex-shrink-0 transition-all duration-300 border flex items-center justify-center snap-center flex-row gap-2 px-5 py-3 rounded-full ${active
-      ? 'bg-orange-600 text-white border-orange-600 shadow-lg scale-105 z-10'
-      : 'bg-white text-stone-600 border-stone-200 hover:border-orange-300 hover:text-orange-600 hover:bg-orange-50'
+    className={`flex-shrink-0 transition-all duration-200 flex items-center justify-center snap-center flex-row gap-2 px-0 pb-1 text-xs font-medium uppercase tracking-[0.2em] whitespace-nowrap border-b-2 ${active
+      ? 'border-stone-900 text-stone-900'
+      : 'border-transparent text-stone-400 hover:text-stone-700 hover:border-stone-300'
       }`}
   >
-    {icon && <span className={`${active ? 'text-white' : 'text-orange-400'}`}>{icon}</span>}
-    <span className="text-sm font-bold uppercase tracking-wider whitespace-nowrap">{label}</span>
+    {icon && <span className="opacity-50">{icon}</span>}
+    <span>{label}</span>
   </button>
 );
 
@@ -167,45 +167,46 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
   return (
     <div className="relative z-10 mx-auto max-w-5xl px-4">
 
-      {/* Hero Title Section - REMOVED (Handled in App.tsx) */}
+      {/* Search Section - Editorial Minimal Style */}
+      <div className="relative mb-12">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 pb-4">
 
-      <div className="relative mb-6">
-        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
-
-          {/* Main Input Container - 100% Width on Mobile */}
-          <div className="flex-1 relative group bg-white rounded-[2rem] p-4 md:p-5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-stone-100 focus-within:shadow-[0_8px_40px_rgba(249,115,22,0.12)] transition-all duration-300">
+          {/* Main Input Container - With Bottom Border */}
+          <div className="flex-1 relative group border-b border-stone-300 pb-3">
             {searchState.ingredients.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mb-2">
+              <div className="flex flex-wrap items-center gap-2 mb-3">
                 {searchState.ingredients.map((ing, idx) => (
                   <IngredientTag key={idx} label={ing} onRemove={() => removeIngredient(idx)} />
                 ))}
               </div>
             )}
 
-            <div className="flex items-center h-full">
-              <Search className="h-6 w-6 text-stone-400 shrink-0 mr-3" />
+            <div className="flex items-start gap-3 py-2">
+              <div className="flex flex-col items-center pt-0.5">
+                <Search className="h-5 w-5 text-stone-400 shrink-0" />
+                <span className="text-[10px] text-stone-400 mt-1 whitespace-nowrap">多種食材</span>
+              </div>
               <input
                 ref={inputRef}
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1 bg-transparent text-lg md:text-xl text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0 w-full py-1"
+                className="flex-1 bg-transparent text-base md:text-lg text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0 w-full"
                 placeholder={searchState.ingredients.length === 0 ? PLACEHOLDER_EXAMPLES[placeholderIndex] : "還有其他食材？"}
               />
             </div>
           </div>
 
-          {/* External Action Buttons - Stacked 50/50 on Mobile */}
-          <div className="flex items-center gap-3 shrink-0 h-14 md:h-auto">
+          {/* Action Buttons - Square, Same Size, Right Aligned */}
+          <div className="flex items-center gap-2 shrink-0 ml-auto">
             {/* Camera Button */}
             <button
               onClick={() => onOpenSmartVision?.()}
-              className="flex-1 md:flex-none md:w-16 md:h-16 h-full px-6 md:px-0 bg-white rounded-[2rem] md:rounded-full flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-stone-100 text-stone-500 hover:text-orange-600 hover:shadow-md active:scale-95 transition-all text-sm font-bold"
+              className="w-16 h-12 bg-white border border-stone-200 flex items-center justify-center text-stone-600 hover:text-stone-900 hover:border-stone-300 transition-all"
               title="AI 視覺辨識"
             >
-              <Camera className="h-6 w-6" />
-              <span className="md:hidden">拍食材</span>
+              <Camera className="h-5 w-5" />
             </button>
 
             {/* Search Button */}
@@ -214,23 +215,17 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
                 onSearch(inputValue);
                 setInputValue('');
               }}
-              className="flex-1 md:flex-none md:w-16 md:h-16 h-full px-6 md:px-0 bg-stone-900 rounded-[2rem] md:rounded-full flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.2)] text-white hover:bg-chef-gold hover:text-black active:scale-95 transition-all text-sm font-bold"
+              className="w-16 h-12 bg-stone-900 text-white flex items-center justify-center hover:bg-stone-800 transition-all"
+              title="搜尋食譜"
             >
-              <Search className="h-6 w-6" />
-              <span className="md:hidden">搜食譜</span>
+              <Search className="h-5 w-5" />
             </button>
           </div>
-        </div>
-
-        {/* Helper Text - Cleaner */}
-        <div className="flex items-center justify-center gap-2 mt-3 text-sm text-stone-400 opacity-80">
-          <Info size={14} />
-          <span>支援多種食材：「雞蛋 豆腐 蔥」</span>
         </div>
       </div>
 
       {/* Search Filters / Inspiration - Simplified "Chips" */}
-      <div className="mb-8">
+      <div className="mb-8 -mt-4">
         {showFilterMenu ? (
           /* Expanded Filter Menu */
           <div className="relative p-6 bg-white rounded-[2rem] shadow-xl border border-stone-100 z-20 animate-in fade-in zoom-in-95 duration-200">
@@ -279,12 +274,12 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
               <span className="font-serif font-bold text-stone-700 text-sm">料理靈感</span>
             </div>
             <div className="grid grid-rows-2 grid-flow-col gap-3 overflow-x-auto no-scrollbar pb-2 mask-linear-fade px-1 h-[116px]">
-              {/* Show All Toggle - Spans 2 rows */}
+              {/* Show All Toggle - Minimal Square Design */}
               <button
                 onClick={() => setShowFilterMenu(true)}
-                className="row-span-2 w-14 h-full rounded-2xl bg-white border border-stone-200 text-stone-500 hover:border-orange-500 hover:text-orange-500 transition-all flex items-center justify-center shadow-sm"
+                className="row-span-2 w-14 h-full border border-stone-200 text-stone-500 hover:border-stone-400 hover:text-stone-900 transition-all flex items-center justify-center"
               >
-                <SlidersHorizontal size={20} />
+                <SlidersHorizontal size={18} strokeWidth={1.5} />
               </button>
 
               {/* Quick Filters - Populated to fill grid */}
@@ -307,63 +302,6 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
         )}
       </div>
 
-      {/* Taiwan Snacks - Horizontal Scroll on Mobile, Grid on Desktop */}
-      <div className="md:bg-white md:rounded-[2rem] md:p-8 md:shadow-[0_8px_30px_rgba(0,0,0,0.04)] md:border md:border-stone-100">
-        <div className="flex items-center justify-between mb-4 md:mb-6 px-1 md:px-0">
-          <div>
-            <h3 className="text-xl md:text-2xl font-serif font-bold text-stone-800 mb-1">本週熱門食譜</h3>
-            <p className="text-sm text-stone-500">精選台灣經典美食靈感</p>
-          </div>
-          <button
-            onClick={() => setShowAllSnacks(!showAllSnacks)}
-            className="text-orange-600 text-sm font-bold hover:underline hidden md:block"
-          >
-            {showAllSnacks ? '收起' : '查看全部'}
-          </button>
-        </div>
-
-        {/* Mobile: Horizontal Scroll (Snap) - Edge to Edge feel */}
-        <div className="md:hidden flex overflow-x-auto gap-3 pb-4 -mx-4 px-4 snap-x no-scrollbar">
-          {TAIWAN_SNACKS_DATA.slice(0, 8).map((snack, idx) => (
-            <button
-              key={idx}
-              onClick={() => {
-                setSearchState(prev => ({ ...prev, ingredients: [snack.keyword] }));
-                onSearch(snack.keyword);
-              }}
-              className="snap-center shrink-0 w-[42%] bg-white rounded-2xl p-4 shadow-sm border border-stone-100 flex flex-col items-center justify-center gap-2 text-center active:scale-95 transition-transform"
-            >
-              <div className="text-3xl mb-1">{snack.icon}</div>
-              <div>
-                <h4 className="font-bold text-stone-800 text-sm">{snack.label}</h4>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {/* Desktop: Grid */}
-        <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {(showAllSnacks ? TAIWAN_SNACKS_DATA : TAIWAN_SNACKS_DATA.slice(0, 10)).map((snack, idx) => (
-            <button
-              key={idx}
-              onClick={() => {
-                setSearchState(prev => ({ ...prev, ingredients: [snack.keyword] }));
-                onSearch(snack.keyword);
-              }}
-              className="group p-4 bg-gradient-to-br from-stone-50 to-white rounded-2xl border border-stone-100 hover:border-orange-300 hover:shadow-md transition-all text-left"
-            >
-              <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{snack.icon}</div>
-              <h4 className="font-bold text-stone-800 text-sm mb-0.5">{snack.label}</h4>
-              <p className="text-xs text-stone-500">{snack.sub}</p>
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-2 text-center md:hidden">
-          <p className="text-xs text-stone-400 opacity-60">← 左右滑動 →</p>
-        </div>
-
-      </div>
 
       <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && onImageUpload(e.target.files[0])} />
     </div >
