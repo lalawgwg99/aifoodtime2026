@@ -5,7 +5,7 @@ import {
   Leaf, Zap, Activity, Heart, Coins, Coffee, Utensils,
   Compass, Flame, Wine, Moon, Users, Briefcase, Dumbbell, Star,
   Carrot, Waves, Tent, PartyPopper, Trees, Apple,
-  ArrowRight, ChevronDown, ChevronUp, TrendingUp, Sparkles, Globe, Clock
+  ArrowRight, ChevronDown, ChevronUp, TrendingUp, Globe, Clock, SlidersHorizontal, Lightbulb
 } from 'lucide-react';
 import { DietaryGoal, Cuisine, SearchState, MealOccasion } from '../types';
 
@@ -23,17 +23,17 @@ const FilterPill: React.FC<{
   label: string;
   active: boolean;
   onClick: () => void;
-  icon?: React.ReactNode
+  icon?: React.ReactNode;
 }> = ({ label, active, onClick, icon }) => (
   <button
     onClick={onClick}
-    className={`flex-shrink-0 px-5 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 border flex items-center gap-2 whitespace-nowrap snap-center ${active
+    className={`flex-shrink-0 transition-all duration-300 border flex items-center justify-center snap-center flex-row gap-2 px-5 py-3 rounded-full ${active
       ? 'bg-orange-600 text-white border-orange-600 shadow-lg scale-105 z-10'
       : 'bg-white text-stone-600 border-stone-200 hover:border-orange-300 hover:text-orange-600 hover:bg-orange-50'
       }`}
   >
     {icon && <span className={`${active ? 'text-white' : 'text-orange-400'}`}>{icon}</span>}
-    {label}
+    <span className="text-sm font-bold uppercase tracking-wider whitespace-nowrap">{label}</span>
   </button>
 );
 
@@ -93,7 +93,7 @@ const GoalConfig: Record<DietaryGoal, { label: string; icon: React.ReactNode }> 
 };
 
 const OccasionConfig: Record<MealOccasion, { label: string; icon: React.ReactNode }> = {
-  [MealOccasion.DATE]: { label: '浪漫約會', icon: <Sparkles size={14} /> },
+  [MealOccasion.DATE]: { label: '浪漫約會', icon: <Heart size={14} /> },
   [MealOccasion.SOLO]: { label: '一人獨享', icon: <Coffee size={14} /> },
   [MealOccasion.FAMILY]: { label: '家庭聚餐', icon: <Users size={14} /> },
   [MealOccasion.WORK]: { label: '效率午餐', icon: <Briefcase size={14} /> },
@@ -169,177 +169,181 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
 
       {/* Hero Title Section - REMOVED (Handled in App.tsx) */}
 
-      <div className="relative mb-8">
-        <div className="relative group bg-white rounded-[2rem] p-3 md:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-stone-100 focus-within:shadow-[0_8px_40px_rgba(249,115,22,0.15)] transition-all duration-300">
-          {searchState.ingredients.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 mb-4 min-h-[40px]">
-              {searchState.ingredients.map((ing, idx) => (
-                <IngredientTag key={idx} label={ing} onRemove={() => removeIngredient(idx)} />
-              ))}
+      <div className="relative mb-6">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+
+          {/* Main Input Container - 100% Width on Mobile */}
+          <div className="flex-1 relative group bg-white rounded-[2rem] p-4 md:p-5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-stone-100 focus-within:shadow-[0_8px_40px_rgba(249,115,22,0.12)] transition-all duration-300">
+            {searchState.ingredients.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                {searchState.ingredients.map((ing, idx) => (
+                  <IngredientTag key={idx} label={ing} onRemove={() => removeIngredient(idx)} />
+                ))}
+              </div>
+            )}
+
+            <div className="flex items-center h-full">
+              <Search className="h-6 w-6 text-stone-400 shrink-0 mr-3" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="flex-1 bg-transparent text-lg md:text-xl text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0 w-full py-1"
+                placeholder={searchState.ingredients.length === 0 ? PLACEHOLDER_EXAMPLES[placeholderIndex] : "還有其他食材？"}
+              />
             </div>
-          )}
+          </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex items-center shrink-0 pl-2">
-              <Search className="h-6 w-6 text-stone-400" />
-            </div>
-            <input
-              ref={inputRef}
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="flex-1 px-2 md:px-4 py-2 bg-transparent text-lg md:text-xl text-stone-800 placeholder-stone-400 focus:outline-none font-serif min-w-0"
-              placeholder={searchState.ingredients.length === 0 ? PLACEHOLDER_EXAMPLES[placeholderIndex] : "還有其他食材？"}
-            />
+          {/* External Action Buttons - Stacked 50/50 on Mobile */}
+          <div className="flex items-center gap-3 shrink-0 h-14 md:h-auto">
+            {/* Camera Button */}
+            <button
+              onClick={() => onOpenSmartVision?.()}
+              className="flex-1 md:flex-none md:w-16 md:h-16 h-full px-6 md:px-0 bg-white rounded-[2rem] md:rounded-full flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-stone-100 text-stone-500 hover:text-orange-600 hover:shadow-md active:scale-95 transition-all text-sm font-bold"
+              title="AI 視覺辨識"
+            >
+              <Camera className="h-6 w-6" />
+              <span className="md:hidden">拍食材</span>
+            </button>
 
-            {/* Right Action Buttons */}
-            <div className="flex items-center gap-2 shrink-0">
-              {/* Camera Button */}
-              <button
-                onClick={() => onOpenSmartVision?.()}
-                className="p-3 rounded-full text-stone-500 hover:bg-orange-50 hover:text-orange-600 transition-colors group/camera"
-                title="AI 視覺辨識"
-              >
-                <Camera className="h-6 w-6" />
-              </button>
-
-              <div className="w-px h-8 bg-stone-200 mx-1" />
-
-              {/* Submit Button - Explicit User Request */}
-              <button
-                onClick={() => {
-                  onSearch(inputValue);
-                  setInputValue('');
-                }}
-                className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-full bg-stone-900 text-white font-bold hover:bg-chef-gold hover:text-black transition-all shadow-lg active:scale-95"
-              >
-                <Search className="w-5 h-5 md:hidden" />
-                <span className="hidden md:inline">搜尋食譜</span>
-              </button>
-            </div>
+            {/* Search Button */}
+            <button
+              onClick={() => {
+                onSearch(inputValue);
+                setInputValue('');
+              }}
+              className="flex-1 md:flex-none md:w-16 md:h-16 h-full px-6 md:px-0 bg-stone-900 rounded-[2rem] md:rounded-full flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.2)] text-white hover:bg-chef-gold hover:text-black active:scale-95 transition-all text-sm font-bold"
+            >
+              <Search className="h-6 w-6" />
+              <span className="md:hidden">搜食譜</span>
+            </button>
           </div>
         </div>
 
-        {/* Helper Text */}
-        <div className="flex items-center justify-center gap-2 mt-4 text-sm text-stone-500">
+        {/* Helper Text - Cleaner */}
+        <div className="flex items-center justify-center gap-2 mt-3 text-sm text-stone-400 opacity-80">
           <Info size={14} />
-          <span>支援多種食材同時搜尋，例如：「雞蛋 豆腐 蔥」</span>
+          <span>支援多種食材：「雞蛋 豆腐 蔥」</span>
         </div>
       </div>
 
-      {/* Smart Filter System */}
-      <div className="mb-12">
-        {/* Header with Expand Toggle */}
-        <div className="flex items-center justify-between mb-4 px-2">
-          <h3 className="font-bold text-stone-800 text-sm uppercase tracking-wider flex items-center gap-2">
-            <Activity size={16} className="text-chef-gold" />
-            料理靈感
-          </h3>
-          <button
-            onClick={() => setShowFilterMenu(!showFilterMenu)}
-            className="flex items-center gap-1 text-xs font-bold text-stone-500 hover:text-chef-gold transition-colors"
-          >
-            {showFilterMenu ? '收起更多' : '顯示全部篩選'}
-          </button>
-        </div>
+      {/* Search Filters / Inspiration - Simplified "Chips" */}
+      <div className="mb-8">
+        {showFilterMenu ? (
+          /* Expanded Filter Menu */
+          <div className="relative p-6 bg-white rounded-[2rem] shadow-xl border border-stone-100 z-20 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-serif font-bold text-lg text-stone-800">搜尋篩選</h3>
+              <button onClick={() => setShowFilterMenu(false)} className="p-2 hover:bg-stone-100 rounded-full text-stone-400">
+                <X size={20} />
+              </button>
+            </div>
 
-        {/* Animated Expandable Area */}
-        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showFilterMenu ? 'max-h-[800px] opacity-100' : 'max-h-[60px] opacity-100'}`}>
-
-          {showFilterMenu ? (
-            /* Expanded View: Full Categories */
-            <div className="bg-white/50 backdrop-blur-md rounded-3xl p-6 border border-stone-100 space-y-8 animate-fadeIn">
-
+            <div className="space-y-6">
               {/* Goals */}
               <div>
-                <div className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">飲食目標</div>
+                <h4 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3">營養目標</h4>
                 <div className="flex flex-wrap gap-2">
-                  {Object.entries(GoalConfig).map(([key, config]) => (
-                    <FilterPill
-                      key={key}
-                      label={config.label}
-                      active={searchState.goal === key}
-                      onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === key ? null : key as DietaryGoal }))}
-                      icon={config.icon}
-                    />
+                  {Object.values(DietaryGoal).map(goal => (
+                    <FilterPill key={goal} label={GoalConfig[goal].label} active={searchState.goal === goal} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === goal ? null : goal }))} />
                   ))}
                 </div>
               </div>
-
               {/* Occasions */}
               <div>
-                <div className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">用餐場合</div>
+                <h4 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3">用餐場合</h4>
                 <div className="flex flex-wrap gap-2">
-                  {Object.entries(OccasionConfig).map(([key, config]) => (
-                    <FilterPill
-                      key={key}
-                      label={config.label}
-                      active={searchState.occasion === key}
-                      onClick={() => setSearchState(prev => ({ ...prev, occasion: prev.occasion === key ? null : key as MealOccasion }))}
-                      icon={config.icon}
-                    />
+                  {Object.values(MealOccasion).map(occ => (
+                    <FilterPill key={occ} label={OccasionConfig[occ].label} active={searchState.occasion === occ} onClick={() => setSearchState(prev => ({ ...prev, occasion: prev.occasion === occ ? null : occ }))} />
                   ))}
                 </div>
               </div>
-
               {/* Cuisines */}
               <div>
-                <div className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">菜系風格</div>
+                <h4 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3">偏好菜系</h4>
                 <div className="flex flex-wrap gap-2">
-                  {Object.entries(CuisineConfig).map(([key, config]) => (
-                    <FilterPill
-                      key={key}
-                      label={config.label}
-                      active={searchState.cuisine === key}
-                      onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === key ? Cuisine.ANY : key as Cuisine }))}
-                      icon={config.icon}
-                    />
+                  {Object.values(Cuisine).filter(c => c !== Cuisine.ANY).map(c => (
+                    <FilterPill key={c} label={CuisineConfig[c].label} active={searchState.cuisine === c} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === c ? Cuisine.ANY : c }))} />
                   ))}
                 </div>
               </div>
-
             </div>
-          ) : (
-            /* Collapsed View: Horizontal Scroll Recommendations */
-            <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2 mask-linear-fade">
+          </div>
+        ) : (
+          /* Collapsed View: Expanded 2-Row Grid Horizontal Scroll */
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 px-1">
+              <Lightbulb className="text-chef-gold" size={16} />
+              <span className="font-serif font-bold text-stone-700 text-sm">料理靈感</span>
+            </div>
+            <div className="grid grid-rows-2 grid-flow-col gap-3 overflow-x-auto no-scrollbar pb-2 mask-linear-fade px-1 h-[116px]">
+              {/* Show All Toggle - Spans 2 rows */}
               <button
                 onClick={() => setShowFilterMenu(true)}
-                className="flex-shrink-0 px-4 py-3 rounded-full bg-stone-100 text-stone-500 hover:bg-stone-200 transition-colors flex items-center gap-2 text-sm font-bold"
+                className="row-span-2 w-14 h-full rounded-2xl bg-white border border-stone-200 text-stone-500 hover:border-orange-500 hover:text-orange-500 transition-all flex items-center justify-center shadow-sm"
               >
-                <span className="w-5 h-5 rounded-full bg-stone-300 text-white flex items-center justify-center text-xs">+</span>
-                更多
+                <SlidersHorizontal size={20} />
               </button>
-              {/* Mix of popular filters */}
-              <FilterPill label="15分鐘快手" active={searchState.goal === DietaryGoal.QUICK} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.QUICK ? null : DietaryGoal.QUICK }))} icon={<Zap size={14} />} />
-              <FilterPill label="台式經典" active={searchState.cuisine === Cuisine.TAIWANESE} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.TAIWANESE ? Cuisine.ANY : Cuisine.TAIWANESE }))} icon={<Utensils size={14} />} />
-              <FilterPill label="減脂" active={searchState.goal === DietaryGoal.WEIGHT_LOSS} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.WEIGHT_LOSS ? null : DietaryGoal.WEIGHT_LOSS }))} icon={<Leaf size={14} />} />
-              <FilterPill label="增肌" active={searchState.goal === DietaryGoal.MUSCLE_GAIN} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.MUSCLE_GAIN ? null : DietaryGoal.MUSCLE_GAIN }))} icon={<Dumbbell size={14} />} />
-              <FilterPill label="療癒暖胃" active={searchState.goal === DietaryGoal.COMFORT} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.COMFORT ? null : DietaryGoal.COMFORT }))} icon={<Heart size={14} />} />
-              <FilterPill label="日式" active={searchState.cuisine === Cuisine.JAPANESE} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.JAPANESE ? Cuisine.ANY : Cuisine.JAPANESE }))} icon={<Star size={14} />} />
-              <FilterPill label="義式" active={searchState.cuisine === Cuisine.ITALIAN} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.ITALIAN ? Cuisine.ANY : Cuisine.ITALIAN }))} icon={<Flame size={14} />} />
+
+              {/* Quick Filters - Populated to fill grid */}
+              <FilterPill label={GoalConfig[DietaryGoal.QUICK].label} active={searchState.goal === DietaryGoal.QUICK} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.QUICK ? null : DietaryGoal.QUICK }))} icon={<Zap size={14} />} />
+              <FilterPill label={CuisineConfig[Cuisine.TAIWANESE].label} active={searchState.cuisine === Cuisine.TAIWANESE} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.TAIWANESE ? Cuisine.ANY : Cuisine.TAIWANESE }))} icon={<Utensils size={14} />} />
+
+              <FilterPill label={GoalConfig[DietaryGoal.WEIGHT_LOSS].label} active={searchState.goal === DietaryGoal.WEIGHT_LOSS} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.WEIGHT_LOSS ? null : DietaryGoal.WEIGHT_LOSS }))} icon={<Leaf size={14} />} />
+              <FilterPill label={GoalConfig[DietaryGoal.MUSCLE_GAIN].label} active={searchState.goal === DietaryGoal.MUSCLE_GAIN} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.MUSCLE_GAIN ? null : DietaryGoal.MUSCLE_GAIN }))} icon={<Dumbbell size={14} />} />
+
+              <FilterPill label={GoalConfig[DietaryGoal.COMFORT].label} active={searchState.goal === DietaryGoal.COMFORT} onClick={() => setSearchState(prev => ({ ...prev, goal: prev.goal === DietaryGoal.COMFORT ? null : DietaryGoal.COMFORT }))} icon={<Heart size={14} />} />
+              <FilterPill label={CuisineConfig[Cuisine.JAPANESE].label} active={searchState.cuisine === Cuisine.JAPANESE} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.JAPANESE ? Cuisine.ANY : Cuisine.JAPANESE }))} icon={<Star size={14} />} />
+
+              <FilterPill label={CuisineConfig[Cuisine.ITALIAN].label} active={searchState.cuisine === Cuisine.ITALIAN} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.ITALIAN ? Cuisine.ANY : Cuisine.ITALIAN }))} icon={<ChefHat size={14} />} />
+              <FilterPill label={OccasionConfig[MealOccasion.FAMILY].label} active={searchState.occasion === MealOccasion.FAMILY} onClick={() => setSearchState(prev => ({ ...prev, occasion: prev.occasion === MealOccasion.FAMILY ? null : MealOccasion.FAMILY }))} icon={<Users size={14} />} />
+
+              <FilterPill label={OccasionConfig[MealOccasion.LATE_NIGHT].label} active={searchState.occasion === MealOccasion.LATE_NIGHT} onClick={() => setSearchState(prev => ({ ...prev, occasion: prev.occasion === MealOccasion.LATE_NIGHT ? null : MealOccasion.LATE_NIGHT }))} icon={<Flame size={14} />} />
+              <FilterPill label={CuisineConfig[Cuisine.KOREAN].label} active={searchState.cuisine === Cuisine.KOREAN} onClick={() => setSearchState(prev => ({ ...prev, cuisine: prev.cuisine === Cuisine.KOREAN ? Cuisine.ANY : Cuisine.KOREAN }))} icon={<Utensils size={14} />} />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* Taiwan Snacks */}
-      <div className="bg-white rounded-3xl p-8 shadow-lg border border-stone-100">
-        <div className="flex items-center justify-between mb-6">
+      {/* Taiwan Snacks - Horizontal Scroll on Mobile, Grid on Desktop */}
+      <div className="md:bg-white md:rounded-[2rem] md:p-8 md:shadow-[0_8px_30px_rgba(0,0,0,0.04)] md:border md:border-stone-100">
+        <div className="flex items-center justify-between mb-4 md:mb-6 px-1 md:px-0">
           <div>
-            <h3 className="text-2xl font-serif font-bold text-stone-800 mb-1">本週熱門食譜</h3>
+            <h3 className="text-xl md:text-2xl font-serif font-bold text-stone-800 mb-1">本週熱門食譜</h3>
             <p className="text-sm text-stone-500">精選台灣經典美食靈感</p>
           </div>
           <button
             onClick={() => setShowAllSnacks(!showAllSnacks)}
-            className="text-orange-600 text-sm font-bold hover:underline"
+            className="text-orange-600 text-sm font-bold hover:underline hidden md:block"
           >
             {showAllSnacks ? '收起' : '查看全部'}
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-          {(showAllSnacks ? TAIWAN_SNACKS_DATA : TAIWAN_SNACKS_DATA.slice(0, 4)).map((snack, idx) => (
+        {/* Mobile: Horizontal Scroll (Snap) - Edge to Edge feel */}
+        <div className="md:hidden flex overflow-x-auto gap-3 pb-4 -mx-4 px-4 snap-x no-scrollbar">
+          {TAIWAN_SNACKS_DATA.slice(0, 8).map((snack, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setSearchState(prev => ({ ...prev, ingredients: [snack.keyword] }));
+                onSearch(snack.keyword);
+              }}
+              className="snap-center shrink-0 w-[42%] bg-white rounded-2xl p-4 shadow-sm border border-stone-100 flex flex-col items-center justify-center gap-2 text-center active:scale-95 transition-transform"
+            >
+              <div className="text-3xl mb-1">{snack.icon}</div>
+              <div>
+                <h4 className="font-bold text-stone-800 text-sm">{snack.label}</h4>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Desktop: Grid */}
+        <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {(showAllSnacks ? TAIWAN_SNACKS_DATA : TAIWAN_SNACKS_DATA.slice(0, 10)).map((snack, idx) => (
             <button
               key={idx}
               onClick={() => {
@@ -354,9 +358,14 @@ export const Hero: React.FC<HeroProps> = ({ searchState, setSearchState, onSearc
             </button>
           ))}
         </div>
+
+        <div className="mt-2 text-center md:hidden">
+          <p className="text-xs text-stone-400 opacity-60">← 左右滑動 →</p>
+        </div>
+
       </div>
 
       <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && onImageUpload(e.target.files[0])} />
-    </div>
+    </div >
   );
 };

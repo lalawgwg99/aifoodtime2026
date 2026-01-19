@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { X, ChefHat, Sparkles, Globe } from 'lucide-react';
+import { X, ChefHat, Award, Globe } from 'lucide-react';
 import { User } from '../types';
 
 interface AuthModalProps {
@@ -133,7 +133,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
               <p className="text-[9px] text-stone-400 leading-relaxed">隨時存取您的私人食譜庫</p>
             </div>
             <div className="space-y-2">
-              <Sparkles size={18} className="text-chef-gold" />
+              <Award size={18} className="text-chef-gold" />
               <h4 className="text-[10px] font-black uppercase tracking-widest text-chef-black">身份聲望</h4>
               <p className="text-[9px] text-stone-400 leading-relaxed">累積點讚，晉升星級主廚</p>
             </div>

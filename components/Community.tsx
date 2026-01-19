@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Plus, Heart, Globe, Camera, PenTool, Loader2, ArrowRight, RefreshCcw, LayoutGrid, BarChart3, TrendingUp, PieChart, Info, Star, Share2, Shield, Eye, AlertCircle } from 'lucide-react';
+import { Lock, Plus, Heart, Globe, Camera, PenTool, Loader2, ArrowRight, RefreshCcw, LayoutGrid, BarChart3, TrendingUp, PieChart, Info, Star, Share2, Shield, Eye, AlertCircle } from 'lucide-react';
 import { Recipe, TrendReport, User } from '../types';
 import { RecipeCard } from './RecipeCard';
 import { createRecipeFromDraft, fetchDiscoveryFeed, generateRecipeImage, fetchMarketTrends } from '../services/geminiService';
@@ -213,7 +213,7 @@ export const Community: React.FC<CommunityProps> = ({ onBack, currentUser, onSho
                 <h2 className="text-2xl font-serif font-bold text-chef-black mb-8 flex items-center gap-3"><PenTool className="text-chef-gold" /> AI 創作室</h2>
                 {!currentUser && (
                   <div className="mb-8 p-6 bg-chef-gold/5 rounded-2xl border border-chef-gold/20 flex flex-col items-center text-center">
-                    <Sparkles className="text-chef-gold mb-3" size={32} />
+                    <Lock className="text-chef-gold mb-3" size={32} />
                     <p className="text-sm font-serif font-bold text-chef-black mb-4">登入後解鎖跨裝置同步與全球發佈</p>
                     <button onClick={onShowLogin} className="w-full py-3 bg-chef-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest">立即登入</button>
                   </div>

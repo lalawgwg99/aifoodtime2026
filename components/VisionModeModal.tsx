@@ -26,7 +26,7 @@ export const VisionModeModal: React.FC<VisionModeModalProps> = ({ onClose, onSel
 
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 p-2 text-stone-500 hover:text-white transition-colors z-10"
+                    className="absolute top-4 right-4 md:top-6 md:right-6 p-2 text-white/50 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full transition-all z-20"
                 >
                     <X size={24} />
                 </button>
@@ -94,6 +94,16 @@ export const VisionModeModal: React.FC<VisionModeModalProps> = ({ onClose, onSel
                         </p>
                     </button>
 
+                </div>
+
+                {/* Cancel Button (Mobile Friendly) */}
+                <div className="mt-8 text-center md:hidden relative z-10">
+                    <button
+                        onClick={onClose}
+                        className="px-8 py-3 rounded-full text-stone-400 hover:text-white border border-stone-700 hover:border-stone-500 hover:bg-stone-800 transition-all text-sm font-bold tracking-widest uppercase"
+                    >
+                        取消返回
+                    </button>
                 </div>
             </div>
         </div>

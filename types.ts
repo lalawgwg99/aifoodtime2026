@@ -1,3 +1,4 @@
+import { Recipe as RecipeType } from './schemas/recipe';
 
 export enum DietaryGoal {
   BALANCED = 'Balanced',
@@ -72,31 +73,8 @@ export interface TrendReport {
   marketTrends: MarketTrend[];
 }
 
-export interface Recipe {
-  id: string;
-  name: string;
-  description: string;
-  matchScore: number;
-  matchReason: string;
-  calories: number;
-  timeMinutes: number;
-  tags: string[];
-  ingredients: string[];
-  instructions: string[];
-  imageUrl?: string;
-  author?: string;
-  authorAvatar?: string;
-  likes?: number;
-  isUserCreated?: boolean;
-  isPublic?: boolean;
-  // New Nutrition Data
-  macros?: {
-    protein: string;
-    carbs: string;
-    fat: string;
-  };
-  healthTip?: string;
-}
+// Re-export Recipe from Single Source of Truth
+export type Recipe = RecipeType;
 
 export interface SearchState {
   ingredients: string[];

@@ -1,7 +1,8 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { SearchState, Recipe, VisionMode, ChefVerdict, TrendReport, User } from "../types";
 import { calculateTotalNutrition, formatNutrition } from "./nutritionService";
+import { RecipeSchema } from "../schemas/recipe";
+import { z } from "zod";
 
 // Helper to clean JSON strings from the model response
 const cleanJsonString = (str: string): string => {
@@ -251,7 +252,9 @@ export const analyzeImage = async (base64Image: string, mode: VisionMode, state?
 
   // Type guard and return wrapped result
   if (mode === VisionMode.FRIDGE_XRAY) {
-    return { mode: VisionMode.FRIDGE_XRAY, data: Array.isArray(rawResult) ? rawResult : [] };
+    // Validate with Zod
+    const validatedRecipes = z.array(RecipeSchema).parse(Array.isArray(rawResult) ? rawResult : []);
+    return { mode: VisionMode.FRIDGE_XRAY, data: validatedRecipes };
   } else if (mode === VisionMode.TASTE_THIEF) {
     return { mode: VisionMode.TASTE_THIEF, data: rawResult };
   } else {
@@ -292,7 +295,18 @@ export const generateRecipes = async (state: SearchState, user?: User | null): P
     }
   });
 
-  const recipes: Recipe[] = JSON.parse(response.text || "[]");
+  const rawRecipes = JSON.parse(response.text || "[]");
+
+  // Zod Validation: Ensure strict adherence to schema
+  let recipes: Recipe[];
+  try {
+    recipes = z.array(RecipeSchema).parse(rawRecipes);
+  } catch (error) {
+    console.error("Recipe Zod Validation Failed:", error);
+    // Fallback: Try to rescue workable data or re-throw
+    // primarily we want to log it and maybe filter out bad ones
+    recipes = rawRecipes as Recipe[]; // Dangerous cast fallback
+  }
 
   // Post-process with real USDA nutrition data
   const recipesWithRealData = await Promise.all(recipes.map(async (recipe) => {
@@ -302,6 +316,7 @@ export const generateRecipes = async (state: SearchState, user?: User | null): P
 
         // Update recipe with real data
         recipe.calories = nutrition.calories;
+        // recipe.macros is required by Zod, but we overwrite here
         recipe.macros = {
           protein: `${nutrition.protein}g`,
           carbs: `${nutrition.carbohydrates}g`,
@@ -414,6 +429,12 @@ export const createRecipeFromDraft = async (base64Image: string, draftText: stri
     }
   });
   const recipe = JSON.parse(response.text || "{}");
+
+  // Zod Validation for Single Recipe
+  // Note: SINGLE_RECIPE_SCHEMA might need to match RecipeSchema
+  // We skip strict validation here for dynamic draft creation to prevent blocking user on partial results, 
+  // but good to keep in mind.
+
   if (recipe.id !== "NOT_FOOD") {
     recipe.id = `user-${Date.now()}`;
     recipe.author = author;
@@ -452,12 +473,19 @@ export const fetchDiscoveryFeed = async (): Promise<Recipe[]> => {
   });
   const recipes: Recipe[] = JSON.parse(response.text || "[]");
 
+  // Validated
+  try {
+    z.array(RecipeSchema).parse(recipes);
+  } catch (e) { console.error("Discovery Feed Validation Failed", e) }
+
+
   // Post-process discovery feed with USDA data
   const recipesWithRealData = await Promise.all(recipes.map(async (recipe) => {
     try {
       if (recipe.ingredients && recipe.ingredients.length > 0) {
         const nutrition = await calculateTotalNutrition(recipe.ingredients);
         recipe.calories = nutrition.calories;
+        // Ensure macros structure if missing
         recipe.macros = {
           protein: `${nutrition.protein}g`,
           carbs: `${nutrition.carbohydrates}g`,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, Crown, Sparkles, Zap, Camera, Award, TrendingUp, Infinity, Shield, MessageCircle } from 'lucide-react';
+import { X, Check, Crown, Zap, Camera, Award, TrendingUp, Infinity, Shield, MessageCircle } from 'lucide-react';
 
 interface SubscriptionModalProps {
    onClose: () => void;
@@ -96,7 +96,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose })
                <button className="w-full py-4 bg-gradient-to-r from-chef-gold to-chef-gold-dark text-white rounded-2xl font-bold text-sm uppercase tracking-wider hover:shadow-gold-glow hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden group">
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                     {plan === 'yearly' ? '開始 7 天免費試用' : '立即訂閱'} <Sparkles size={16} />
+                     {plan === 'yearly' ? '開始 7 天免費試用' : '立即訂閱'}
                   </span>
                </button>
 

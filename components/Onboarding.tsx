@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, Camera, ChefHat, Mic, Award, Heart, TrendingUp, Globe, Sparkles, ArrowRight } from 'lucide-react';
+import { X, Camera, ChefHat, Mic, Award, Heart, TrendingUp, Globe, Star, ArrowRight } from 'lucide-react';
 
 interface OnboardingProps {
   onClose: () => void;
@@ -96,7 +96,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
             <div className="space-y-6 animate-fadeIn">
               {/* Quote Card */}
               <div className="p-6 md:p-8 bg-gradient-to-br from-chef-black to-stone-900 text-white rounded-[2rem] relative overflow-hidden shadow-gold-glow">
-                <Sparkles className="absolute top-4 right-4 text-chef-gold animate-pulse" size={24} />
+                <Star className="absolute top-4 right-4 text-chef-gold animate-pulse" size={24} />
                 <div className="absolute -left-10 -bottom-10 w-32 h-32 bg-chef-gold/10 rounded-full blur-[40px]"></div>
                 <p className="font-serif italic text-lg md:text-xl leading-relaxed text-center relative z-10">
                   「我們解決的不只是『<span className="text-chef-gold border-b border-chef-gold/30">晚餐吃什麼</span>』，<br />而是試圖喚醒那份對<span className="text-chef-gold border-b border-chef-gold/30">生活的熱愛</span>。」

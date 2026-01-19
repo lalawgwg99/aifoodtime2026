@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ChefHat, Sparkles, X, Users, Heart, Crown, HelpCircle, Menu, BookOpen, Calendar, Coffee } from 'lucide-react';
+import { ChefHat, X, Users, Heart, Crown, HelpCircle, Menu, BookOpen, Calendar, Coffee } from 'lucide-react';
 import { Hero } from './components/Hero';
 import { RecipeCard } from './components/RecipeCard';
 import { Community } from './components/Community';
 import { Chronicles } from './components/Chronicles';
-import { MarketTicker } from './components/MarketTicker';
+
 import { Footer } from './components/Footer';
 import { TrustSection } from './components/TrustSection';
 import { AuthModal } from './components/AuthModal';
@@ -167,7 +167,7 @@ export default function App() {
       // Use the effective state with the pending ingredient included
       const results = await generateRecipes({ ...searchState, ingredients: effectiveIngredients }, currentUser);
       setRecipes(results); setHasSearched(true);
-      playSuccess(); // ✨ Audio Feedback
+      playSuccess(); // Audio Feedback
 
       // Increment usage count for non-logged-in users
       if (!currentUser) {
@@ -282,7 +282,7 @@ export default function App() {
     <div className="min-h-screen bg-chef-paper selection:bg-chef-gold/30 pb-24 font-sans relative">
 
       {/* 1. Market Ticker - The "Market Research" Vibe */}
-      <MarketTicker />
+
 
       {/* Global Error Toast */}
       {error && (
@@ -390,7 +390,7 @@ export default function App() {
               {!currentUser && (
                 <button onClick={() => { setShowLoginBenefitsModal(true); setShowMobileMenu(false); }} className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-stone-50 transition-all">
                   <div className="w-10 h-10 bg-chef-gold/10 rounded-xl flex items-center justify-center">
-                    <Sparkles size={18} className="text-chef-gold-dark" />
+                    <Crown size={18} className="text-chef-gold-dark" />
                   </div>
                   <div className="text-left">
                     <span className="font-bold text-sm text-chef-black">為什麼要登入？</span>
@@ -451,8 +451,8 @@ export default function App() {
               </div>
 
               <p className="text-base md:text-xl text-stone-500 max-w-2xl mx-auto font-normal leading-relaxed">
-                「饗味食光」不只是食譜，更是您廚房裡的藝術策展人。
-                <span className="hidden md:inline">讓我們為您編織一場味覺的極致饗宴。</span>
+                這不僅是食譜，更是您廚房裡的藝術策展人，
+                為您喚醒食材靈魂，編織一場味覺的極致饗宴。
               </p>
             </div>
 
