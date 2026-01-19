@@ -1,239 +1,123 @@
-<div align="center">
+# 饗味食光 SavorChef - AI 私廚顧問系統
 
-<img width="120" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" alt="SavorChef Logo" />
+![SavorChef Design](https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=2070&auto=format&fit=crop)
 
-# 饗味食光 (SavorChef)
-
-### 🍳 讓食材綻放靈魂 — 全球趨勢與極致私廚系統
-
-<div align="center">
-
-[![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
-[![Gemini AI](https://img.shields.io/badge/Gemini_AI_Pro-8E75B2?style=for-the-badge&logo=google)](https://ai.google.dev/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
-
-[![](https://img.shields.io/badge/Demo-Live_Preview-success?style=for-the-badge&logo=vercel)](https://ai.studio/apps/drive/1C43Glk1UIKgOmpyzBsyNFu-U5YlKT1Ol)
-
-</div>
+> **「這不僅是食譜，更是您廚房裡的藝術策展人。」**
+>
+> *An AI-powered culinary companion that transforms ingredients into soulful experiences.*
 
 ---
 
-## ✨ 專案亮點
+## 📖 專案簡介 (Introduction)
 
-> **「這不只是一個食譜 App，這是您廚房裡的米其林大腦。」**
+**饗味食光 (SavorChef)** 是一個結合 **Google Gemini AI** 多模態感知能力的現代化極致私廚系統。
 
-**饗味食光 (SavorChef)** 是一款深度整合 Google Gemini AI 的頂級私廚系統。我們致力於解決現代人的「料理倦怠」，透過科技重拾對食物的熱情。
+我們致力於解決現代人「不知道煮什麼」的痛點，但拒絕提供冰冷的數據列表。SavorChef 透過 **Ambient Design (氛圍感設計)** 與 **Kinfolk 美學**，將食材辨識、食譜生成、烹飪導航轉化為一場優雅的生活儀式。
 
-🌟 **核心差異：**
+### 核心願景
 
-* **不只是搜尋**：AI 主動為您策劃菜單，而非等待您輸入。
-* **不只是辨識**：看懂食材的靈魂，結合您的健身目標（增肌/減脂）給予建議。
-* **不只是做菜**：像嚴師一樣評鑑您的擺盤，推動您的廚藝達到星級水準。
-
----
-
-## 🚀 為什麼選擇 SavorChef？
-
-### 🔮 極致 AI 體驗
-
-| 功能模組 | 深度解析 |
-|---------|----------|
-| **🍽️ 靈感策展人** | 厭倦了不知道吃什麼？AI 根據您的心情、天氣、甚至當下的穿搭風格，推薦最適合的料理。 |
-| **📸 視覺魔術師** | **[旗艦功能]** 拍下冰箱剩餘食材，AI 瞬間變出三道不同國家的米其林級食譜 (含視覺預覽)。 |
-| **🎯 逆向工程師** | 在餐廳吃到神級美味？拍下來，AI 幫您拆解食譜與烹飪工法，讓您在家復刻。 |
-| **🍎 營養精算師** | 每一口都在掌控之中。即時計算卡路里與巨量營養素，讓美味與健康不再妥協。 |
-| **👨‍🍳 星級評鑑官** | 勇敢上傳您的作品！獲得 AI 針對「色、香、味、形」的專業毒舌與建設性指導。 |
-| **🌍 趨勢獵人** | 連線全球美食資料庫，告訴您現在紐約、東京、巴黎正在流行什麼食材。 |
-
-### 🎯 飲食目標支援
-
-* 🥗 均衡飲食 (Balanced)
-* 🏃 減重計畫 (Weight Loss)
-* 💪 增肌飲食 (Muscle Gain)
-* ⚡ 快速簡餐 (Quick & Easy)
-* 💰 經濟實惠 (Budget Friendly)
-* 🍜 療癒美食 (Comfort Food)
-* 🥑 生酮飲食 (Keto Friendly)
-* 🌱 植物性飲食 (Plant Based)
-* 🌾 高纖飲食 (High Fiber)
-* 🧂 低鈉飲食 (Low Sodium)
-
-### 🌏 支援料理風格
-
-日式 🇯🇵 | 台式 🇹🇼 | 義式 🇮🇹 | 西式 🍔 | 中式 🇨🇳 | 泰式 🇹🇭 | 法式 🇫🇷 | 韓式 🇰🇷 | 越式 🇻🇳 | 印度 🇮🇳 | 墨西哥 🇲🇽 | 美式 🇺🇸
+* **See (看見)**：AI 視覺瞬間看透冰箱庫存，將剩材變為寶藏。
+* **Sense (感知)**：理解您的口味偏好、營養目標 (增肌/減脂) 與當下的情緒。
+* **Savor (品味)**：從備料到擺盤，提供米其林等級的指導，找回料理的感動。
 
 ---
 
-## 🛠️ 技術架構
+## ✨ 核心功能 (Key Features)
 
-```
-饗味食光/
-├── 📁 components/          # React 元件
-│   ├── AuthModal.tsx       # 登入/註冊彈窗
-│   ├── Community.tsx       # 社群互動功能
-│   ├── Hero.tsx            # 首頁主視覺與搜尋
-│   ├── MarketTicker.tsx    # 市場趨勢跑馬燈
-│   ├── Onboarding.tsx      # 新手引導流程
-│   ├── ProfileModal.tsx    # 個人資料管理
-│   ├── RecipeCard.tsx      # 食譜卡片組件
-│   └── SubscriptionModal.tsx # 訂閱方案彈窗
-├── 📁 services/
-│   └── geminiService.ts    # Gemini AI 服務封裝
-├── 📁 public/              # 靜態資源
-├── App.tsx                 # 應用程式主體
-├── types.ts                # TypeScript 型別定義
-├── config.ts               # 應用程式設定
-├── index.html              # HTML 入口
-├── index.tsx               # React 入口
-├── index.css               # 全域樣式
-├── tailwind.config.js      # Tailwind 設定
-├── vite.config.ts          # Vite 建置設定
-└── package.json            # 專案依賴
-```
+### 1. 📸 AI 智能冰箱透視 (Smart Vision)
 
-### 技術棧
+不只是拍照！透過 Gemini Vision Pro 模型，一秒辨識圖中食材，自動盤點庫存，並立即生成專屬料理提案。
 
-| 層級 | 技術 |
-|------|------|
-| **前端框架** | React 19 + TypeScript 5.7 |
-| **建置工具** | Vite 6.0 |
-| **樣式系統** | TailwindCSS 3.4 |
-| **AI 引擎** | Google Gemini API (@google/genai) |
-| **圖示庫** | Lucide React |
+* **技術亮點**：Base64 影像串流處理、即時多模態推論。
+
+### 2. 🍳 靈感食譜生成 (Recipe Inspiration)
+
+拒絕千篇一律的罐頭食譜。AI 主廚根據您現有的食材，為您量身打造包含「前菜、主餐、湯品」的完整菜單。
+
+* **特色**：支援客製化調整 (份量、辣度、過敏原)，並附帶「風味描述」與「營養分析」。
+
+### 3. 👨‍🍳 沉浸式烹飪導航 (Immersive Cooking Mode)
+
+告別手忙腳亂。專為廚房場景設計的「大字體、高對比、語音友善」介面，讓您專注於火候與香氣。
+
+* **特色**：分步指導、計時器整合、關鍵步驟語音朗讀。
+
+### 4. 🎨 極致感官體驗 (Ambient Aesthetics)
+
+* **Kinfolk 風格**：採用 Chef Paper 米色調、Chef Gold 金色點綴與襯線字體，營造雜誌般的閱讀體驗。
+* **Ambient Background**：動態流動的光影背景與紙張紋理，填補視覺留白，帶來平靜與高級感。
+* **Smooth Motion**：全站採用 Framer Motion 風格的微互動動畫，操作如絲般滑順。
 
 ---
 
-## 📦 快速開始
+## 🛠 技術架構 (Tech Stack)
 
-### 系統需求
+本專案採用最前沿的現代化前端技術棧，確保極致的效能與開發體驗：
 
-* Node.js 18+
-* npm 或 yarn
+| Layer | Technology | Details |
+|-------|------------|---------|
+| **Core** | **React 18** + **Vite** | 極速構建與熱更新 |
+| **Language** | **TypeScript** | 嚴格型別檢查，確保生產級穩定性 |
+| **Styling** | **Tailwind CSS v4** | Utility-first 原子化 CSS 架構 |
+| **AI Model** | **Google Gemini 2.0 Flash/Pro** | 多模態視覺識別與自然語言生成 |
+| **Icons** | **Lucide React** | 輕量、風格統一的向量圖標庫 |
+| **State** | **React Hooks** | 簡潔的邏輯複用與狀態管理 |
+
+---
+
+## 🚀 快速開始 (Getting Started)
+
+### 先決條件
+
+* Node.js (v18+)
+* npm (v9+)
 * Google Gemini API Key
 
 ### 安裝步驟
 
-```bash
-# 1. 複製專案
-git clone https://github.com/lalawgwg99/aifoodtime2026.git
-cd aifoodtime2026
+1. **複製專案**
 
-# 2. 安裝依賴
-npm install
+    ```bash
+    git clone https://github.com/your-username/savor-chef-ai.git
+    cd savor-chef-ai
+    ```
 
-# 3. 設定環境變數
-# 編輯 .env.local 檔案，填入您的 Gemini API Key
-GEMINI_API_KEY=your_api_key_here
+2. **安裝依賴**
 
-# 4. 啟動開發伺服器
-npm run dev
-```
+    ```bash
+    npm install
+    ```
 
-### 建置生產版本
+3. **設定環境變數**
+    複製 `.env.example` 為 `.env` 並填入您的 API Key：
 
-```bash
-# 建置
-npm run build
+    ```env
+    VITE_GEMINI_API_KEY=your_api_key_here
+    ```
 
-# 預覽
-npm run preview
-```
+4. **啟動開發伺服器**
 
----
-
-## ⚙️ 設定說明
-
-### 建置模式 (`config.ts`)
-
-```typescript
-// true  = App Store 上架模式 (解鎖所有 Pro 功能)
-// false = Web SaaS 營利模式 (啟用付費牆)
-export const IS_APP_STORE_BUILD = false;
-```
-
-### 權限需求 (`metadata.json`)
-
-* 📷 **相機** — 食材拍照辨識
-* 💬 **問問二廚** — 智能文字問答助手
-* 📍 **定位** — 在地化食材推薦
+    ```bash
+    npm run dev
+    ```
 
 ---
 
-## 🎨 使用者介面
+## 🔒 資安與隱私 (Security & Privacy)
 
-### 核心體驗
+SavorChef 通過 **Strict Security Audit**：
 
-1. **🏠 首頁** — 輸入食材、選擇偏好，一鍵獲得 AI 食譜
-2. **📸 視覺探索** — 三種 AI 視覺模式：味道竊取、冰箱透視、營養掃描
-3. **👨‍🍳 主廚評鑑** — 上傳作品獲得專業評語
-4. **🌍 趨勢報告** — 掌握全球美食動態
-5. **👥 社群** — 分享食譜、交流心得
+* **Region Locked**: 系統由台灣團隊開發，針對台灣在地食材與資安法規進行優化。
+* **Ephemeral Processing**: 所有上傳的影像僅用於即時推論，分析完成後立即銷毀，絕不留存。
+* **TLS 1.3**: 全程採用銀行級加密傳輸。
 
 ---
 
-## 📄 API 服務
+## 📝 版權聲明 (License)
 
-### Gemini 服務功能 (`geminiService.ts`)
-
-| 方法 | 功能 |
-|------|------|
-| `generateRecipes()` | 根據條件生成食譜 |
-| `analyzeImage()` | 影像分析 (食材辨識/營養分析) |
-| `generateChefVerdict()` | 料理作品評鑑 |
-| `generateRecipeImage()` | 食譜配圖生成 |
-| `askSousChef()` | 烹飪助手問答 |
-| `createRecipeFromDraft()` | 草稿轉專業食譜 |
-| `fetchDiscoveryFeed()` | 探索推薦 |
-| `fetchMarketTrends()` | 市場趨勢報告 |
+Copyright © 2026 **SavorChef Inc.** All rights reserved.
+Built with ❤️ in Taiwan.
 
 ---
 
-## 🗺️ 開發路線圖
-
-* [x] ✅ 核心食譜推薦系統
-* [x] ✅ AI 視覺辨識 (三種模式)
-* [x] ✅ 主廚評鑑系統
-* [x] ✅ 全球趨勢分析
-* [x] ✅ 社群分享功能
-* [x] ✅ 問問二廚 (Text Chat Mode)
-* [ ] 🔜 智慧購物清單
-* [ ] 🔜 跨裝置同步
-* [ ] 🔜 AR 擺盤指導
-
----
-
-## 🤝 貢獻指南
-
-歡迎貢獻！請遵循以下流程：
-
-1. Fork 本專案
-2. 建立功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送分支 (`git push origin feature/AmazingFeature`)
-5. 開啟 Pull Request
-
----
-
-## 📜 授權條款
-
-本專案採用 MIT 授權條款 — 詳見 [LICENSE](LICENSE) 檔案
-
----
-
-## 📧 聯絡資訊
-
-**專案連結：** [https://github.com/lalawgwg99/aifoodtime2026](https://github.com/lalawgwg99/aifoodtime2026)
-
-**AI Studio 預覽：** [https://ai.studio/apps/drive/1C43Glk1UIKgOmpyzBsyNFu-U5YlKT1Ol](https://ai.studio/apps/drive/1C43Glk1UIKgOmpyzBsyNFu-U5YlKT1Ol)
-
----
-
-<div align="center">
-
-**用心料理，讓每一口都成為回憶 ❤️**
-
-Made with 💝 by SavorChef Team
-
-</div>
+> *"Cooking is not just about eating due to hunger. It's about feeding the soul."*
