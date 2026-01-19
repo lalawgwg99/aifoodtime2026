@@ -18,6 +18,8 @@ import { LoginBenefitsModal } from './components/LoginBenefitsModal';
 import { MealPlanner } from './components/MealPlanner';
 import { MethodologyModal } from './components/MethodologyModal';
 import { VisionModeModal } from './components/VisionModeModal';
+import { LegalModal } from './components/LegalModal';
+import { SecurityModal } from './components/SecurityModal';
 import { AnalysisResult } from './components/AnalysisResult';
 import { generateRecipes, generateRecipeImage, analyzeImage } from './services/geminiService';
 import { usageService } from './services/usageService';
@@ -49,6 +51,9 @@ export default function App() {
   const [favorites, setFavorites] = useState<Recipe[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
+  const [showSecurityModal, setShowSecurityModal] = useState(false);
+  const [legalTab, setLegalTab] = useState<'terms' | 'privacy'>('terms');
   const [loadingIndex, setLoadingIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
@@ -573,11 +578,27 @@ export default function App() {
       />
 
 
-      {/* Global Footer */}
       <Footer
         onOpenContact={() => setShowContactModal(true)}
         onOpenMethodology={() => setShowMethodologyModal(true)}
+        onOpenTerms={() => { setLegalTab('terms'); setShowLegalModal(true); }}
+        onOpenPrivacy={() => { setLegalTab('privacy'); setShowLegalModal(true); }}
+        onOpenRegion={() => setError('Region Locked: Taiwan - 系統已針對台灣在地食材優化')}
+        onOpenSecurity={() => setShowSecurityModal(true)}
       />
+
+      {/* Security Check Modal */}
+      {showSecurityModal && (
+        <SecurityModal onClose={() => setShowSecurityModal(false)} />
+      )}
+
+      {/* Legal Modal */}
+      {showLegalModal && (
+        <LegalModal
+          initialTab={legalTab}
+          onClose={() => setShowLegalModal(false)}
+        />
+      )}
 
       {/* Contact Modal */}
       {showContactModal && (
