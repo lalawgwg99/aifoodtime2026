@@ -10,11 +10,10 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<'guide' | 'story'>('guide');
 
   const guideSteps = [
-    { icon: Camera, title: '📸 AI 智能冰箱透視', desc: '不只是拍照！AI 瞬間分析冰箱食材，結合您的增肌減脂目標，變出米其林級健康菜單。' },
-    { icon: Mic, title: '💬 24H 專屬私廚顧問', desc: '料理過程卡關？隨時呼叫您的 AI 二廚，從從備料到調味，即時獲得大師級指引。' },
-    { icon: TrendingUp, title: '📈 全球食尚情報', desc: '獨家掌握全球最新美食趨勢、當季熱門食材與爆紅擺盤風格，讓您永遠走在食尚尖端。' },
-    { icon: Award, title: '⭐ 星級擺盤導師', desc: '上傳您的料理作品，AI 依照米其林標準進行評分，並提供擺盤升級建議，讓家常菜瞬間變大菜。' },
-    { icon: Globe, title: '🌍 連結全球靈感', desc: '加入全球美食家社群，分享您的創作，Remix 他人的靈感，激盪出無限美味可能。' },
+    { icon: Camera, title: '📸 一秒看透食材靈魂', desc: '冰箱剩材不再是煩惱，而是未被發掘的寶藏。拍張照，AI 瞬間為您解鎖食材潛力，變幻出令人驚豔的美味提案。' },
+    { icon: ChefHat, title: '🍳 把日常餐桌變私廚', desc: '不知道煮什麼？交給 AI 靈感庫。從清冰箱料理到宴客大餐，量身打造專屬於您的味蕾地圖，讓每一餐都充滿期待。' },
+    { icon: ArrowRight, title: '👨‍🍳 享受優雅的烹飪 Flow', desc: '告別手忙腳亂。如同主廚在旁輕聲指引，精準掌控每個步驟與火候。讓下廚不再是家務，而是一場療癒身心的儀式。' },
+    { icon: Star, title: '✨ 獻給懂生活的探險家', desc: '純淨、無擾、高質感。我們剔除了一切雜訊，只為了讓您沉浸在最純粹的料理美學中，找回對生活的熱愛。' },
   ];
 
   return (
