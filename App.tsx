@@ -483,7 +483,7 @@ export default function App() {
               onSearch={handleSearch}
               isLoading={loading}
               onImageUpload={handleImageUpload}
-              onOpenSmartVision={() => setShowVisionModal(true)}
+              onSelectMode={handleModeSelection}
             />
 
             {/* Vision Analysis Result (Non-Recipe Modes) */}
