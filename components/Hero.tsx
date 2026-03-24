@@ -2,8 +2,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import {
   Search, X, ChefHat,
-  Leaf, Zap, Activity, Heart, Utensils,
-  Flame, Users, Dumbbell, Star,
+  Leaf, Zap, Activity, Heart, Coins, Coffee, Utensils,
+  Compass, Flame, Wine, Moon, Users, Briefcase, Dumbbell, Star,
+  Carrot, Waves, Tent, PartyPopper, Trees, Apple,
   SlidersHorizontal, Lightbulb
 } from 'lucide-react';
 import { DietaryGoal, Cuisine, SearchState, MealOccasion } from '../types';
