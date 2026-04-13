@@ -134,6 +134,11 @@ input[type="range"] {
   color: #3a4941;
 }
 
+.nav-lang {
+  min-height: 36px;
+  padding: 6px 12px;
+}
+
 .nav-links a:hover {
   color: var(--primary);
 }
@@ -842,6 +847,27 @@ input[type="range"] {
   background: rgba(255, 255, 255, 0.86);
   padding: 0 18px;
   color: var(--ink);
+}
+
+.auth-box {
+  display: grid;
+  gap: 14px;
+}
+
+.auth-form input {
+  flex: 1 1 220px;
+}
+
+.auth-signed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .waitlist-form input:focus-visible {

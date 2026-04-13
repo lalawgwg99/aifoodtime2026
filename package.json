@@ -9,8 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.103.0",
+    "i18next": "^26.0.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-i18next": "^17.0.2",
+    "stripe": "^22.0.1"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

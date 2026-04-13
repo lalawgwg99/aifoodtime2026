@@ -117,6 +117,7 @@ export interface PricingPlan {
   description: string;
   features: string[];
   cta: string;
+  checkoutKey?: string;
   featured?: boolean;
 }
 

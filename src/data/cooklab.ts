@@ -537,6 +537,7 @@ export const pricingPlans: PricingPlan[] = [
       "Full experiment archive",
     ],
     cta: "Join Pro waitlist",
+    checkoutKey: "pro_monthly",
     featured: true,
   },
   {

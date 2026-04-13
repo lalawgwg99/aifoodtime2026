@@ -1,4 +1,5 @@
 import React, { FormEvent, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   applianceOptions,
   brandPositioning,
@@ -20,7 +21,9 @@ import { MenuWorkbenchSection } from "./components/sections/MenuWorkbenchSection
 import { ExperimentSection } from "./components/sections/ExperimentSection";
 import { SupportSection } from "./components/sections/SupportSection";
 import { PricingSection } from "./components/sections/PricingSection";
+import { AuthSection } from "./components/sections/AuthSection";
 import { useLocalStorageState } from "./hooks/useLocalStorageState";
+import { useAuth } from "./hooks/useAuth";
 import {
   buildBudgetSummary,
   buildRescueFeed,
@@ -41,6 +44,8 @@ const defaultVariantMap = Object.fromEntries(
 );
 
 export default function App() {
+  const { t, i18n } = useTranslation();
+  const { user, loading: authLoading, signIn, signUp, signOut, hasConfig } = useAuth();
   const [profile, setProfile] = useLocalStorageState<UserProfile>(
     "cooklab.global-profile",
     defaultProfile
@@ -53,6 +58,7 @@ export default function App() {
   const [activeExperimentId, setActiveExperimentId] = useState(experiments[0].id);
   const [email, setEmail] = useState("");
   const [waitlistStatus, setWaitlistStatus] = useState<"idle" | "error" | "success">("idle");
+  const [checkoutStatus, setCheckoutStatus] = useState<"idle" | "error">("idle");
 
   const scoredMenus = useMemo(() => scoreMenus(menuItems, profile), [profile]);
   const recommendedMenus = useMemo(
@@ -140,15 +146,80 @@ export default function App() {
 
   const handleWaitlistSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    const trimmedEmail = email.trim().toLowerCase();
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
 
     if (!isValidEmail) {
       setWaitlistStatus("error");
       return;
     }
 
-    setWaitlistStatus("success");
-    setEmail("");
+    void (async () => {
+      try {
+        const response = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: trimmedEmail,
+            locale: i18n.language,
+            source: "landing",
+            userId: user?.id ?? null,
+            planId: "pro",
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("waitlist_failed");
+        }
+
+        setWaitlistStatus("success");
+        setEmail("");
+      } catch {
+        setWaitlistStatus("error");
+      }
+    })();
+  };
+
+  const handleCheckout = (checkoutKey?: string): void => {
+    if (!checkoutKey) {
+      return;
+    }
+
+    setCheckoutStatus("idle");
+    void (async () => {
+      try {
+        const normalizedEmail =
+          user?.email ?? (email.trim().toLowerCase() || undefined);
+
+        const response = await fetch("/api/stripe/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            checkoutKey,
+            email: normalizedEmail,
+            userId: user?.id ?? null,
+            locale: i18n.language,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("checkout_failed");
+        }
+
+        const data = (await response.json()) as { url?: string };
+        if (!data.url) {
+          throw new Error("missing_checkout_url");
+        }
+
+        window.location.href = data.url;
+      } catch {
+        setCheckoutStatus("error");
+      }
+    })();
   };
 
   return (
@@ -160,11 +231,29 @@ export default function App() {
             <span>CookLab AI</span>
           </a>
           <nav className="nav-links">
-            <a href="#planner">Planner</a>
-            <a href="#menus">Workbench</a>
-            <a href="#lab">Experiment</a>
-            <a href="#support">Support</a>
-            <a href="#pricing">Pricing</a>
+            <a href="#planner">{t("nav.planner")}</a>
+            <a href="#menus">{t("nav.workbench")}</a>
+            <a href="#lab">{t("nav.experiment")}</a>
+            <a href="#support">{t("nav.support")}</a>
+            <a href="#pricing">{t("nav.pricing")}</a>
+            <button
+              type="button"
+              className={i18n.language === "zh-TW" ? "chip chip-active nav-lang" : "chip nav-lang"}
+              onClick={() => {
+                void i18n.changeLanguage("zh-TW");
+              }}
+            >
+              {t("common.chinese")}
+            </button>
+            <button
+              type="button"
+              className={i18n.language === "en" ? "chip chip-active nav-lang" : "chip nav-lang"}
+              onClick={() => {
+                void i18n.changeLanguage("en");
+              }}
+            >
+              {t("common.english")}
+            </button>
           </nav>
         </div>
       </header>
@@ -210,19 +299,33 @@ export default function App() {
           onSelectVariant={handleVariantSelect}
         />
 
+        <AuthSection
+          user={user}
+          loading={authLoading}
+          hasConfig={hasConfig}
+          onSignIn={signIn}
+          onSignUp={signUp}
+          onSignOut={signOut}
+        />
+
         <SupportSection rescueFeed={rescueFeed} reports={reports} contentPlans={weekOnePlan} />
 
         <PricingSection
           pricingPlans={pricingPlans}
           email={email}
           status={waitlistStatus}
+          checkoutStatus={checkoutStatus}
           onEmailChange={(value) => {
             setEmail(value);
             if (waitlistStatus !== "idle") {
               setWaitlistStatus("idle");
             }
+            if (checkoutStatus !== "idle") {
+              setCheckoutStatus("idle");
+            }
           }}
           onSubmit={handleWaitlistSubmit}
+          onCheckout={handleCheckout}
         />
       </main>
 
