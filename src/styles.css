@@ -1,13 +1,13 @@
 :root {
   color-scheme: light;
-  --bg: #fffbf5;
-  --ink: #1a1818;
-  --muted: #6b6764;
-  --accent: #c49a5a;
-  --accent-dark: #8b5a2b;
+  --bg: #f7f3ee;
+  --ink: #191715;
+  --muted: #5f5a55;
+  --accent: #b7693e;
+  --accent-soft: #f3ddcf;
   --paper: #ffffff;
-  --line: #efe6da;
-  --shadow: 0 20px 50px -12px rgba(26, 24, 24, 0.12);
+  --line: #eadfce;
+  --shadow: 0 20px 45px -22px rgba(25, 23, 21, 0.4);
 }
 
 * {
@@ -17,20 +17,27 @@
 body {
   margin: 0;
   font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 12% 0%, #f9e8d4 0%, transparent 36%),
+    radial-gradient(circle at 95% 18%, #f5ddcd 0%, transparent 30%),
+    var(--bg);
   color: var(--ink);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: "Noto Serif TC", "Playfair Display", serif;
-  margin: 0 0 12px;
-  line-height: 1.2;
+  margin: 0;
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 p {
-  margin: 0 0 12px;
+  margin: 0;
   color: var(--muted);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 a {
@@ -52,8 +59,8 @@ a {
 .nav {
   position: sticky;
   top: 0;
-  background: rgba(255, 251, 245, 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(247, 243, 238, 0.88);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
   z-index: 10;
 }
@@ -67,32 +74,35 @@ a {
 }
 
 .logo {
-  font-weight: 700;
-  letter-spacing: 0.6px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
   font-size: 14px;
 }
 
 .hero {
-  padding: 80px 0 60px;
+  padding: 92px 0 54px;
 }
 
 .hero-inner {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 40px;
+  display: flex;
   align-items: center;
+  gap: 40px;
+}
+
+.hero-inner > * {
+  flex: 1;
 }
 
 .badge {
   display: inline-flex;
-  background: #f5ede1;
-  color: var(--accent-dark);
+  background: var(--accent-soft);
+  color: #8a4521;
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 999px;
@@ -102,6 +112,8 @@ a {
 
 .lead {
   font-size: 18px;
+  margin-top: 14px;
+  max-width: 640px;
 }
 
 .actions {
@@ -113,7 +125,7 @@ a {
 
 .btn {
   border: 1px solid transparent;
-  padding: 12px 20px;
+  padding: 11px 18px;
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
@@ -134,21 +146,21 @@ a {
 }
 
 .btn-secondary {
-  background: #fff;
+  background: var(--paper);
   border-color: var(--line);
 }
 
 .btn-ghost {
   border-color: var(--line);
-  background: #fff;
+  background: var(--paper);
   font-size: 13px;
 }
 
 .hero-card {
-  background: #fff;
+  background: linear-gradient(154deg, #fff 0%, #fff8f1 100%);
   padding: 28px;
   border-radius: 24px;
-  border: 1px solid var(--line);
+  border: 1px solid #e8d8c5;
   box-shadow: var(--shadow);
 }
 
@@ -160,37 +172,43 @@ a {
 }
 
 .card-highlight {
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 700;
-  margin: 12px 0 10px;
+  margin: 14px 0 10px;
 }
 
 .card-footer {
-  color: var(--accent-dark);
+  color: #8a4521;
   font-weight: 600;
   margin-top: 18px;
 }
 
-.hero-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 28px;
-}
-
-.metric {
-  font-size: 20px;
-  font-weight: 700;
-}
-
 .section {
-  padding: 70px 0;
+  padding: 66px 0;
 }
 
 .section.split {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.92);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+}
+
+.positioning-line {
+  margin-top: 14px;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.slogan-list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 10px;
+  color: var(--muted);
 }
 
 .pain-grid {
@@ -201,7 +219,7 @@ a {
 }
 
 .pain {
-  background: #fff;
+  background: var(--paper);
   padding: 18px;
   border-radius: 16px;
   border: 1px solid var(--line);
@@ -215,15 +233,14 @@ a {
 }
 
 .feature-card {
-  background: #fff;
+  background: var(--paper);
   border-radius: 20px;
   padding: 24px;
   border: 1px solid var(--line);
 }
 
-.emoji {
-  font-size: 28px;
-  margin-bottom: 10px;
+.feature-card p {
+  margin-top: 10px;
 }
 
 .features-grid {
@@ -234,10 +251,18 @@ a {
 }
 
 .feature {
-  background: #fff;
+  background: var(--paper);
   border-radius: 18px;
   padding: 18px;
   border: 1px solid var(--line);
+}
+
+.feature p {
+  margin-top: 10px;
+}
+
+.section-lead {
+  margin-top: 14px;
 }
 
 .menu-list {
@@ -247,7 +272,7 @@ a {
 }
 
 .menu-item {
-  background: #fff;
+  background: var(--paper);
   border-radius: 14px;
   padding: 14px 18px;
   border: 1px solid var(--line);
@@ -262,7 +287,7 @@ a {
 }
 
 .report-card {
-  background: #fff;
+  background: var(--paper);
   border-radius: 18px;
   padding: 20px;
   border: 1px solid var(--line);
@@ -271,13 +296,43 @@ a {
   gap: 10px;
 }
 
+.report-card p {
+  margin-top: 4px;
+}
+
 .report-card span {
   font-weight: 600;
-  color: var(--accent-dark);
+  color: var(--accent);
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.plan-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.plan-card h3 {
+  font-size: 18px;
+}
+
+.plan-card ul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
 }
 
 .subscribe {
-  background: #1a1818;
+  background: #1b1917;
   color: #fff;
 }
 
@@ -296,6 +351,7 @@ a {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .subscribe-form input {
@@ -306,13 +362,18 @@ a {
 }
 
 .about {
-  background: #fff;
+  background: var(--paper);
   border-top: 1px solid var(--line);
+}
+
+.about p {
+  margin-top: 12px;
 }
 
 .footer {
   border-top: 1px solid var(--line);
   padding: 24px 0 36px;
+  background: rgba(255, 255, 255, 0.84);
 }
 
 .footer-inner {
@@ -335,9 +396,31 @@ a {
 
 @media (max-width: 900px) {
   .hero-inner {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
   }
   .nav-links {
     display: none;
+  }
+  .section {
+    padding: 58px 0;
+  }
+  .hero {
+    padding-top: 70px;
+  }
+  .lead {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 560px) {
+  .container {
+    width: min(1120px, 94%);
+  }
+  .btn {
+    width: 100%;
+  }
+  .subscribe-form input {
+    width: 100%;
   }
 }
