@@ -1,17 +1,23 @@
-export type Trend = "上升" | "下降" | "持平";
+export type Trend = "up" | "down" | "flat";
 
-export type SkillLevel = "新手" | "普通" | "熟手";
+export type SkillLevel = "Beginner" | "Intermediate" | "Advanced";
 
 export type GoalTag =
-  | "省錢優先"
-  | "少失敗優先"
-  | "快速上桌"
-  | "便當備餐"
-  | "想練技巧";
+  | "Weight Loss"
+  | "High Protein"
+  | "Budget Smart"
+  | "Quick Meals"
+  | "Family Prep"
+  | "Skill Building";
 
-export type Appliance = "氣炸鍋" | "平底鍋" | "湯鍋" | "電鍋" | "烤箱";
+export type Appliance = "Air Fryer" | "Skillet" | "Pot" | "Rice Cooker" | "Oven";
 
-export type IngredientSection = "蔬菜" | "蛋白質" | "乾貨調味" | "冷凍" | "主食";
+export type IngredientSection =
+  | "Produce"
+  | "Protein"
+  | "Pantry"
+  | "Frozen"
+  | "Carbs";
 
 export interface ExperimentVariant {
   id: string;
@@ -99,6 +105,7 @@ export interface UserProfile {
   mainGoal: GoalTag;
   appliances: Appliance[];
   pantry: string[];
+  fridgeItems: string[];
 }
 
 export interface QuickPreset {
@@ -130,12 +137,37 @@ export interface ScoredMenu extends MenuItem {
   adjustedCost: number;
   adjustedMarketCost: number;
   adjustedMinutes: number;
+  adjustedCalories: number;
+  adjustedProtein: number;
   estimatedSavings: number;
-  pantryHits: number;
+  fridgeHits: number;
   missingAppliances: Appliance[];
   eligible: boolean;
   score: number;
   why: string[];
+}
+
+export type WasteRisk = "Low" | "Medium" | "High";
+
+export interface FridgeRecoveryIdea {
+  item: string;
+  menuTitles: string[];
+}
+
+export interface FridgeInsights {
+  coverageRate: number;
+  coveredIngredients: number;
+  totalIngredients: number;
+  unusedItems: string[];
+  wasteRisk: WasteRisk;
+  recoveryIdeas: FridgeRecoveryIdea[];
+}
+
+export interface NutritionSummary {
+  weeklyCalories: number;
+  avgCaloriesPerMeal: number;
+  weeklyProtein: number;
+  avgProteinPerMeal: number;
 }
 
 export interface ShoppingListItem {

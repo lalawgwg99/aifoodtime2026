@@ -16,6 +16,7 @@ import {
   weekOnePlan,
 } from "./data/cooklab";
 import { HeroSection } from "./components/sections/HeroSection";
+import { FridgeSection } from "./components/sections/FridgeSection";
 import { PlannerSection } from "./components/sections/PlannerSection";
 import { MenuWorkbenchSection } from "./components/sections/MenuWorkbenchSection";
 import { ExperimentSection } from "./components/sections/ExperimentSection";
@@ -26,10 +27,13 @@ import { useLocalStorageState } from "./hooks/useLocalStorageState";
 import { useAuth } from "./hooks/useAuth";
 import {
   buildBudgetSummary,
+  buildFridgeInsights,
+  buildNutritionSummary,
   buildRescueFeed,
   buildShoppingList,
   formatLocalCurrency,
   getExperimentAdvice,
+  normalizeIngredientToken,
   scoreMenus,
 } from "./lib/planner";
 import { Appliance, QuickPreset, UserProfile } from "./types/cooklab";
@@ -59,30 +63,58 @@ export default function App() {
   const [email, setEmail] = useState("");
   const [waitlistStatus, setWaitlistStatus] = useState<"idle" | "error" | "success">("idle");
   const [checkoutStatus, setCheckoutStatus] = useState<"idle" | "error">("idle");
+  const currencyLocale = i18n.language === "zh-TW" ? "zh-TW" : "en";
 
-  const scoredMenus = useMemo(() => scoreMenus(menuItems, profile), [profile]);
+  const normalizedProfile = useMemo<UserProfile>(
+    () => ({
+      ...defaultProfile,
+      ...profile,
+      appliances: profile.appliances ?? defaultProfile.appliances,
+      pantry: profile.pantry ?? defaultProfile.pantry,
+      fridgeItems: profile.fridgeItems ?? defaultProfile.fridgeItems,
+    }),
+    [profile]
+  );
+
+  const scoredMenus = useMemo(() => scoreMenus(menuItems, normalizedProfile), [normalizedProfile]);
   const recommendedMenus = useMemo(
-    () => scoredMenus.filter((menu) => menu.eligible).slice(0, Math.max(profile.cookingDays, 3)),
-    [profile.cookingDays, scoredMenus]
+    () => scoredMenus.filter((menu) => menu.eligible).slice(0, Math.max(normalizedProfile.cookingDays, 3)),
+    [normalizedProfile.cookingDays, scoredMenus]
+  );
+  const fridgeTopMatches = useMemo(
+    () =>
+      scoredMenus
+        .filter((menu) => menu.eligible)
+        .sort((left, right) => right.fridgeHits - left.fridgeHits || right.score - left.score)
+        .slice(0, 3),
+    [scoredMenus]
   );
   const selectedMenus = useMemo(
     () => scoredMenus.filter((menu) => selectedMenuIds.includes(menu.id)),
     [scoredMenus, selectedMenuIds]
   );
   const budgetSummary = useMemo(
-    () => buildBudgetSummary(selectedMenus, profile),
-    [profile, selectedMenus]
+    () => buildBudgetSummary(selectedMenus, normalizedProfile),
+    [normalizedProfile, selectedMenus]
   );
   const shoppingGroups = useMemo(
-    () => buildShoppingList(selectedMenus, profile),
-    [profile, selectedMenus]
+    () => buildShoppingList(selectedMenus, normalizedProfile),
+    [normalizedProfile, selectedMenus]
+  );
+  const nutritionSummary = useMemo(
+    () => buildNutritionSummary(selectedMenus),
+    [selectedMenus]
+  );
+  const fridgeInsights = useMemo(
+    () => buildFridgeInsights(selectedMenus, scoredMenus, normalizedProfile),
+    [normalizedProfile, scoredMenus, selectedMenus]
   );
   const rescueFeed = useMemo(() => buildRescueFeed(selectedMenus).slice(0, 6), [selectedMenus]);
   const activeExperiment =
     experiments.find((experiment) => experiment.id === activeExperimentId) ?? experiments[0];
   const advice = useMemo(
-    () => getExperimentAdvice(activeExperiment, profile),
-    [activeExperiment, profile]
+    () => getExperimentAdvice(activeExperiment, normalizedProfile),
+    [activeExperiment, normalizedProfile]
   );
   const activeVariantId = variantMap[activeExperiment.id] ?? advice.variant.id;
 
@@ -104,24 +136,68 @@ export default function App() {
   const togglePantry = (ingredientKey: string): void => {
     setProfile((current) => ({
       ...current,
-      pantry: current.pantry.includes(ingredientKey)
-        ? current.pantry.filter((key) => key !== ingredientKey)
-        : [...current.pantry, ingredientKey],
+      pantry: (current.pantry ?? []).includes(ingredientKey)
+        ? (current.pantry ?? []).filter((key) => key !== ingredientKey)
+        : [...(current.pantry ?? []), ingredientKey],
+    }));
+  };
+
+  const addFridgeItems = (items: string[]): void => {
+    if (items.length === 0) {
+      return;
+    }
+
+    setProfile((current) => {
+      const currentFridge = current.fridgeItems ?? [];
+      const seen = new Set(currentFridge.map((entry) => normalizeIngredientToken(entry)));
+      const nextItems: string[] = [];
+
+      items.forEach((item) => {
+        const cleaned = item.trim();
+        if (!cleaned) {
+          return;
+        }
+        const token = normalizeIngredientToken(cleaned);
+        if (!token || seen.has(token)) {
+          return;
+        }
+        seen.add(token);
+        nextItems.push(cleaned);
+      });
+
+      if (nextItems.length === 0) {
+        return current;
+      }
+
+      return {
+        ...current,
+        fridgeItems: [...currentFridge, ...nextItems],
+      };
+    });
+  };
+
+  const removeFridgeItem = (item: string): void => {
+    const normalized = normalizeIngredientToken(item);
+    setProfile((current) => ({
+      ...current,
+      fridgeItems: (current.fridgeItems ?? []).filter(
+        (entry) => normalizeIngredientToken(entry) !== normalized
+      ),
     }));
   };
 
   const toggleAppliance = (appliance: Appliance): void => {
     setProfile((current) => ({
       ...current,
-      appliances: current.appliances.includes(appliance)
-        ? current.appliances.filter((item) => item !== appliance)
-        : [...current.appliances, appliance],
+      appliances: (current.appliances ?? []).includes(appliance)
+        ? (current.appliances ?? []).filter((item) => item !== appliance)
+        : [...(current.appliances ?? []), appliance],
     }));
   };
 
   const applyPreset = (preset: QuickPreset): void => {
     const nextProfile = {
-      ...profile,
+      ...normalizedProfile,
       ...preset.profile,
     };
     setProfile(nextProfile);
@@ -134,7 +210,7 @@ export default function App() {
   };
 
   const applyRecommendations = (): void => {
-    setSelectedMenuIds(recommendedMenus.slice(0, profile.cookingDays).map((menu) => menu.id));
+    setSelectedMenuIds(recommendedMenus.slice(0, normalizedProfile.cookingDays).map((menu) => menu.id));
   };
 
   const handleVariantSelect = (experimentId: string, variantId: string): void => {
@@ -231,6 +307,7 @@ export default function App() {
             <span>CookLab AI</span>
           </a>
           <nav className="nav-links">
+            <a href="#fridge">{t("nav.fridge")}</a>
             <a href="#planner">{t("nav.planner")}</a>
             <a href="#menus">{t("nav.workbench")}</a>
             <a href="#lab">{t("nav.experiment")}</a>
@@ -263,18 +340,36 @@ export default function App() {
           brandPositioning={brandPositioning}
           shortSlogans={shortSlogans}
           suggestedMenu={recommendedMenus[0]}
-          plannedSavingsLabel={formatLocalCurrency(budgetSummary.savings)}
+          plannedSavingsLabel={formatLocalCurrency(budgetSummary.savings, currencyLocale)}
           selectedCount={budgetSummary.selectedCount}
         />
 
+        <FridgeSection
+          fridgeItems={normalizedProfile.fridgeItems}
+          suggestions={[
+            "spinach",
+            "ground turkey",
+            "tofu",
+            "sweet potato",
+            "greek yogurt",
+            "salmon",
+          ]}
+          topMatches={fridgeTopMatches}
+          insights={fridgeInsights}
+          currencyLocale={currencyLocale}
+          onAddItems={addFridgeItems}
+          onRemoveItem={removeFridgeItem}
+        />
+
         <PlannerSection
-          profile={profile}
+          profile={normalizedProfile}
           presets={quickPresets}
           skillOptions={skillOptions}
           goalOptions={goalOptions}
           applianceOptions={applianceOptions}
           pantryOptions={pantryOptions}
           recommendedMenus={recommendedMenus}
+          currencyLocale={currencyLocale}
           onApplyPreset={applyPreset}
           onPatchProfile={patchProfile}
           onToggleAppliance={toggleAppliance}
@@ -287,6 +382,8 @@ export default function App() {
           selectedMenuIds={selectedMenuIds}
           shoppingGroups={shoppingGroups}
           budgetSummary={budgetSummary}
+          nutritionSummary={nutritionSummary}
+          currencyLocale={currencyLocale}
           onToggleMenu={toggleMenu}
         />
 
@@ -295,6 +392,7 @@ export default function App() {
           activeExperimentId={activeExperimentId}
           activeVariantId={activeVariantId}
           advice={advice}
+          currencyLocale={currencyLocale}
           onSelectExperiment={setActiveExperimentId}
           onSelectVariant={handleVariantSelect}
         />

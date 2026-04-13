@@ -5,6 +5,7 @@ const resources = {
   en: {
     translation: {
       nav: {
+        fridge: "Fridge",
         planner: "Planner",
         workbench: "Workbench",
         experiment: "Experiment",
@@ -53,6 +54,7 @@ const resources = {
   "zh-TW": {
     translation: {
       nav: {
+        fridge: "冰箱",
         planner: "規劃器",
         workbench: "工作台",
         experiment: "實驗室",

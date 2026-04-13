@@ -20,7 +20,7 @@ export function SupportSection({
         <div className="panel">
           <div className="section-heading compact-heading">
             <p className="section-kicker">Human rescue layer</p>
-            <h2>People stay when the product helps them recover from mistakes.</h2>
+            <h2>People stay when the product helps them recover fast.</h2>
           </div>
 
           <div className="rescue-list">
@@ -46,7 +46,7 @@ export function SupportSection({
           <div className="panel">
             <div className="section-heading compact-heading">
               <p className="section-kicker">Credibility assets</p>
-              <h2>Reports that convert trust into paid retention.</h2>
+              <h2>Reports that turn trust into paid retention.</h2>
             </div>
 
             <div className="report-list">
@@ -64,7 +64,7 @@ export function SupportSection({
           <div className="panel">
             <div className="section-heading compact-heading">
               <p className="section-kicker">Growth flywheel</p>
-              <h2>Content roadmap that feeds SEO, email, and paid conversion.</h2>
+              <h2>Content roadmap for SEO, social clips, and paid conversion.</h2>
             </div>
 
             <div className="content-roadmap">

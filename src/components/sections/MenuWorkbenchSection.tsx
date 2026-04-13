@@ -1,5 +1,5 @@
 import React from "react";
-import { ScoredMenu, ShoppingListGroup } from "../../types/cooklab";
+import { NutritionSummary, ScoredMenu, ShoppingListGroup } from "../../types/cooklab";
 import { formatLocalCurrency } from "../../lib/planner";
 
 interface MenuWorkbenchSectionProps {
@@ -13,6 +13,8 @@ interface MenuWorkbenchSectionProps {
     remainingBudget: number;
     selectedCount: number;
   };
+  nutritionSummary: NutritionSummary;
+  currencyLocale: string;
   onToggleMenu: (menuId: string) => void;
 }
 
@@ -21,6 +23,8 @@ export function MenuWorkbenchSection({
   selectedMenuIds,
   shoppingGroups,
   budgetSummary,
+  nutritionSummary,
+  currencyLocale,
   onToggleMenu,
 }: MenuWorkbenchSectionProps) {
   return (
@@ -29,18 +33,18 @@ export function MenuWorkbenchSection({
         <div className="panel">
           <div className="section-heading">
             <p className="section-kicker">Plan workbench</p>
-            <h2>Let users edit the stack without destroying the recommendation logic.</h2>
+            <h2>Let users edit the stack without breaking recommendation quality.</h2>
             <p>
-              A paid tool needs control. The user can override the plan, but CookLab still keeps
-              budget, time, and rescue context in sync.
+              A paid planner needs control. Users can override picks while budget, shopping, and
+              rescue context stay synced.
             </p>
           </div>
 
           <div className="commercial-strip">
             <strong>Pro conversion hook</strong>
             <span>
-              Save pantry memory, regenerate the week in one tap, and export the shopping list to
-              messaging apps.
+              Save fridge memory, regenerate weekly plans in one tap, and export shopping lists to
+              chat apps.
             </span>
           </div>
 
@@ -70,9 +74,10 @@ export function MenuWorkbenchSection({
                   </div>
 
                   <div className="mini-stat-row">
-                    <span>{formatLocalCurrency(menu.adjustedCost)}</span>
+                    <span>{formatLocalCurrency(menu.adjustedCost, currencyLocale)}</span>
                     <span>{menu.adjustedMinutes} min</span>
                     <span>stability {menu.stabilityScore}</span>
+                    <span>{menu.adjustedProtein} g protein</span>
                   </div>
 
                   <p className="menu-note">{menu.heroNote}</p>
@@ -103,15 +108,15 @@ export function MenuWorkbenchSection({
           <div className="summary-stack">
             <article className="summary-tile">
               <span>Planned cost</span>
-              <strong>{formatLocalCurrency(budgetSummary.plannedCost)}</strong>
+              <strong>{formatLocalCurrency(budgetSummary.plannedCost, currencyLocale)}</strong>
             </article>
             <article className="summary-tile">
               <span>Market cost</span>
-              <strong>{formatLocalCurrency(budgetSummary.marketCost)}</strong>
+              <strong>{formatLocalCurrency(budgetSummary.marketCost, currencyLocale)}</strong>
             </article>
             <article className="summary-tile">
               <span>Savings</span>
-              <strong>{formatLocalCurrency(budgetSummary.savings)}</strong>
+              <strong>{formatLocalCurrency(budgetSummary.savings, currencyLocale)}</strong>
             </article>
             <article
               className={
@@ -121,7 +126,15 @@ export function MenuWorkbenchSection({
               }
             >
               <span>Budget left</span>
-              <strong>{formatLocalCurrency(budgetSummary.remainingBudget)}</strong>
+              <strong>{formatLocalCurrency(budgetSummary.remainingBudget, currencyLocale)}</strong>
+            </article>
+            <article className="summary-tile">
+              <span>Avg calories / meal</span>
+              <strong>{nutritionSummary.avgCaloriesPerMeal} kcal</strong>
+            </article>
+            <article className="summary-tile">
+              <span>Avg protein / meal</span>
+              <strong>{nutritionSummary.avgProteinPerMeal} g</strong>
             </article>
           </div>
 
@@ -139,10 +152,14 @@ export function MenuWorkbenchSection({
                     <article className="shopping-item" key={item.key}>
                       <div className="shopping-head">
                         <strong>{item.name}</strong>
-                        <span>{item.fromPantry ? "From pantry" : formatLocalCurrency(item.totalCost)}</span>
+                        <span>
+                          {item.fromPantry
+                            ? "From pantry"
+                            : formatLocalCurrency(item.totalCost, currencyLocale)}
+                        </span>
                       </div>
                       <p>{item.amounts.join(" / ")}</p>
-                      <p className="shopping-meta">Used in {item.menus.join("、")}</p>
+                      <p className="shopping-meta">Used in {item.menus.join(", ")}</p>
                     </article>
                   ))}
                 </div>

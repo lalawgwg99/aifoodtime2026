@@ -1,6 +1,9 @@
 # CookLab AI
 
-Monetizable cooking planner with:
+Global fridge-to-recipe SaaS foundation focused on low API cost:
+- Deterministic fridge matching and weekly scoring (no mandatory LLM calls)
+- Nutrition and protein estimation from local ingredient profiles
+- Waste-risk insights and recovery meal suggestions
 - Supabase auth (email/password)
 - Waitlist backend (Supabase table write)
 - Stripe checkout session backend
@@ -102,3 +105,5 @@ for each row execute function public.set_updated_at();
 - Frontend auth requires `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`.
 - Backend waitlist and checkout require server env values; missing values return explicit API errors.
 - Current checkout key map is in `api/stripe/checkout.ts`.
+- Currency rendering uses TWD as internal base and auto-displays USD for `en` locale.
+- Product core is intentionally deterministic-first to keep infrastructure margins healthy.

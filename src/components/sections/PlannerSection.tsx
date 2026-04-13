@@ -18,6 +18,7 @@ interface PlannerSectionProps {
   applianceOptions: Appliance[];
   pantryOptions: OptionItem[];
   recommendedMenus: ScoredMenu[];
+  currencyLocale: string;
   onApplyPreset: (preset: QuickPreset) => void;
   onPatchProfile: (patch: Partial<UserProfile>) => void;
   onToggleAppliance: (appliance: Appliance) => void;
@@ -33,6 +34,7 @@ export function PlannerSection({
   applianceOptions,
   pantryOptions,
   recommendedMenus,
+  currencyLocale,
   onApplyPreset,
   onPatchProfile,
   onToggleAppliance,
@@ -46,11 +48,11 @@ export function PlannerSection({
       <div className="container grid-2">
         <div className="panel planner-panel">
           <div className="section-heading">
-            <p className="section-kicker">Human-centered planning</p>
-            <h2>Start from real household constraints, not idealized recipe dreams.</h2>
+            <p className="section-kicker">Goal-based planning</p>
+            <h2>Convert fridge matches into a realistic weekly plan.</h2>
             <p>
-              This is the part people pay for: the planner remembers budget, time, skill, tools,
-              and pantry reality, then turns that into a weekly answer.
+              This is where free traffic converts. Users set real constraints, then CookLab turns
+              ingredient matches into a repeatable meal stack.
             </p>
           </div>
 
@@ -88,7 +90,7 @@ export function PlannerSection({
             <label className="control-card">
               <span className="control-top">
                 <span>Weekly budget</span>
-                <strong>{formatLocalCurrency(profile.weeklyBudget)}</strong>
+                <strong>{formatLocalCurrency(profile.weeklyBudget, currencyLocale)}</strong>
               </span>
               <input
                 type="range"
@@ -209,11 +211,11 @@ export function PlannerSection({
 
         <aside className="panel recommendation-panel">
           <div className="section-heading">
-            <p className="section-kicker">What the user sees</p>
-            <h2>CookLab's recommended weekly stack</h2>
+            <p className="section-kicker">Planner output</p>
+            <h2>Recommended weekly stack</h2>
             <p>
-              These are scored against budget, time, appliances, pantry matches, and your chosen
-              goal. This is the core retention loop.
+              Scored by fridge overlap, budget, time, skill, and appliance constraints. This is
+              the repeat-value loop that supports subscription.
             </p>
           </div>
 
@@ -229,9 +231,10 @@ export function PlannerSection({
                 </div>
 
                 <div className="mini-stat-row">
-                  <span>{formatLocalCurrency(menu.adjustedCost)}</span>
+                  <span>{formatLocalCurrency(menu.adjustedCost, currencyLocale)}</span>
                   <span>{menu.adjustedMinutes} min</span>
-                  <span>score {menu.score}</span>
+                  <span>{menu.adjustedProtein} g protein</span>
+                  <span>{menu.adjustedCalories} kcal</span>
                 </div>
 
                 <div className="reason-list">

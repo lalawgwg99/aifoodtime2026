@@ -7,6 +7,7 @@ interface ExperimentSectionProps {
   activeExperimentId: string;
   activeVariantId: string;
   advice: ExperimentAdvice;
+  currencyLocale: string;
   onSelectExperiment: (experimentId: string) => void;
   onSelectVariant: (experimentId: string, variantId: string) => void;
 }
@@ -16,6 +17,7 @@ export function ExperimentSection({
   activeExperimentId,
   activeVariantId,
   advice,
+  currencyLocale,
   onSelectExperiment,
   onSelectVariant,
 }: ExperimentSectionProps) {
@@ -27,10 +29,10 @@ export function ExperimentSection({
       <div className="container">
         <div className="section-heading">
           <p className="section-kicker">Trust engine</p>
-          <h2>Experiments justify the subscription.</h2>
+          <h2>Experiments defend retention and pricing power.</h2>
           <p>
-            Users do not pay for recipes. They pay for reduced uncertainty. The experiment layer is
-            what makes the planner defensible.
+            Users do not pay for recipe text. They pay for fewer bad outcomes. Experiment cards turn
+            uncertain kitchen decisions into repeatable playbooks.
           </p>
         </div>
 
@@ -105,7 +107,7 @@ export function ExperimentSection({
 
                 <div className="experiment-meta">
                   <span>{variant.cookMinutes} min</span>
-                  <span>{formatLocalCurrency(variant.estimatedCost)}</span>
+                  <span>{formatLocalCurrency(variant.estimatedCost, currencyLocale)}</span>
                   <span>{variant.requiredSkill}</span>
                 </div>
 

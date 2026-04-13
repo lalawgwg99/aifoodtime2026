@@ -21,24 +21,25 @@ export function HeroSection({
       <div className="container hero-grid">
         <div className="hero-copy">
           <div className="eyebrow-row">
-            <span className="eyebrow">Global consumer product</span>
-            <span className="eyebrow eyebrow-muted">Taiwan market beta inside</span>
+            <span className="eyebrow">Global traffic theme</span>
+            <span className="eyebrow eyebrow-muted">Fridge-to-Recipe + Goal Planner</span>
           </div>
 
-          <h1>Build a cooking product people will pay for, not another recipe brochure.</h1>
+          <h1>Turn what is in your fridge into goal-based weekly meals.</h1>
           <p className="hero-lead">
-            CookLab AI turns verified recipes, grocery intelligence, shopping logic, and failure rescue
-            into a weekly operating system for home cooks. The planner below uses Taiwan demo pricing,
-            while the product structure is built for a global subscription launch.
+            This version is designed for traffic and conversion: high-frequency search intent
+            ("what can I cook with..."), then an upgrade path into paid weekly planning and
+            shopping automation. Core recommendations run on deterministic scoring so infra spend
+            stays predictable.
           </p>
           <p className="hero-positioning">{brandPositioning}</p>
 
           <div className="hero-actions">
-            <a className="button button-primary" href="#planner">
-              Rebuild the planner
+            <a className="button button-primary" href="#fridge">
+              Add fridge ingredients
             </a>
             <a className="button button-secondary" href="#pricing">
-              Inspect pricing model
+              View pricing model
             </a>
           </div>
 
@@ -52,27 +53,27 @@ export function HeroSection({
         </div>
 
         <aside className="hero-card">
-          <p className="card-label">Why this can monetize</p>
-          <h2>Weekly planning, rescue guidance, and market-aware grocery logic create repeat value.</h2>
+          <p className="card-label">Monetization thesis</p>
+          <h2>Free fridge matching drives traffic. Goal planning and automation drive subscriptions.</h2>
           <div className="hero-stats">
             <article>
               <strong>{selectedCount}</strong>
-              <span>meals currently in plan</span>
+              <span>meals in active plan</span>
             </article>
             <article>
               <strong>{plannedSavingsLabel}</strong>
-              <span>demo savings with current stack</span>
+              <span>estimated weekly savings</span>
             </article>
             <article>
               <strong>{suggestedMenu?.adjustedMinutes ?? 0} min</strong>
-              <span>for the top suggested dish</span>
+              <span>for top recommended dish</span>
             </article>
           </div>
 
           <div className="hero-card-note">
-            <p className="card-label">Tonight's best fit</p>
-            <strong>{suggestedMenu?.title ?? "Choose your first market-ready menu"}</strong>
-            <p>{suggestedMenu?.heroNote ?? "Once preferences are set, CookLab tells the user what to cook first."}</p>
+            <p className="card-label">Best next meal</p>
+            <strong>{suggestedMenu?.title ?? "Add ingredients to start matching"}</strong>
+            <p>{suggestedMenu?.heroNote ?? "CookLab will rank meals after your fridge inventory is set."}</p>
           </div>
         </aside>
       </div>
