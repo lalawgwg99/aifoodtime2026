@@ -513,8 +513,8 @@ export const pricingPlans: PricingPlan[] = [
   {
     id: "pro",
     name: "CookLab Pro",
-    priceLabel: "$19",
-    billingNote: "per month",
+    priceLabel: "$0",
+    billingNote: "Limited-time free access",
     audience: "For weekly meal planners",
     description: "Full planner with personalization, shopping automation, and rescue workflows.",
     features: [
@@ -524,15 +524,14 @@ export const pricingPlans: PricingPlan[] = [
       "Failure rescue playbooks",
       "Full experiment library",
     ],
-    cta: "Start Pro",
-    checkoutKey: "pro_monthly",
+    cta: "Use Pro for free",
     featured: true,
   },
   {
     id: "creator",
     name: "Creator Studio",
-    priceLabel: "$79",
-    billingNote: "per month",
+    priceLabel: "$0",
+    billingNote: "Limited-time free access",
     audience: "For coaches and creators",
     description: "Build and monetize custom meal systems on top of CookLab logic.",
     features: [
@@ -542,6 +541,6 @@ export const pricingPlans: PricingPlan[] = [
       "Export-ready client reports",
       "Priority feature requests",
     ],
-    cta: "Talk to sales",
+    cta: "Use Studio for free",
   },
 ];
