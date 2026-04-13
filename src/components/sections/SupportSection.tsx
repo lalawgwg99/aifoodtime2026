@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ContentPlan, Report, RescueFeedItem } from "../../types/cooklab";
 
 interface SupportSectionProps {
@@ -13,14 +14,15 @@ export function SupportSection({
   contentPlans,
 }: SupportSectionProps) {
   const topPlans = contentPlans.slice(0, 3);
+  const { t } = useTranslation();
 
   return (
     <section className="section" id="support">
       <div className="container support-grid">
         <div className="panel">
           <div className="section-heading compact-heading">
-            <p className="section-kicker">Human rescue layer</p>
-            <h2>People stay when the product helps them recover fast.</h2>
+            <p className="section-kicker">{t("support.kicker")}</p>
+            <h2>{t("support.title")}</h2>
           </div>
 
           <div className="rescue-list">
@@ -29,13 +31,13 @@ export function SupportSection({
                 <p className="card-label">{item.menuTitle}</p>
                 <h3>{item.scenario.title}</h3>
                 <p>
-                  <strong>Symptom:</strong> {item.scenario.symptom}
+                  <strong>{t("support.symptom")} </strong> {item.scenario.symptom}
                 </p>
                 <p>
-                  <strong>Fix now:</strong> {item.scenario.fix}
+                  <strong>{t("support.fix")} </strong> {item.scenario.fix}
                 </p>
                 <p>
-                  <strong>Prevent next time:</strong> {item.scenario.prevention}
+                  <strong>{t("support.prevent")} </strong> {item.scenario.prevention}
                 </p>
               </article>
             ))}
@@ -45,14 +47,14 @@ export function SupportSection({
         <div className="support-column">
           <div className="panel">
             <div className="section-heading compact-heading">
-              <p className="section-kicker">Credibility assets</p>
-              <h2>Reports that turn trust into paid retention.</h2>
+              <p className="section-kicker">{t("support.reportKicker")}</p>
+              <h2>{t("support.reportTitle")}</h2>
             </div>
 
             <div className="report-list">
               {reports.map((report) => (
                 <article className="report-card" key={report.title}>
-                  <span className="report-confidence">{report.confidence}% confidence</span>
+                  <span className="report-confidence">{t("support.confidence", { confidence: report.confidence })}</span>
                   <h3>{report.title}</h3>
                   <p>{report.summary}</p>
                   <div className="report-finding">{report.keyFinding}</div>
@@ -63,8 +65,8 @@ export function SupportSection({
 
           <div className="panel">
             <div className="section-heading compact-heading">
-              <p className="section-kicker">Growth flywheel</p>
-              <h2>Content roadmap for SEO, social clips, and paid conversion.</h2>
+              <p className="section-kicker">{t("support.roadmapKicker")}</p>
+              <h2>{t("support.roadmapTitle")}</h2>
             </div>
 
             <div className="content-roadmap">

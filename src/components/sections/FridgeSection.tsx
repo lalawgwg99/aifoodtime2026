@@ -1,4 +1,5 @@
 import React, { FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FridgeInsights, ScoredMenu } from "../../types/cooklab";
 import { formatLocalCurrency } from "../../lib/planner";
 
@@ -22,6 +23,7 @@ export function FridgeSection({
   onRemoveItem,
 }: FridgeSectionProps) {
   const [input, setInput] = useState("");
+  const { t } = useTranslation();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,12 +44,9 @@ export function FridgeSection({
       <div className="container grid-2">
         <div className="panel">
           <div className="section-heading">
-            <p className="section-kicker">Fridge-first engine</p>
-            <h2>Start from ingredients you already own.</h2>
-            <p>
-              This is the low-cost core: deterministic matching and scoring first, optional AI layer
-              later. No expensive model call needed to generate value.
-            </p>
+            <p className="section-kicker">{t("fridge.kicker")}</p>
+            <h2>{t("fridge.title")}</h2>
+            <p>{t("fridge.desc")}</p>
           </div>
 
           <form className="waitlist-form" onSubmit={handleSubmit}>
@@ -55,17 +54,17 @@ export function FridgeSection({
               type="text"
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Add one or many items: chicken breast, spinach, mushrooms"
+              placeholder={t("fridge.placeholder")}
               aria-label="Add fridge item"
             />
             <button type="submit" className="button button-primary">
-              Add ingredient
+              {t("fridge.add")}
             </button>
           </form>
 
           <div className="selector-group">
             <div>
-              <p className="selector-title">Quick add</p>
+              <p className="selector-title">{t("fridge.quickAdd")}</p>
               <div className="chip-row">
                 {suggestions.map((item) => (
                   <button
@@ -81,9 +80,9 @@ export function FridgeSection({
             </div>
 
             <div>
-              <p className="selector-title">Current fridge inventory</p>
+              <p className="selector-title">{t("fridge.inventory")}</p>
               <div className="chip-row">
-                {fridgeItems.length === 0 && <span className="empty-note">No items yet.</span>}
+                {fridgeItems.length === 0 && <span className="empty-note">{t("fridge.empty")}</span>}
                 {fridgeItems.map((item) => (
                   <button
                     type="button"
@@ -100,27 +99,24 @@ export function FridgeSection({
 
             <div className="fridge-insight-grid">
               <article className="fridge-insight-card">
-                <span>Ingredient coverage</span>
+                <span>{t("fridge.coverage")}</span>
                 <strong>{Math.round(insights.coverageRate * 100)}%</strong>
-                <p>
-                  {insights.coveredIngredients}/{insights.totalIngredients} selected ingredients are
-                  already in fridge or pantry.
-                </p>
+                <p>{t("fridge.coverageDesc", { covered: insights.coveredIngredients, total: insights.totalIngredients })}</p>
               </article>
               <article className="fridge-insight-card">
-                <span>Waste risk</span>
+                <span>{t("fridge.waste")}</span>
                 <strong>{insights.wasteRisk}</strong>
                 <p>
                   {insights.unusedItems.length === 0
-                    ? "No stranded ingredients right now."
-                    : `${insights.unusedItems.length} fridge items are currently unused.`}
+                    ? t("fridge.wasteNone")
+                    : t("fridge.wasteCount", { count: insights.unusedItems.length })}
                 </p>
               </article>
             </div>
 
             {insights.recoveryIdeas.length > 0 && (
               <div>
-                <p className="selector-title">Recovery ideas for unused items</p>
+                <p className="selector-title">{t("fridge.recoveryTitle")}</p>
                 <div className="recovery-list">
                   {insights.recoveryIdeas.map((idea) => (
                     <article key={idea.item} className="recovery-item">
@@ -136,15 +132,15 @@ export function FridgeSection({
 
         <aside className="panel recommendation-panel">
           <div className="section-heading compact-heading">
-            <p className="section-kicker">Fridge match results</p>
-            <h2>Top meals based on current fridge state</h2>
+            <p className="section-kicker">{t("fridge.resultsKicker")}</p>
+            <h2>{t("fridge.resultsTitle")}</h2>
           </div>
 
           <div className="recommendation-list">
             {topMatches.length === 0 && (
               <article className="recommendation-card">
-                <h3>No matches yet</h3>
-                <p>Add ingredients first and CookLab will rank meals automatically.</p>
+                <h3>{t("fridge.noMatchesTitle")}</h3>
+                <p>{t("fridge.noMatchesDesc")}</p>
               </article>
             )}
             {topMatches.map((menu) => (

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Experiment, ExperimentAdvice } from "../../types/cooklab";
 import { formatLocalCurrency } from "../../lib/planner";
 
@@ -23,17 +24,15 @@ export function ExperimentSection({
 }: ExperimentSectionProps) {
   const activeExperiment =
     experiments.find((experiment) => experiment.id === activeExperimentId) ?? experiments[0];
+  const { t } = useTranslation();
 
   return (
     <section className="section section-surface" id="lab">
       <div className="container">
         <div className="section-heading">
-          <p className="section-kicker">Trust engine</p>
-          <h2>Experiments defend retention and pricing power.</h2>
-          <p>
-            Users do not pay for recipe text. They pay for fewer bad outcomes. Experiment cards turn
-            uncertain kitchen decisions into repeatable playbooks.
-          </p>
+          <p className="section-kicker">{t("experiment.kicker")}</p>
+          <h2>{t("experiment.title")}</h2>
+          <p>{t("experiment.desc")}</p>
         </div>
 
         <div className="experiment-tabs">
@@ -50,7 +49,7 @@ export function ExperimentSection({
         </div>
 
         <div className="experiment-banner">
-          <strong>CookLab recommendation</strong>
+          <strong>{t("experiment.reco")}</strong>
           <p>{advice.reason}</p>
         </div>
 
@@ -76,28 +75,28 @@ export function ExperimentSection({
                     <p>{variant.note}</p>
                   </div>
                   <div className="badge-stack">
-                    {recommended && <span className="status-pill">Recommended</span>}
-                    {selected && <span className="status-pill status-pill-dark">Inspecting</span>}
+                    {recommended && <span className="status-pill">{t("experiment.recommended")}</span>}
+                    {selected && <span className="status-pill status-pill-dark">{t("experiment.inspecting")}</span>}
                   </div>
                 </div>
 
                 <div className="metric-list">
                   <div className="metric-line">
-                    <span>Success rate</span>
+                    <span>{t("experiment.success")}</span>
                     <strong>{variant.successRate}%</strong>
                   </div>
                   <div className="meter">
                     <span style={{ width: `${variant.successRate}%` }} />
                   </div>
                   <div className="metric-line">
-                    <span>Stability</span>
+                    <span>{t("experiment.stability")}</span>
                     <strong>{variant.stabilityScore}/100</strong>
                   </div>
                   <div className="meter meter-alt">
                     <span style={{ width: `${variant.stabilityScore}%` }} />
                   </div>
                   <div className="metric-line">
-                    <span>Texture</span>
+                    <span>{t("experiment.texture")}</span>
                     <strong>{variant.textureScore}/100</strong>
                   </div>
                   <div className="meter meter-alt-2">
@@ -112,10 +111,10 @@ export function ExperimentSection({
                 </div>
 
                 <p className="experiment-callout">
-                  <strong>Best for:</strong> {variant.bestFor}
+                  <strong>{t("experiment.bestFor")} </strong> {variant.bestFor}
                 </p>
                 <p className="experiment-callout">
-                  <strong>Quick fix:</strong> {variant.quickFix}
+                  <strong>{t("experiment.quickFix")} </strong> {variant.quickFix}
                 </p>
 
                 <button
@@ -123,7 +122,7 @@ export function ExperimentSection({
                   className={selected ? "button button-secondary full-width" : "button button-ghost full-width"}
                   onClick={() => onSelectVariant(activeExperiment.id, variant.id)}
                 >
-                  {selected ? "Selected for inspection" : "Inspect this variant"}
+                  {selected ? t("experiment.selected") : t("experiment.inspect")}
                 </button>
               </article>
             );

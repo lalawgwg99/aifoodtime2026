@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { NutritionSummary, ScoredMenu, ShoppingListGroup } from "../../types/cooklab";
 import { formatLocalCurrency } from "../../lib/planner";
 
@@ -27,25 +28,21 @@ export function MenuWorkbenchSection({
   currencyLocale,
   onToggleMenu,
 }: MenuWorkbenchSectionProps) {
+  const { t } = useTranslation();
+
   return (
     <section className="section" id="menus">
       <div className="container workbench-grid">
         <div className="panel">
           <div className="section-heading">
-            <p className="section-kicker">Plan workbench</p>
-            <h2>Let users edit the stack without breaking recommendation quality.</h2>
-            <p>
-              A paid planner needs control. Users can override picks while budget, shopping, and
-              rescue context stay synced.
-            </p>
+            <p className="section-kicker">{t("workbench.kicker")}</p>
+            <h2>{t("workbench.title")}</h2>
+            <p>{t("workbench.desc")}</p>
           </div>
 
           <div className="commercial-strip">
-            <strong>Pro conversion hook</strong>
-            <span>
-              Save fridge memory, regenerate weekly plans in one tap, and export shopping lists to
-              chat apps.
-            </span>
+            <strong>{t("workbench.hookTitle")}</strong>
+            <span>{t("workbench.hookDesc")}</span>
           </div>
 
           <div className="menu-grid">
@@ -69,19 +66,21 @@ export function MenuWorkbenchSection({
                       <p>{menu.description}</p>
                     </div>
                     <span className={menu.eligible ? "status-pill" : "status-pill status-pill-warn"}>
-                      {menu.eligible ? "Ready" : `Needs ${menu.missingAppliances.join(" / ")}`}
+                      {menu.eligible
+                        ? t("workbench.ready")
+                        : t("workbench.needs", { gear: menu.missingAppliances.join(" / ") })}
                     </span>
                   </div>
 
                   <div className="mini-stat-row">
                     <span>{formatLocalCurrency(menu.adjustedCost, currencyLocale)}</span>
                     <span>{menu.adjustedMinutes} min</span>
-                    <span>stability {menu.stabilityScore}</span>
-                    <span>{menu.adjustedProtein} g protein</span>
+                    <span>{t("workbench.stability", { score: menu.stabilityScore })}</span>
+                    <span>{t("workbench.protein", { grams: menu.adjustedProtein })}</span>
                   </div>
 
                   <p className="menu-note">{menu.heroNote}</p>
-                  <p className="menu-leftover">Leftover logic: {menu.leftoverPlan}</p>
+                  <p className="menu-leftover">{t("workbench.leftover", { plan: menu.leftoverPlan })}</p>
 
                   <div className="reason-list">
                     {menu.why.map((reason) => (
@@ -96,7 +95,7 @@ export function MenuWorkbenchSection({
                     className={selected ? "button button-secondary full-width" : "button button-ghost full-width"}
                     onClick={() => onToggleMenu(menu.id)}
                   >
-                    {selected ? "Remove from week" : "Add to week"}
+                    {selected ? t("workbench.remove") : t("workbench.add")}
                   </button>
                 </article>
               );
@@ -107,15 +106,15 @@ export function MenuWorkbenchSection({
         <aside className="panel aside-panel">
           <div className="summary-stack">
             <article className="summary-tile">
-              <span>Planned cost</span>
+              <span>{t("workbench.planned")}</span>
               <strong>{formatLocalCurrency(budgetSummary.plannedCost, currencyLocale)}</strong>
             </article>
             <article className="summary-tile">
-              <span>Market cost</span>
+              <span>{t("workbench.market")}</span>
               <strong>{formatLocalCurrency(budgetSummary.marketCost, currencyLocale)}</strong>
             </article>
             <article className="summary-tile">
-              <span>Savings</span>
+              <span>{t("workbench.savings")}</span>
               <strong>{formatLocalCurrency(budgetSummary.savings, currencyLocale)}</strong>
             </article>
             <article
@@ -125,23 +124,23 @@ export function MenuWorkbenchSection({
                   : "summary-tile summary-tile-negative"
               }
             >
-              <span>Budget left</span>
+              <span>{t("workbench.left")}</span>
               <strong>{formatLocalCurrency(budgetSummary.remainingBudget, currencyLocale)}</strong>
             </article>
             <article className="summary-tile">
-              <span>Avg calories / meal</span>
+              <span>{t("workbench.calories")}</span>
               <strong>{nutritionSummary.avgCaloriesPerMeal} kcal</strong>
             </article>
             <article className="summary-tile">
-              <span>Avg protein / meal</span>
+              <span>{t("workbench.proteinAvg")}</span>
               <strong>{nutritionSummary.avgProteinPerMeal} g</strong>
             </article>
           </div>
 
           <div className="shopping-panel">
             <div className="section-heading compact-heading">
-              <p className="section-kicker">Auto-built shopping list</p>
-              <h2>Shopping list stays synced with the plan.</h2>
+              <p className="section-kicker">{t("workbench.shoppingKicker")}</p>
+              <h2>{t("workbench.shoppingTitle")}</h2>
             </div>
 
             {shoppingGroups.map((group) => (
@@ -154,12 +153,12 @@ export function MenuWorkbenchSection({
                         <strong>{item.name}</strong>
                         <span>
                           {item.fromPantry
-                            ? "From pantry"
+                            ? t("workbench.fromPantry")
                             : formatLocalCurrency(item.totalCost, currencyLocale)}
                         </span>
                       </div>
                       <p>{item.amounts.join(" / ")}</p>
-                      <p className="shopping-meta">Used in {item.menus.join(", ")}</p>
+                      <p className="shopping-meta">{t("workbench.usedIn", { menus: item.menus.join(", ") })}</p>
                     </article>
                   ))}
                 </div>

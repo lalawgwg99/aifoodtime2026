@@ -1,24 +1,24 @@
 :root {
   color-scheme: light;
-  --bg: #f5f1e8;
-  --surface: #fcfaf5;
-  --surface-2: #f2eee3;
-  --panel: rgba(255, 255, 255, 0.82);
+  --bg: #f2f4f6;
+  --surface: #f9fafb;
+  --surface-2: #edf1f4;
+  --panel: rgba(255, 255, 255, 0.9);
   --panel-strong: #ffffff;
-  --ink: #18201c;
-  --muted: #59655e;
-  --line: rgba(44, 68, 55, 0.14);
-  --line-strong: rgba(44, 68, 55, 0.28);
-  --primary: #214b3b;
-  --primary-2: #2f6b50;
-  --accent: #d6713f;
-  --accent-soft: rgba(214, 113, 63, 0.14);
+  --ink: #0f1c24;
+  --muted: #5a6a78;
+  --line: rgba(25, 48, 66, 0.12);
+  --line-strong: rgba(25, 48, 66, 0.24);
+  --primary: #0f6c5c;
+  --primary-2: #0c8f73;
+  --accent: #f08a24;
+  --accent-soft: rgba(240, 138, 36, 0.15);
   --success: #2f7a57;
   --success-soft: rgba(47, 122, 87, 0.12);
-  --danger: #a95532;
-  --danger-soft: rgba(169, 85, 50, 0.12);
-  --shadow-lg: 0 32px 90px -42px rgba(24, 32, 28, 0.34);
-  --shadow-md: 0 18px 48px -28px rgba(24, 32, 28, 0.24);
+  --danger: #c14c3b;
+  --danger-soft: rgba(193, 76, 59, 0.12);
+  --shadow-lg: 0 32px 90px -42px rgba(12, 27, 39, 0.35);
+  --shadow-md: 0 18px 48px -28px rgba(12, 27, 39, 0.25);
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-md: 14px;
@@ -36,12 +36,12 @@ html {
 body {
   margin: 0;
   color: var(--ink);
-  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
   background:
-    radial-gradient(circle at 0% 0%, rgba(126, 168, 131, 0.26), transparent 26%),
-    radial-gradient(circle at 100% 10%, rgba(227, 163, 113, 0.26), transparent 28%),
-    radial-gradient(circle at 86% 92%, rgba(145, 175, 151, 0.22), transparent 24%),
-    linear-gradient(180deg, #f9f4e9 0%, #f3efe7 100%);
+    radial-gradient(circle at 12% 18%, rgba(15, 108, 92, 0.12), transparent 26%),
+    radial-gradient(circle at 88% 12%, rgba(240, 138, 36, 0.12), transparent 24%),
+    radial-gradient(circle at 70% 88%, rgba(12, 143, 115, 0.14), transparent 28%),
+    linear-gradient(180deg, #f7f9fb 0%, #eef1f5 100%);
 }
 
 h1,
@@ -57,7 +57,7 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-family: "Noto Serif TC", "Playfair Display", serif;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
   line-height: 1.14;
   letter-spacing: -0.01em;
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Appliance,
   GoalTag,
@@ -42,18 +43,16 @@ export function PlannerSection({
   onApplyRecommendations,
 }: PlannerSectionProps) {
   const topMenus = recommendedMenus.slice(0, Math.max(3, profile.cookingDays));
+  const { t } = useTranslation();
 
   return (
     <section className="section section-surface" id="planner">
       <div className="container grid-2">
         <div className="panel planner-panel">
           <div className="section-heading">
-            <p className="section-kicker">Goal-based planning</p>
-            <h2>Convert fridge matches into a realistic weekly plan.</h2>
-            <p>
-              This is where free traffic converts. Users set real constraints, then CookLab turns
-              ingredient matches into a repeatable meal stack.
-            </p>
+            <p className="section-kicker">{t("planner.kicker")}</p>
+            <h2>{t("planner.title")}</h2>
+            <p>{t("planner.desc")}</p>
           </div>
 
           <div className="preset-grid">
@@ -73,8 +72,8 @@ export function PlannerSection({
           <div className="control-grid">
             <label className="control-card">
               <span className="control-top">
-                <span>Household size</span>
-                <strong>{profile.householdSize} people</strong>
+                <span>{t("planner.household")}</span>
+                <strong>{t("planner.householdValue", { count: profile.householdSize })}</strong>
               </span>
               <input
                 type="range"
@@ -89,7 +88,7 @@ export function PlannerSection({
 
             <label className="control-card">
               <span className="control-top">
-                <span>Weekly budget</span>
+                <span>{t("planner.budget")}</span>
                 <strong>{formatLocalCurrency(profile.weeklyBudget, currencyLocale)}</strong>
               </span>
               <input
@@ -106,7 +105,7 @@ export function PlannerSection({
 
             <label className="control-card">
               <span className="control-top">
-                <span>Time ceiling per dish</span>
+                <span>{t("planner.time")}</span>
                 <strong>{profile.maxCookMinutes} min</strong>
               </span>
               <input
@@ -123,7 +122,7 @@ export function PlannerSection({
 
             <label className="control-card">
               <span className="control-top">
-                <span>Cooking days</span>
+                <span>{t("planner.days")}</span>
                 <strong>{profile.cookingDays} days</strong>
               </span>
               <input
@@ -140,7 +139,7 @@ export function PlannerSection({
 
           <div className="selector-group">
             <div>
-              <p className="selector-title">Primary goal</p>
+              <p className="selector-title">{t("planner.goal")}</p>
               <div className="chip-row">
                 {goalOptions.map((goal) => (
                   <button
@@ -156,7 +155,7 @@ export function PlannerSection({
             </div>
 
             <div>
-              <p className="selector-title">Skill level</p>
+              <p className="selector-title">{t("planner.skill")}</p>
               <div className="chip-row">
                 {skillOptions.map((skill) => (
                   <button
@@ -172,7 +171,7 @@ export function PlannerSection({
             </div>
 
             <div>
-              <p className="selector-title">Owned tools</p>
+              <p className="selector-title">{t("planner.tools")}</p>
               <div className="chip-row">
                 {applianceOptions.map((appliance) => (
                   <button
@@ -190,7 +189,7 @@ export function PlannerSection({
             </div>
 
             <div>
-              <p className="selector-title">Already in pantry</p>
+              <p className="selector-title">{t("planner.pantry")}</p>
               <div className="chip-row">
                 {pantryOptions.map((ingredient) => (
                   <button
@@ -211,12 +210,9 @@ export function PlannerSection({
 
         <aside className="panel recommendation-panel">
           <div className="section-heading">
-            <p className="section-kicker">Planner output</p>
-            <h2>Recommended weekly stack</h2>
-            <p>
-              Scored by fridge overlap, budget, time, skill, and appliance constraints. This is
-              the repeat-value loop that supports subscription.
-            </p>
+            <p className="section-kicker">{t("planner.outputKicker")}</p>
+            <h2>{t("planner.outputTitle")}</h2>
+            <p>{t("planner.outputDesc")}</p>
           </div>
 
           <div className="recommendation-list">
@@ -233,8 +229,8 @@ export function PlannerSection({
                 <div className="mini-stat-row">
                   <span>{formatLocalCurrency(menu.adjustedCost, currencyLocale)}</span>
                   <span>{menu.adjustedMinutes} min</span>
-                  <span>{menu.adjustedProtein} g protein</span>
-                  <span>{menu.adjustedCalories} kcal</span>
+                  <span>{t("planner.protein", { grams: menu.adjustedProtein })}</span>
+                  <span>{t("planner.calories", { kcal: menu.adjustedCalories })}</span>
                 </div>
 
                 <div className="reason-list">
@@ -249,7 +245,7 @@ export function PlannerSection({
           </div>
 
           <button type="button" className="button button-primary full-width" onClick={onApplyRecommendations}>
-            Apply this weekly stack
+            {t("planner.apply")}
           </button>
         </aside>
       </div>
