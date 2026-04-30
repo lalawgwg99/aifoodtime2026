@@ -28,7 +28,6 @@ const resources = {
         bestNext: "Best first meal",
         bestNextFallbackTitle: "Choose a goal to start",
         bestNextFallbackDesc: "CookLab ranks meals by goal fit, protein, time, budget, and cooking difficulty.",
-        betaBanner: "Open beta: every feature is free while the product is being shaped.",
       },
       fridge: {
         kicker: "Start here",
@@ -154,7 +153,6 @@ const resources = {
         waitlistSuccess: "You're on the beta list.",
         waitlistError: "Enter a valid email address.",
         checkoutError: "Could not start checkout. Verify Stripe backend configuration.",
-        betaFree: "Open beta: all plans are free, checkout disabled.",
         plans: {
           starter: {
             name: "Starter",
@@ -203,7 +201,6 @@ const resources = {
         language: "Language",
         chinese: "繁中",
         english: "EN",
-        betaFree: "Open beta · all features free",
       },
     },
   },
@@ -232,7 +229,6 @@ const resources = {
         bestNext: "第一餐建議",
         bestNextFallbackTitle: "先選目標開始",
         bestNextFallbackDesc: "CookLab 會依目標、蛋白、時間、預算與難度排序餐點。",
-        betaBanner: "公測中：目前所有功能免費。",
       },
       fridge: {
         kicker: "從這裡開始",
@@ -279,7 +275,7 @@ const resources = {
         kicker: "本週餐點",
         title: "開煮前先微調你的計畫。",
         desc: "新增或移除餐點時，成本、蛋白、熱量與購物清單會同步更新。",
-        hookTitle: "公測期間全功能免費",
+        hookTitle: "完整規劃器",
         hookDesc: "完整規劃器目前可直接使用，沒有付款牆。",
         ready: "可執行",
         needs: "缺少 {{gear}}",
@@ -355,7 +351,6 @@ const resources = {
         waitlistSuccess: "已加入 beta 名單。",
         waitlistError: "請輸入有效 Email。",
         checkoutError: "無法啟動付款流程，請檢查 Stripe 後端設定。",
-        betaFree: "公測期間全方案免費，已關閉結帳。",
         plans: {
           starter: {
             name: "Starter",
@@ -404,7 +399,6 @@ const resources = {
         language: "語言",
         chinese: "繁中",
         english: "EN",
-        betaFree: "公測中 · 全功能免費",
       },
     },
   },

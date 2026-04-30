@@ -306,7 +306,6 @@ export default function App() {
             <span className="brand-orb" />
             <span>CookLab AI</span>
           </a>
-          <span className="beta-pill">{t("common.betaFree")}</span>
           <nav className="nav-links">
             <a href="#fridge">{t("nav.fridge")}</a>
             <a href="#planner">{t("nav.planner")}</a>

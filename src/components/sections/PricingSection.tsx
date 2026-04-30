@@ -37,7 +37,6 @@ export function PricingSection({
           <p className="section-kicker">{t("pricing.kicker")}</p>
           <h2>{t("pricing.title")}</h2>
           <p>{t("pricing.desc")}</p>
-          <div className="beta-note">{t("pricing.betaFree")}</div>
         </div>
 
         <div className="pricing-grid">
