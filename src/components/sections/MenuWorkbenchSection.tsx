@@ -37,12 +37,10 @@ export function MenuWorkbenchSection({
           <div className="section-heading">
             <p className="section-kicker">{t("workbench.kicker")}</p>
             <h2>{t("workbench.title")}</h2>
-            <p>{t("workbench.desc")}</p>
           </div>
 
           <div className="commercial-strip">
             <strong>{t("workbench.hookTitle")}</strong>
-            <span>{t("workbench.hookDesc")}</span>
           </div>
 
           <div className="menu-grid">

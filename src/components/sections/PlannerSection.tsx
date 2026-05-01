@@ -52,7 +52,6 @@ export function PlannerSection({
           <div className="section-heading">
             <p className="section-kicker">{t("planner.kicker")}</p>
             <h2>{t("planner.title")}</h2>
-            <p>{t("planner.desc")}</p>
           </div>
 
           <div className="preset-grid">
@@ -212,7 +211,6 @@ export function PlannerSection({
           <div className="section-heading">
             <p className="section-kicker">{t("planner.outputKicker")}</p>
             <h2>{t("planner.outputTitle")}</h2>
-            <p>{t("planner.outputDesc")}</p>
           </div>
 
           <div className="recommendation-list">

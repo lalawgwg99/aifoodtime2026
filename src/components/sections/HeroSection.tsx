@@ -11,7 +11,6 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({
-  brandPositioning,
   shortSlogans,
   suggestedMenu,
   plannedSavingsLabel,
@@ -23,14 +22,8 @@ export function HeroSection({
     <section className="hero-section" id="top">
       <div className="container hero-grid">
         <div className="hero-copy">
-          <div className="eyebrow-row">
-            <span className="eyebrow">{t("hero.eyebrowPrimary")}</span>
-            <span className="eyebrow eyebrow-muted">{t("hero.eyebrowSecondary")}</span>
-          </div>
-
           <h1>{t("hero.title")}</h1>
           <p className="hero-lead">{t("hero.lead")}</p>
-          <p className="hero-positioning">{brandPositioning}</p>
 
           <div className="hero-actions">
             <a className="button button-primary" href="#fridge">
@@ -51,8 +44,10 @@ export function HeroSection({
         </div>
 
         <aside className="hero-card">
-          <p className="card-label">{t("hero.cardLabel")}</p>
-          <h2>{t("hero.cardTitle")}</h2>
+          <div className="macro-header">
+            <p className="card-label">{t("hero.cardLabel")}</p>
+            <h2>{suggestedMenu?.title ?? t("hero.bestNextFallbackTitle")}</h2>
+          </div>
           <div className="hero-stats">
             <article>
               <strong>{selectedCount}</strong>
@@ -69,8 +64,7 @@ export function HeroSection({
           </div>
 
           <div className="hero-card-note">
-            <p className="card-label">{t("hero.bestNext")}</p>
-            <strong>{suggestedMenu?.title ?? t("hero.bestNextFallbackTitle")}</strong>
+            <strong>{t("hero.bestNext")}</strong>
             <p>{suggestedMenu?.heroNote ?? t("hero.bestNextFallbackDesc")}</p>
           </div>
         </aside>

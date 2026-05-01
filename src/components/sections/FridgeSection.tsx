@@ -42,11 +42,10 @@ export function FridgeSection({
   return (
     <section className="section" id="fridge">
       <div className="container grid-2">
-        <div className="panel">
+        <div className="panel planner-entry">
           <div className="section-heading">
             <p className="section-kicker">{t("fridge.kicker")}</p>
             <h2>{t("fridge.title")}</h2>
-            <p>{t("fridge.desc")}</p>
           </div>
 
           <form className="waitlist-form" onSubmit={handleSubmit}>
@@ -63,7 +62,7 @@ export function FridgeSection({
           </form>
 
           <div className="selector-group">
-            <div>
+            <div className="entry-block">
               <p className="selector-title">{t("fridge.quickAdd")}</p>
               <div className="chip-row">
                 {suggestions.map((item) => (
@@ -79,7 +78,7 @@ export function FridgeSection({
               </div>
             </div>
 
-            <div>
+            <div className="entry-block">
               <p className="selector-title">{t("fridge.inventory")}</p>
               <div className="chip-row">
                 {fridgeItems.length === 0 && <span className="empty-note">{t("fridge.empty")}</span>}
@@ -130,7 +129,7 @@ export function FridgeSection({
           </div>
         </div>
 
-        <aside className="panel recommendation-panel">
+        <aside className="panel recommendation-panel compact-output">
           <div className="section-heading compact-heading">
             <p className="section-kicker">{t("fridge.resultsKicker")}</p>
             <h2>{t("fridge.resultsTitle")}</h2>
