@@ -29,7 +29,7 @@ export function HeroSection({
             <a className="button button-primary" href="#fridge">
               {t("hero.ctaPrimary")}
             </a>
-            <a className="button button-secondary" href="#pricing">
+            <a className="button button-secondary" href="#menus">
               {t("hero.ctaSecondary")}
             </a>
           </div>

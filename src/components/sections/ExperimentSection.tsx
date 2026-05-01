@@ -3,6 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Experiment, ExperimentAdvice } from "../../types/cooklab";
 import { formatLocalCurrency } from "../../lib/planner";
 
+const travelStyleLabels = {
+  Beginner: "第一次來",
+  Intermediate: "熟門熟路",
+  Advanced: "專程吃",
+} as const;
+
 interface ExperimentSectionProps {
   experiments: Experiment[];
   activeExperimentId: string;
@@ -107,7 +113,7 @@ export function ExperimentSection({
                 <div className="experiment-meta">
                   <span>{variant.cookMinutes} min</span>
                   <span>{formatLocalCurrency(variant.estimatedCost, currencyLocale)}</span>
-                  <span>{variant.requiredSkill}</span>
+                  <span>{travelStyleLabels[variant.requiredSkill]}</span>
                 </div>
 
                 <p className="experiment-callout">

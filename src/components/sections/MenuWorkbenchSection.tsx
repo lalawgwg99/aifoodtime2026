@@ -3,6 +3,14 @@ import { useTranslation } from "react-i18next";
 import { NutritionSummary, ScoredMenu, ShoppingListGroup } from "../../types/cooklab";
 import { formatLocalCurrency } from "../../lib/planner";
 
+const routeSectionLabels: Record<string, string> = {
+  Produce: "地區",
+  Protein: "主食",
+  Carbs: "配餐",
+  Pantry: "甜點 / 備註",
+  Frozen: "口味",
+};
+
 interface MenuWorkbenchSectionProps {
   menus: ScoredMenu[];
   selectedMenuIds: string[];
@@ -127,11 +135,11 @@ export function MenuWorkbenchSection({
             </article>
             <article className="summary-tile">
               <span>{t("workbench.calories")}</span>
-              <strong>{nutritionSummary.avgCaloriesPerMeal} kcal</strong>
+              <strong>{nutritionSummary.avgCaloriesPerMeal}</strong>
             </article>
             <article className="summary-tile">
               <span>{t("workbench.proteinAvg")}</span>
-              <strong>{nutritionSummary.avgProteinPerMeal} g</strong>
+              <strong>{nutritionSummary.avgProteinPerMeal}</strong>
             </article>
           </div>
 
@@ -143,7 +151,7 @@ export function MenuWorkbenchSection({
 
             {shoppingGroups.map((group) => (
               <div className="shopping-group" key={group.section}>
-                <h3>{group.section}</h3>
+                <h3>{routeSectionLabels[group.section] ?? group.section}</h3>
                 <div className="shopping-items">
                   {group.items.map((item) => (
                     <article className="shopping-item" key={item.key}>

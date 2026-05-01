@@ -23,6 +23,15 @@ const skillRank: Record<SkillLevel, number> = {
   Advanced: 3,
 };
 
+const goalReasonLabels: Record<GoalTag, string> = {
+  "Quick Meals": "快速",
+  "Budget Smart": "省預算",
+  "Family Prep": "多人分食",
+  "Skill Building": "在地深挖",
+  "High Protein": "經典必吃",
+  "Weight Loss": "輕鬆散步",
+};
+
 const sectionOrder: IngredientSection[] = [
   "Produce",
   "Protein",
@@ -32,6 +41,35 @@ const sectionOrder: IngredientSection[] = [
 ];
 
 const aliasByToken: Record<string, string> = {
+  "台北": "taipei",
+  "taipei": "taipei",
+  "台南": "tainan",
+  "tainan": "tainan",
+  "台中": "taichung",
+  "taichung": "taichung",
+  "嘉義": "chiayi",
+  "chiayi": "chiayi",
+  "高雄": "kaohsiung",
+  "kaohsiung": "kaohsiung",
+  "夜市": "night market",
+  "night market": "night market",
+  "牛肉麵": "beef noodle",
+  "beef noodle": "beef noodle",
+  "牛肉湯": "beef soup",
+  "beef soup": "beef soup",
+  "火雞肉飯": "turkey rice",
+  "turkey rice": "turkey rice",
+  "鹽酥雞": "salty crispy chicken",
+  "salty crispy chicken": "salty crispy chicken",
+  "甜點": "dessert",
+  "dessert": "dessert",
+  "老店": "old shop",
+  "old shop": "old shop",
+  "豆花": "douhua",
+  "芒果冰": "shaved ice",
+  "剉冰": "shaved ice",
+  "第二市場": "market snacks",
+  "辣": "spicy",
   "chicken": "chicken breast",
   "chicken breast": "chicken breast",
   "chicken breasts": "chicken breast",
@@ -65,6 +103,29 @@ interface NutritionEstimate {
 }
 
 const nutritionByIngredient: Record<string, NutritionEstimate> = {
+  taipei: { calories: 68, protein: 6 },
+  tainan: { calories: 72, protein: 5 },
+  taichung: { calories: 64, protein: 5 },
+  chiayi: { calories: 62, protein: 4 },
+  kaohsiung: { calories: 70, protein: 5 },
+  "beef-noodle": { calories: 88, protein: 22 },
+  douhua: { calories: 52, protein: 6 },
+  "old-shop": { calories: 40, protein: 4 },
+  "beef-soup": { calories: 70, protein: 18 },
+  "braised-rice": { calories: 76, protein: 8 },
+  soup: { calories: 48, protein: 5 },
+  "turkey-rice": { calories: 74, protein: 14 },
+  "fish-head": { calories: 82, protein: 16 },
+  "market-snacks": { calories: 78, protein: 10 },
+  "sun-cake": { calories: 66, protein: 4 },
+  "night-market": { calories: 82, protein: 10 },
+  "salty-crispy-chicken": { calories: 88, protein: 20 },
+  "oyster-omelet": { calories: 78, protein: 9 },
+  "bubble-tea": { calories: 74, protein: 4 },
+  spicy: { calories: 60, protein: 4 },
+  "duck-rice": { calories: 80, protein: 16 },
+  "shaved-ice": { calories: 58, protein: 3 },
+  dessert: { calories: 62, protein: 3 },
   rice: { calories: 410, protein: 8 },
   egg: { calories: 210, protein: 18 },
   "chicken-breast": { calories: 364, protein: 68 },
@@ -285,22 +346,22 @@ export function scoreMenus(menus: MenuItem[], profile: UserProfile): ScoredMenu[
 
       const why: string[] = [];
       if (fridgeHits >= 2) {
-        why.push(`uses ${fridgeHits} foods you listed`);
+        why.push(`命中 ${fridgeHits} 個偏好`);
       }
       if (menu.goalTags.includes(profile.mainGoal)) {
-        why.push(`aligned with your goal: ${profile.mainGoal}`);
+        why.push(`符合模式：${goalReasonLabels[profile.mainGoal]}`);
       }
       if (adjustedMinutes <= profile.maxCookMinutes) {
-        why.push(`fits your ${profile.maxCookMinutes}-minute time limit`);
+        why.push(`${profile.maxCookMinutes} 分鐘內可走完`);
       }
       if (nutrition.protein >= 28) {
-        why.push(`provides about ${nutrition.protein} g protein per meal`);
+        why.push(`排隊風險約 ${nutrition.protein}`);
       }
       if (estimatedSavings >= 60) {
-        why.push("beats typical market spend for this meal type");
+        why.push("比觀光吃法更省");
       }
       if (!eligible) {
-        why.push(`requires missing gear: ${missingAppliances.join(", ")}`);
+        why.push(`不符合路線：${missingAppliances.join(", ")}`);
       }
 
       return {
@@ -504,17 +565,17 @@ export function getExperimentAdvice(
     (left, right) => scoreVariant(right, profile) - scoreVariant(left, profile)
   )[0];
 
-  let reason = `${variant.label} best fits your ${profile.maxCookMinutes}-minute session limit.`;
+  let reason = `${variant.label} 最符合 ${profile.maxCookMinutes} 分鐘內完成的需求。`;
   if (profile.mainGoal === "Quick Meals") {
-    reason = `${variant.label} keeps the workflow fastest while preserving acceptable consistency.`;
+    reason = `${variant.label} 最省時間，穩定度也夠。`;
   } else if (profile.mainGoal === "Budget Smart") {
-    reason = `${variant.label} has lower waste risk and more cost control for weekly repeats.`;
+    reason = `${variant.label} 比較不浪費預算。`;
   } else if (profile.mainGoal === "High Protein") {
-    reason = `${variant.label} gives the most stable prep quality for protein-focused planning.`;
+    reason = `${variant.label} 比較適合想吃有記憶點的人。`;
   } else if (profile.mainGoal === "Weight Loss") {
-    reason = `${variant.label} is easiest to repeat consistently without added calories from fixes.`;
+    reason = `${variant.label} 比較輕鬆，不會排太滿。`;
   } else if (profile.mainGoal === "Skill Building") {
-    reason = `${variant.label} gives stronger texture signals for technique training.`;
+    reason = `${variant.label} 更適合想吃在地一點的人。`;
   }
 
   return { variant, reason };

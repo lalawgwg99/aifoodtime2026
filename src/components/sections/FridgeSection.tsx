@@ -13,6 +13,12 @@ interface FridgeSectionProps {
   onRemoveItem: (item: string) => void;
 }
 
+const wasteRiskLabels: Record<string, string> = {
+  Low: "低",
+  Medium: "中",
+  High: "高",
+};
+
 export function FridgeSection({
   fridgeItems,
   suggestions,
@@ -104,7 +110,7 @@ export function FridgeSection({
               </article>
               <article className="fridge-insight-card">
                 <span>{t("fridge.waste")}</span>
-                <strong>{insights.wasteRisk}</strong>
+                <strong>{wasteRiskLabels[insights.wasteRisk] ?? insights.wasteRisk}</strong>
                 <p>
                   {insights.unusedItems.length === 0
                     ? t("fridge.wasteNone")
@@ -150,7 +156,7 @@ export function FridgeSection({
                   <span>{t("fridge.fitCount", { count: menu.fridgeHits })}</span>
                   <span>{menu.adjustedMinutes} min</span>
                   <span>{formatLocalCurrency(menu.adjustedCost, currencyLocale)}</span>
-                  <span>{menu.adjustedProtein} g protein</span>
+                  <span>排隊 {menu.adjustedProtein}</span>
                 </div>
                 <div className="reason-list">
                   {menu.why.map((reason) => (

@@ -11,6 +11,29 @@ import {
 } from "../../types/cooklab";
 import { formatLocalCurrency } from "../../lib/planner";
 
+const goalLabels: Record<GoalTag, string> = {
+  "Quick Meals": "快速",
+  "Budget Smart": "省預算",
+  "Family Prep": "多人分食",
+  "Skill Building": "在地深挖",
+  "High Protein": "經典必吃",
+  "Weight Loss": "輕鬆散步",
+};
+
+const skillLabels: Record<SkillLevel, string> = {
+  Beginner: "第一次來",
+  Intermediate: "熟門熟路",
+  Advanced: "專程吃",
+};
+
+const routeTypeLabels: Record<Appliance, string> = {
+  Skillet: "市區",
+  Pot: "熱湯",
+  "Air Fryer": "夜市",
+  "Rice Cooker": "米食",
+  Oven: "伴手禮",
+};
+
 interface PlannerSectionProps {
   profile: UserProfile;
   presets: QuickPreset[];
@@ -122,7 +145,7 @@ export function PlannerSection({
             <label className="control-card">
               <span className="control-top">
                 <span>{t("planner.days")}</span>
-                <strong>{profile.cookingDays} days</strong>
+                <strong>{profile.cookingDays} 站</strong>
               </span>
               <input
                 type="range"
@@ -147,7 +170,7 @@ export function PlannerSection({
                     className={profile.mainGoal === goal ? "chip chip-active" : "chip"}
                     onClick={() => onPatchProfile({ mainGoal: goal })}
                   >
-                    {goal}
+                    {goalLabels[goal]}
                   </button>
                 ))}
               </div>
@@ -163,7 +186,7 @@ export function PlannerSection({
                     className={profile.skillLevel === skill ? "chip chip-active" : "chip"}
                     onClick={() => onPatchProfile({ skillLevel: skill })}
                   >
-                    {skill}
+                    {skillLabels[skill]}
                   </button>
                 ))}
               </div>
@@ -181,7 +204,7 @@ export function PlannerSection({
                     }
                     onClick={() => onToggleAppliance(appliance)}
                   >
-                    {appliance}
+                    {routeTypeLabels[appliance]}
                   </button>
                 ))}
               </div>

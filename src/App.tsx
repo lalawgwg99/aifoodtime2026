@@ -1,4 +1,4 @@
-import React, { FormEvent, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   applianceOptions,
@@ -8,7 +8,6 @@ import {
   goalOptions,
   menuItems,
   pantryOptions,
-  pricingPlans,
   quickPresets,
   reports,
   shortSlogans,
@@ -21,10 +20,7 @@ import { PlannerSection } from "./components/sections/PlannerSection";
 import { MenuWorkbenchSection } from "./components/sections/MenuWorkbenchSection";
 import { ExperimentSection } from "./components/sections/ExperimentSection";
 import { SupportSection } from "./components/sections/SupportSection";
-import { PricingSection } from "./components/sections/PricingSection";
-import { AuthSection } from "./components/sections/AuthSection";
 import { useLocalStorageState } from "./hooks/useLocalStorageState";
-import { useAuth } from "./hooks/useAuth";
 import {
   buildBudgetSummary,
   buildFridgeInsights,
@@ -47,32 +43,50 @@ const defaultVariantMap = Object.fromEntries(
   experiments.map((experiment) => [experiment.id, experiment.variants[0].id])
 );
 
+const obsoleteFoodSignals = new Set([
+  "chicken breast",
+  "broccoli",
+  "bell pepper",
+  "mushrooms",
+  "greek yogurt",
+  "tofu",
+  "oats",
+]);
+
+function shouldResetObsoleteProfile(profile: UserProfile): boolean {
+  return (profile.fridgeItems ?? []).some((item) =>
+    obsoleteFoodSignals.has(normalizeIngredientToken(item))
+  );
+}
+
 export default function App() {
   const { t, i18n } = useTranslation();
-  const { user, loading: authLoading, signIn, signUp, signOut, hasConfig } = useAuth();
   const [profile, setProfile] = useLocalStorageState<UserProfile>(
-    "cooklab.global-profile",
+    "cooklab.taiwan-food-profile",
     defaultProfile
   );
   const [selectedMenuIds, setSelectedMenuIds] = useLocalStorageState<string[]>(
-    "cooklab.selected-menu-ids",
+    "cooklab.taiwan-food-selected-route-ids",
     defaultSelectedMenuIds
   );
   const [variantMap, setVariantMap] = useState<Record<string, string>>(defaultVariantMap);
   const [activeExperimentId, setActiveExperimentId] = useState(experiments[0].id);
-  const [email, setEmail] = useState("");
-  const [waitlistStatus, setWaitlistStatus] = useState<"idle" | "error" | "success">("idle");
-  const [checkoutStatus, setCheckoutStatus] = useState<"idle" | "error">("idle");
   const currencyLocale = i18n.language === "zh-TW" ? "zh-TW" : "en";
 
   const normalizedProfile = useMemo<UserProfile>(
-    () => ({
-      ...defaultProfile,
-      ...profile,
-      appliances: profile.appliances ?? defaultProfile.appliances,
-      pantry: profile.pantry ?? defaultProfile.pantry,
-      fridgeItems: profile.fridgeItems ?? defaultProfile.fridgeItems,
-    }),
+    () => {
+      if (shouldResetObsoleteProfile(profile)) {
+        return defaultProfile;
+      }
+
+      return {
+        ...defaultProfile,
+        ...profile,
+        appliances: profile.appliances ?? defaultProfile.appliances,
+        pantry: profile.pantry ?? defaultProfile.pantry,
+        fridgeItems: profile.fridgeItems ?? defaultProfile.fridgeItems,
+      };
+    },
     [profile]
   );
 
@@ -89,9 +103,22 @@ export default function App() {
         .slice(0, 3),
     [scoredMenus]
   );
+  const effectiveSelectedMenuIds = useMemo(() => {
+    const scoredIds = new Set(scoredMenus.map((menu) => menu.id));
+    const validIds = selectedMenuIds.filter((id) => scoredIds.has(id));
+
+    if (validIds.length > 0) {
+      return validIds;
+    }
+
+    return scoredMenus
+      .filter((menu) => menu.eligible)
+      .slice(0, Math.max(normalizedProfile.cookingDays, 3))
+      .map((menu) => menu.id);
+  }, [normalizedProfile.cookingDays, scoredMenus, selectedMenuIds]);
   const selectedMenus = useMemo(
-    () => scoredMenus.filter((menu) => selectedMenuIds.includes(menu.id)),
-    [scoredMenus, selectedMenuIds]
+    () => scoredMenus.filter((menu) => effectiveSelectedMenuIds.includes(menu.id)),
+    [effectiveSelectedMenuIds, scoredMenus]
   );
   const budgetSummary = useMemo(
     () => buildBudgetSummary(selectedMenus, normalizedProfile),
@@ -220,84 +247,6 @@ export default function App() {
     }));
   };
 
-  const handleWaitlistSubmit = (event: FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-    const trimmedEmail = email.trim().toLowerCase();
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
-
-    if (!isValidEmail) {
-      setWaitlistStatus("error");
-      return;
-    }
-
-    void (async () => {
-      try {
-        const response = await fetch("/api/waitlist", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: trimmedEmail,
-            locale: i18n.language,
-            source: "landing",
-            userId: user?.id ?? null,
-            planId: "pro",
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("waitlist_failed");
-        }
-
-        setWaitlistStatus("success");
-        setEmail("");
-      } catch {
-        setWaitlistStatus("error");
-      }
-    })();
-  };
-
-  const handleCheckout = (checkoutKey?: string): void => {
-    if (!checkoutKey) {
-      return;
-    }
-
-    setCheckoutStatus("idle");
-    void (async () => {
-      try {
-        const normalizedEmail =
-          user?.email ?? (email.trim().toLowerCase() || undefined);
-
-        const response = await fetch("/api/stripe/checkout", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            checkoutKey,
-            email: normalizedEmail,
-            userId: user?.id ?? null,
-            locale: i18n.language,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("checkout_failed");
-        }
-
-        const data = (await response.json()) as { url?: string };
-        if (!data.url) {
-          throw new Error("missing_checkout_url");
-        }
-
-        window.location.href = data.url;
-      } catch {
-        setCheckoutStatus("error");
-      }
-    })();
-  };
-
   return (
     <div className="site-shell">
       <header className="top-nav">
@@ -312,7 +261,6 @@ export default function App() {
             <a href="#menus">{t("nav.workbench")}</a>
             <a href="#lab">{t("nav.experiment")}</a>
             <a href="#support">{t("nav.support")}</a>
-            <a href="#pricing">{t("nav.pricing")}</a>
             <button
               type="button"
               className={i18n.language === "zh-TW" ? "chip chip-active nav-lang" : "chip nav-lang"}
@@ -347,12 +295,12 @@ export default function App() {
         <FridgeSection
           fridgeItems={normalizedProfile.fridgeItems}
           suggestions={[
-            "chicken breast",
-            "eggs",
-            "greek yogurt",
-            "tofu",
-            "oats",
-            "rice",
+            "台北",
+            "台南",
+            "夜市",
+            "牛肉麵",
+            "甜點",
+            "老店",
           ]}
           topMatches={fridgeTopMatches}
           insights={fridgeInsights}
@@ -379,7 +327,7 @@ export default function App() {
 
         <MenuWorkbenchSection
           menus={scoredMenus}
-          selectedMenuIds={selectedMenuIds}
+          selectedMenuIds={effectiveSelectedMenuIds}
           shoppingGroups={shoppingGroups}
           budgetSummary={budgetSummary}
           nutritionSummary={nutritionSummary}
@@ -397,34 +345,7 @@ export default function App() {
           onSelectVariant={handleVariantSelect}
         />
 
-        <AuthSection
-          user={user}
-          loading={authLoading}
-          hasConfig={hasConfig}
-          onSignIn={signIn}
-          onSignUp={signUp}
-          onSignOut={signOut}
-        />
-
         <SupportSection rescueFeed={rescueFeed} reports={reports} contentPlans={weekOnePlan} />
-
-        <PricingSection
-          pricingPlans={pricingPlans}
-          email={email}
-          status={waitlistStatus}
-          checkoutStatus={checkoutStatus}
-          onEmailChange={(value) => {
-            setEmail(value);
-            if (waitlistStatus !== "idle") {
-              setWaitlistStatus("idle");
-            }
-            if (checkoutStatus !== "idle") {
-              setCheckoutStatus("idle");
-            }
-          }}
-          onSubmit={handleWaitlistSubmit}
-          onCheckout={handleCheckout}
-        />
       </main>
 
       <footer className="footer">
